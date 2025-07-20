@@ -21,6 +21,9 @@ export default function Footer() {
             <li>
               <Link href="/privacy">Privacy Policy</Link>
             </li>
+            <li>
+              <Link href="/validator">Favicon Validator</Link>
+            </li>
           </ul>
         </div>
 
