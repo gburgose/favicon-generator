@@ -4,6 +4,7 @@ import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
 import GoogleTagManager from "@/components/GoogleTagManager";
+import CookieConsent from "@/components/CookieConsent";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -94,6 +95,7 @@ export default function RootLayout({
       <body className={`${montserrat.className} ${poppins.variable}`}>
         <GoogleTagManager />
         {children}
+        <CookieConsent />
         <Toaster
           position="top-right"
           toastOptions={{
