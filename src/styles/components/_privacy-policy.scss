@@ -8,6 +8,7 @@
   &__header {
     text-align: center;
     margin-bottom: 3rem;
+    padding-bottom: 2rem;
   }
 
   &__back-link {
@@ -71,7 +72,8 @@
     align-items: center;
     transition: background-color 0.2s ease;
 
-    &:hover {
+    &:hover,
+    &--hover {
       background: #252525;
     }
 
@@ -85,6 +87,10 @@
     font-size: 1.2rem;
     font-weight: 600;
     color: #EFE6DD;
+  }
+
+  &__accordion-icon {
+    color: #EFE6DD !important;
   }
 
   &__accordion-content {
@@ -115,27 +121,6 @@
   &__list-item {
     margin-bottom: 0.75rem;
     color: #EFE6DD;
-  }
-
-  &__info-box {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    background: #2d2d2d;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #7EBDC2;
-  }
-
-  &__info-content {
-    flex: 1;
-  }
-
-  &__contact {
-    background: #2d2d2d;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 1rem;
   }
 
   &__contact-item {
@@ -184,12 +169,6 @@
       &--open {
         padding: 1.5rem;
       }
-    }
-
-    &__info-box {
-      flex-direction: column;
-      gap: 0.75rem;
-      text-align: center;
     }
   }
 }
