@@ -2,12 +2,19 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Poppins } from "next/font/google";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-montserrat',
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
 });
 
 export const metadata: Metadata = {
@@ -83,7 +90,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} ${poppins.variable}`}>
         {children}
         <Toaster
           position="top-right"

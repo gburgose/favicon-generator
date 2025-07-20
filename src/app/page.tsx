@@ -12,7 +12,8 @@ import {
   FileText,
   Sparkles,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Zap
 } from 'lucide-react';
 
 export default function FaviconGenerator() {
@@ -45,7 +46,10 @@ export default function FaviconGenerator() {
 
   return (
     <div className="container">
-      <h1 className="title">Favicon Generator</h1>
+      <h1 className="title">
+        <Zap size={40} className="title-icon" />
+        Favicon Generator
+      </h1>
       <p className="subtitle">
         Upload an image and generate favicons in multiple sizes for your website
       </p>
