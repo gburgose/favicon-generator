@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import { GoogleTagManager } from '@next/third-parties/google';
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
-import GoogleTagManager from "@/components/GoogleTagManager";
 import CookieConsent from "@/components/CookieConsent";
 
 const montserrat = Montserrat({
@@ -92,8 +92,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <GoogleTagManager gtmId="GTM-P7FQSKFN" />
+      </head>
       <body className={`${montserrat.className} ${poppins.variable}`}>
-        <GoogleTagManager />
         {children}
         <CookieConsent />
         <Toaster

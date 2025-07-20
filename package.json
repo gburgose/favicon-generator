@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^15.4.2",
     "@types/file-saver": "^2.0.7",
     "@types/react-syntax-highlighter": "^15.5.13",
     "file-saver": "^2.0.5",
