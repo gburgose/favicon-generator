@@ -123,6 +123,17 @@ export const useFaviconGenerator = () => {
         setGeneratedFavicons(favicons);
         toast.success('Favicons generated successfully!');
         setIsGenerating(false);
+
+        // Scroll to generated favicons section
+        setTimeout(() => {
+          const element = document.getElementById('generated-favicons');
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 100);
       };
 
       img.onerror = () => {

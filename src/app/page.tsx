@@ -150,7 +150,7 @@ export default function FaviconGenerator() {
         )}
 
         {Object.keys(generatedFavicons).length > 0 && (
-          <div className="preview-section">
+          <div className="preview-section" id="generated-favicons">
             <div className="section-header">
               <h2 className="preview-title">Generated Favicons</h2>
               <button
