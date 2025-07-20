@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import { gtmEvents } from '@/utils/gtm';
 
 interface FaviconSize {
@@ -343,16 +344,33 @@ Generated with Favicon Generator - Create professional favicons for your website
   };
 
   const clearAll = () => {
-    setSelectedFile(null);
-    setPreviewUrl('');
-    setGeneratedFavicons({});
-    setImageWarning('');
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will clear all uploaded images and generated favicons. This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#F3DFA2',
+      cancelButtonColor: '#666',
+      confirmButtonText: 'Yes, clear everything',
+      cancelButtonText: 'Cancel',
+      background: '#1e1e1e',
+      color: '#EFE6DD'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setSelectedFile(null);
+        setPreviewUrl('');
+        setGeneratedFavicons({});
+        setImageWarning('');
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+        }
 
-    // Track clear action
-    gtmEvents.allCleared();
+        // Track clear action
+        gtmEvents.allCleared();
+
+        toast.success('All data cleared successfully!');
+      }
+    });
   };
 
   const updateAppSettings = (updates: Partial<AppSettings>) => {
