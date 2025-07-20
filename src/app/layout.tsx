@@ -1,44 +1,35 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "../styles/globals.scss";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Favicon Generator - Create Icons for Your Website",
-  description: "Generate professional favicons in multiple sizes (16x16, 32x32, 192x192, 512x512) for your website. Supports PNG, JPG, WebP formats. Download complete favicon package with HTML meta tags and web app manifest.",
-  keywords: [
-    "favicon generator",
-    "website icons",
-    "favicon creator",
-    "web development tools",
-    "site icons",
-    "browser icons",
-    "apple touch icon",
-    "pwa icons",
-    "web app manifest"
-  ],
-  authors: [{ name: "Favicon Generator" }],
-  creator: "Favicon Generator",
-  publisher: "Favicon Generator",
+  title: `${siteConfig.name} - Create Icons for Your Website`,
+  description: `${siteConfig.description}. Supports PNG, JPG, WebP formats. Download complete favicon package with HTML meta tags and web app manifest.`,
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.creator }],
+  creator: siteConfig.creator,
+  publisher: siteConfig.creator,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://favicon-generator.vercel.app'),
+  metadataBase: new URL(siteConfig.url),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "Favicon Generator - Create Icons for Your Website",
-    description: "Generate professional favicons in multiple sizes for your website. Download complete package with HTML meta tags.",
-    url: 'https://favicon-generator.vercel.app',
-    siteName: 'Favicon Generator',
+    title: `${siteConfig.name} - Create Icons for Your Website`,
+    description: `${siteConfig.description}. Download complete package with HTML meta tags.`,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
     images: [
       {
-        url: '/og-image.png',
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Favicon Generator - Create Icons for Your Website',
+        alt: `${siteConfig.name} - Create Icons for Your Website`,
       },
     ],
     locale: 'en_US',
@@ -46,10 +37,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Favicon Generator - Create Icons for Your Website",
-    description: "Generate professional favicons in multiple sizes for your website. Download complete package with HTML meta tags.",
-    images: ['/og-image.png'],
-    creator: '@favicon_generator',
+    title: `${siteConfig.name} - Create Icons for Your Website`,
+    description: `${siteConfig.description}. Download complete package with HTML meta tags.`,
+    images: [siteConfig.ogImage],
+    creator: siteConfig.links.twitter.replace('https://twitter.com/', '@'),
   },
   robots: {
     index: true,
@@ -74,7 +65,7 @@ export const metadata: Metadata = {
     'msapplication-TileColor': '#231F20',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'Favicon Generator',
+    'apple-mobile-web-app-title': siteConfig.name,
   },
 };
 
