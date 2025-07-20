@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section className="privacy-section">
-            <h2>8. Children's Privacy</h2>
+            <h2>8. Children&apos;s Privacy</h2>
             <p>
               Our service is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.
             </p>
@@ -141,7 +141,7 @@ export default function PrivacyPolicy() {
           <section className="privacy-section">
             <h2>9. Changes to This Policy</h2>
             <p>
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+              We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
             </p>
           </section>
 
@@ -152,7 +152,7 @@ export default function PrivacyPolicy() {
             </p>
             <div className="contact-info">
               <p><strong>Email:</strong> privacy@favicon-generator.com</p>
-              <p><strong>Website:</strong> <a href="/" className="contact-link">favicon-generator.com</a></p>
+              <p><strong>Website:</strong> <Link href="/" className="contact-link">favicon-generator.com</Link></p>
             </div>
           </section>
         </div>

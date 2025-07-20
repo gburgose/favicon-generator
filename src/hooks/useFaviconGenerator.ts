@@ -31,8 +31,7 @@ export const useFaviconGenerator = () => {
   const [generatedFavicons, setGeneratedFavicons] = useState<{ [key: string]: string }>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string>('');
+
   const [imageWarning, setImageWarning] = useState<string>('');
   const [appSettings, setAppSettings] = useState<AppSettings>({
     name: 'My App',
@@ -347,8 +346,6 @@ Generated with Favicon Generator - Create professional favicons for your website
     setSelectedFile(null);
     setPreviewUrl('');
     setGeneratedFavicons({});
-    setError('');
-    setSuccess('');
     setImageWarning('');
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
