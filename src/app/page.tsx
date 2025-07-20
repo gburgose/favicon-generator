@@ -27,6 +27,7 @@ export default function FaviconGenerator() {
     isGenerating,
     isDownloading,
     appSettings,
+    imageWarning,
     dropzoneProps,
     generateFavicons,
     downloadFavicons,
@@ -76,6 +77,12 @@ export default function FaviconGenerator() {
             <p className="file-info">
               {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
             </p>
+
+            {imageWarning && (
+              <div className="image-warning">
+                ⚠️ {imageWarning}
+              </div>
+            )}
 
             <div className="app-settings">
               <h3>App Settings</h3>

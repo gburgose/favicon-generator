@@ -577,6 +577,17 @@ a {
   margin-bottom: 1.5rem;
 }
 
+.image-warning {
+  background: rgba(243, 223, 162, 0.1);
+  border: 1px solid rgba(243, 223, 162, 0.3);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #F3DFA2;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;

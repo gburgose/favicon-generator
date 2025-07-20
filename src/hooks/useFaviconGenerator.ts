@@ -32,6 +32,7 @@ export const useFaviconGenerator = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const [imageWarning, setImageWarning] = useState<string>('');
   const [appSettings, setAppSettings] = useState<AppSettings>({
     name: 'My App',
     description: 'Application description',
@@ -40,6 +41,7 @@ export const useFaviconGenerator = () => {
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
+    setImageWarning('');
 
     if (acceptedFiles.length === 0) return;
 
@@ -59,9 +61,18 @@ export const useFaviconGenerator = () => {
 
     setSelectedFile(file);
 
-    // Create preview URL
+    // Create preview URL and check image dimensions
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+
+    // Check image dimensions
+    const img = new Image();
+    img.onload = () => {
+      if (img.width < 512 || img.height < 512) {
+        setImageWarning(`Warning: Your image is ${img.width}x${img.height}px. For best quality, use an image of 512x512px or larger. The favicons will still be generated but larger sizes may appear pixelated.`);
+      }
+    };
+    img.src = url;
   }, []);
 
   const dropzoneProps = useDropzone({
@@ -243,6 +254,9 @@ export const useFaviconGenerator = () => {
     setSelectedFile(null);
     setPreviewUrl('');
     setGeneratedFavicons({});
+    setError('');
+    setSuccess('');
+    setImageWarning('');
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
@@ -351,6 +365,7 @@ export const useFaviconGenerator = () => {
     isGenerating,
     isDownloading,
     appSettings,
+    imageWarning,
 
     // Dropzone
     dropzoneProps,
