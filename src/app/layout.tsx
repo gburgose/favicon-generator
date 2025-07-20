@@ -6,6 +6,8 @@ import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -98,7 +100,13 @@ export default function RootLayout({
         <GoogleTagManager gtmId="GTM-P7FQSKFN" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable}`}>
-        {children}
+        <div className="app-layout">
+          <Header />
+          <main className="main-content">
+            {children}
+          </main>
+          <Footer />
+        </div>
         <CookieConsent />
         <ServiceWorkerRegistration />
         <Toaster
