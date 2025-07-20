@@ -1,4 +1,5 @@
 import { Zap } from "lucide-react";
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -14,9 +15,11 @@ export default function Header() {
           rel="noopener noreferrer"
           className="header__link"
         >
-          <img
+          <Image
             src="https://avatars.githubusercontent.com/u/944868?s=32&v=4"
             alt="Gabriel Burgos GitHub"
+            width={24}
+            height={24}
             className="header__avatar"
           />
           <span className="header__link-text">Sígueme en GitHub</span>
