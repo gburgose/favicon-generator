@@ -69,50 +69,7 @@ export const useFaviconValidator = () => {
         }
       }
 
-      // Verificar meta tags en el HTML
-      try {
-        const htmlResponse = await fetch(normalizedUrl);
-        const html = await htmlResponse.text();
 
-        // Buscar meta tags específicos que genera nuestra app
-        const metaPatterns = [
-          /<link[^>]*rel=["']icon["'][^>]*href=["']([^"']+)["']/gi,
-          /<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/gi,
-          /<link[^>]*rel=["']manifest["'][^>]*href=["']([^"']+)["']/gi,
-          /<meta[^>]*name=["']theme-color["'][^>]*content=["']([^"']+)["']/gi
-        ];
-
-        for (const pattern of metaPatterns) {
-          let match;
-          while ((match = pattern.exec(html)) !== null) {
-            const faviconUrl = match[1];
-            const absoluteUrl = faviconUrl.startsWith('http')
-              ? faviconUrl
-              : faviconUrl.startsWith('/')
-                ? `${baseUrl}${faviconUrl}`
-                : `${baseUrl}/${faviconUrl}`;
-
-            try {
-              const response = await fetch(absoluteUrl, { method: 'HEAD' });
-              checks.push({
-                type: 'Meta tag',
-                url: absoluteUrl,
-                exists: response.ok,
-                size: response.headers.get('content-length') || undefined
-              });
-            } catch (error) {
-              checks.push({
-                type: 'Meta tag',
-                url: absoluteUrl,
-                exists: false,
-                error: 'Error al verificar'
-              });
-            }
-          }
-        }
-      } catch (error) {
-        // Si no se puede obtener el HTML, continuar con los checks básicos
-      }
 
       const hasFavicon = checks.some(check => check.exists);
 

@@ -1,3 +1,5 @@
+@use '../_colors.scss' as *;
+
 .favicon-validator {
   max-width: 800px;
   margin: 0 auto;
@@ -30,9 +32,8 @@
   }
 
   &__card {
-    background: #2d2d2d;
-    border: 1px solid rgba(126, 189, 194, 0.3);
-    border-radius: 8px;
+    background: transparent;
+    border: none;
     padding: 2rem;
   }
 
@@ -87,8 +88,7 @@
     align-items: center;
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: rgba(126, 189, 194, 0.05);
-    border-radius: 6px;
+    background: transparent;
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -120,23 +120,21 @@
     gap: 0.5rem;
     font-weight: 600;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
 
     &.success {
       color: #10b981;
-      background: rgba(16, 185, 129, 0.1);
+      background: transparent;
     }
 
     &.error {
       color: #ef4444;
-      background: rgba(239, 68, 68, 0.1);
+      background: transparent;
     }
   }
 
   &__error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 6px;
+    background: transparent;
+    border: none;
     padding: 1rem;
     color: #ef4444;
     margin-bottom: 2rem;
@@ -155,26 +153,20 @@
 
   &__checks-grid {
     margin-top: 1rem;
-    overflow-x: auto;
 
     table {
       width: 100%;
       border-collapse: collapse;
       background: transparent;
-      overflow: hidden;
 
       td {
-        padding: 1rem;
-        border-bottom: 1px solid rgba(64, 64, 64, 0.5);
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         vertical-align: middle;
       }
 
       tr:last-child td {
         border-bottom: none;
-      }
-
-      tr:hover {
-        background: #252525;
       }
     }
   }

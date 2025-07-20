@@ -20,8 +20,6 @@ const getFaviconPurpose = (type: string): string => {
       return 'Android Chrome Icon';
     case '/site.webmanifest':
       return 'Web Manifest';
-    case 'Meta tag':
-      return 'Meta Tag';
     default:
       return 'Favicon';
   }
@@ -101,7 +99,7 @@ export default function FaviconValidator() {
                 <table>
                   <tbody>
                     {validationResult.checks.map((check, index) => (
-                      <tr key={index} className={`favicon-validator__check ${check.exists ? 'success' : 'error'}`}>
+                      <tr key={index} className="favicon-validator__check">
                         <td className="favicon-validator__check-icon">
                           {check.exists ? <Check size={16} /> : <X size={16} />}
                         </td>
