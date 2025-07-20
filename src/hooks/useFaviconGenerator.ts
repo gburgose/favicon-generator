@@ -249,6 +249,68 @@ export const useFaviconGenerator = () => {
 
       zip.file('meta-tags.html', htmlSnippet);
 
+      // Generate README.md with installation instructions
+      const readmeContent = `# Favicon Package
+
+This package contains all the favicon files needed for your website.
+
+## Files Included
+
+- \`favicon.ico\` - Classic favicon for older browsers
+- \`favicon-16x16.png\` - Small favicon for modern browsers
+- \`favicon-32x32.png\` - Standard favicon for modern browsers
+- \`favicon-192x192.png\` - Large favicon for Android devices
+- \`favicon-512x512.png\` - Extra large favicon for Android devices
+- \`apple-touch-icon.png\` - Icon for iOS devices
+- \`mstile-144x144.png\` - Icon for Windows tiles
+- \`site.webmanifest\` - Web app manifest for PWA support
+- \`meta-tags.html\` - HTML meta tags to include in your website
+
+## Installation
+
+1. Upload all the favicon files to your website's root directory (public folder)
+2. Add the following meta tags to your HTML <head> section:
+
+\`\`\`html
+<!-- Classic Favicon -->
+<link rel="shortcut icon" href="/favicon.ico">
+
+<!-- Modern PNG Favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<!-- Windows Tiles -->
+<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
+<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+
+<!-- Manifest and Theme Color -->
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="${appSettings.themeColor}">
+\`\`\`
+
+## Notes
+
+- Make sure all files are accessible from your website's root URL
+- The theme color in the meta tags should match your website's design
+- For PWA support, ensure your server serves the \`site.webmanifest\` file with the correct MIME type (\`application/manifest+json\`)
+
+## Browser Support
+
+- **Chrome, Firefox, Safari, Edge**: Modern PNG favicons
+- **Internet Explorer**: Classic .ico favicon
+- **iOS Safari**: Apple Touch Icon
+- **Android Chrome**: Large PNG favicons
+- **Windows**: Tile icons for pinned sites
+
+Generated with Favicon Generator - Create professional favicons for your website!`;
+
+      zip.file('README.md', readmeContent);
+
       // Generate and download zip
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       saveAs(zipBlob, 'favicons.zip');
