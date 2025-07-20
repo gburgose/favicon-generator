@@ -2,24 +2,24 @@ import { Zap } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="main-header">
-      <div className="header-container">
-        <div className="header-logo">
-          <Zap size={24} className="logo-icon" />
-          <span className="logo-text">Favicon Generator</span>
+    <header className="header">
+      <div className="header__container">
+        <div className="header__logo">
+          <Zap size={24} className="header__icon" />
+          <span className="header__text">Favicon Generator</span>
         </div>
         <a
           href="https://github.com/gburgose"
           target="_blank"
           rel="noopener noreferrer"
-          className="github-link"
+          className="header__link"
         >
           <img
             src="https://avatars.githubusercontent.com/u/944868?s=32&v=4"
             alt="Gabriel Burgos GitHub"
-            className="github-avatar"
+            className="header__avatar"
           />
-          <span className="github-text">Sígueme en GitHub</span>
+          <span className="header__link-text">Sígueme en GitHub</span>
         </a>
       </div>
     </header>
