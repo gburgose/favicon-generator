@@ -42,7 +42,7 @@ export default function FaviconValidator() {
   };
 
   return (
-    <div className="validator">
+    <section className="validator">
       <div className="validator__header">
         <h1 className="validator__title">
           <Search size={32} className="validator__icon" />
@@ -125,6 +125,6 @@ export default function FaviconValidator() {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 } 
