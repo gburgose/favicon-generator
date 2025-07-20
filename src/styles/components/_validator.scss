@@ -1,9 +1,8 @@
 @use '../_colors.scss' as *;
 
-.favicon-validator {
+.validator {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem 0;
 
   &__header {
     text-align: center;
@@ -32,9 +31,9 @@
   }
 
   &__card {
-    background: transparent;
-    border: none;
     padding: 2rem;
+    background-color: #2d2d2d;
+    border-radius: 8px;
   }
 
 
