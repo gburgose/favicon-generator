@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat',
+});
 
 export const metadata: Metadata = {
   title: `${siteConfig.name} - Create Icons for Your Website`,
@@ -76,7 +83,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={montserrat.className}>
         {children}
         <Toaster
           position="top-right"
