@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, Check, X, ExternalLink, RefreshCw } from 'lucide-react';
+import { Search, Check, X, RefreshCw } from 'lucide-react';
 import { useFaviconValidator } from '@/hooks/useFaviconValidator';
 
 const getFaviconPurpose = (type: string): string => {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ArrowLeft, Shield, Eye, Database, Cookie, Users, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Shield, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
 export default function PrivacyPolicy() {

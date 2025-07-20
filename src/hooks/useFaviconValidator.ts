@@ -59,7 +59,7 @@ export const useFaviconValidator = () => {
             exists: response.ok || response.status === 0, // no-cors siempre retorna 0
             size: response.headers.get('content-length') || undefined
           });
-        } catch (error) {
+        } catch {
           checks.push({
             type: path,
             url: `${baseUrl}${path}`,
@@ -80,7 +80,7 @@ export const useFaviconValidator = () => {
         loading: false
       });
 
-    } catch (error) {
+    } catch {
       setValidationResult({
         url,
         hasFavicon: false,
