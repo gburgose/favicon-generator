@@ -1,14 +1,15 @@
 import { Zap } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   return (
     <header className="header">
       <div className="header__container">
-        <a href="/" className="header__logo">
+        <Link href="/" className="header__logo">
           <Zap size={24} className="header__icon" />
           <span className="header__text">Favicon Generator</span>
-        </a>
+        </Link>
         <a
           href="https://github.com/gburgose"
           target="_blank"

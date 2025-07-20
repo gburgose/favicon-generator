@@ -1,14 +1,15 @@
 import { Heart, Github, Zap } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__content">
-          <a href="/" className="footer__logo">
+          <Link href="/" className="footer__logo">
             <Zap size={20} className="footer__icon" />
             <span>Favicon Generator</span>
-          </a>
+          </Link>
 
           <ul className="footer__links">
             <li>
@@ -18,7 +19,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="/privacy">Privacy Policy</a>
+              <Link href="/privacy">Privacy Policy</Link>
             </li>
           </ul>
         </div>
