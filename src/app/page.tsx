@@ -78,9 +78,14 @@ export default function FaviconGenerator() {
               alt="Preview"
               className="original-image"
             />
-            <p className="file-info">
-              {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
-            </p>
+            <div className="file-info">
+              <div className="file-name-long" title={selectedFile.name}>
+                {selectedFile.name}
+              </div>
+              <div className="file-size-info">
+                ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+              </div>
+            </div>
 
             {imageWarning && (
               <div className="image-warning">

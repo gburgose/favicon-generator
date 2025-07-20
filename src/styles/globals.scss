@@ -119,6 +119,12 @@ a {
   border: 1px solid #404040;
 }
 
+.preview-section {
+  margin-top: 2rem;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .favicons-table {
   margin-top: 1rem;
   overflow-x: auto;
@@ -559,6 +565,26 @@ a {
 .file-info {
   margin-top: 0.5rem;
   color: #666;
+  max-width: 100%;
+  line-height: 1.4;
+}
+
+.file-name-long {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85rem;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  margin-bottom: 0.25rem;
+  cursor: help;
+}
+
+.file-size-info {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
 }
 
 .buttons-container {
