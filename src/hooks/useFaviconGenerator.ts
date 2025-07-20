@@ -142,7 +142,7 @@ export const useFaviconGenerator = () => {
 
       img.src = URL.createObjectURL(selectedFile);
 
-    } catch (err) {
+    } catch {
       toast.error('Failed to generate favicons. Please try again.');
       setIsGenerating(false);
     }
@@ -316,7 +316,7 @@ Generated with Favicon Generator - Create professional favicons for your website
       saveAs(zipBlob, 'favicons.zip');
 
       toast.success('Favicons and files downloaded successfully!');
-    } catch (err) {
+    } catch {
       toast.error('Failed to download favicons. Please try again.');
     } finally {
       setIsDownloading(false);

@@ -5,7 +5,6 @@ import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
-  Upload,
   Download,
   Trash2,
   Copy,
@@ -190,7 +189,7 @@ export default function FaviconGenerator() {
                         <td className="purpose">Classic Favicon</td>
                         <td className="file-size">{getFileSize(generatedFavicons['32x32'])}</td>
                       </tr>
-                      {FAVICON_SIZES.map(({ size, name }) => {
+                      {FAVICON_SIZES.map(({ name }) => {
                         const fileName = getFileName(name);
                         const purpose = getFaviconPurpose(name);
                         const fileSize = getFileSize(generatedFavicons[name]);
