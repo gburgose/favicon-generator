@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: 'Favicon Generator',
   description: 'Generate professional favicons in multiple sizes for your website',
-  url: 'https://favicon-generator.vercel.app',
+  url: 'https://favicon-generator-beige.vercel.app',
   ogImage: '/og-image.png',
   gtmId: 'GTM-P7FQSKFN',
   links: {

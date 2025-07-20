@@ -237,7 +237,7 @@ export const useFaviconGenerator = () => {
         ]
       };
 
-      zip.file('site.webmanifest', JSON.stringify(manifest, null, 2));
+      zip.file('manifest.json', JSON.stringify(manifest, null, 2));
 
       // Generate HTML snippet with all the favicon links
       const htmlSnippet = `<!-- Classic Favicon -->
@@ -257,7 +257,7 @@ export const useFaviconGenerator = () => {
 <meta name="msapplication-TileImage" content="/mstile-144x144.png">
 
 <!-- Manifest and Theme Color -->
-<link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="${appSettings.themeColor}">`;
 
       zip.file('meta-tags.html', htmlSnippet);
@@ -276,7 +276,7 @@ This package contains all the favicon files needed for your website.
 - \`favicon-512x512.png\` - Extra large favicon for Android devices
 - \`apple-touch-icon.png\` - Icon for iOS devices
 - \`mstile-144x144.png\` - Icon for Windows tiles
-- \`site.webmanifest\` - Web app manifest for PWA support
+- \`manifest.json\` - Web app manifest for PWA support
 - \`meta-tags.html\` - HTML meta tags to include in your website
 
 ## Installation
@@ -310,7 +310,7 @@ This package contains all the favicon files needed for your website.
 
 - Make sure all files are accessible from your website's root URL
 - The theme color in the meta tags should match your website's design
-- For PWA support, ensure your server serves the \`site.webmanifest\` file with the correct MIME type (\`application/manifest+json\`)
+- For PWA support, ensure your server serves the \`manifest.json\` file with the correct MIME type (\`application/manifest+json\`)
 
 ## Browser Support
 
@@ -415,7 +415,7 @@ Generated with Favicon Generator - Create professional favicons for your website
 <meta name="msapplication-TileImage" content="/mstile-144x144.png">
 
 <!-- Manifest and Theme Color -->
-<link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="${appSettings.themeColor}">`;
   };
 

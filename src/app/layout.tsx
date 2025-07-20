@@ -5,6 +5,7 @@ import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -77,12 +78,13 @@ export const metadata: Metadata = {
   category: 'web development',
   classification: 'web tools',
   other: {
-    'theme-color': '#231F20',
-    'msapplication-TileColor': '#231F20',
+    'theme-color': '#F3DFA2',
+    'msapplication-TileColor': '#F3DFA2',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': siteConfig.name,
   },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -98,6 +100,7 @@ export default function RootLayout({
       <body className={`${montserrat.className} ${poppins.variable}`}>
         {children}
         <CookieConsent />
+        <ServiceWorkerRegistration />
         <Toaster
           position="top-right"
           toastOptions={{
