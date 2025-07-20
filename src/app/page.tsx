@@ -94,6 +94,9 @@ export default function FaviconGenerator() {
 
             <div className="app-settings">
               <h3>App Settings</h3>
+              <p className="settings-subtitle">
+                Customize these fields with your project information. This data will be used in meta tags and manifest to improve SEO and user experience.
+              </p>
 
               <div className="settings-grid">
                 <div className="form-group">

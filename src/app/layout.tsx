@@ -92,8 +92,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} ${poppins.variable}`}>
-        <GoogleTagManager />
         {children}
+        <GoogleTagManager />
         <Toaster
           position="top-right"
           toastOptions={{
