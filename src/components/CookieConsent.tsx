@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import Link from 'next/link';
 
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -36,7 +37,10 @@ export default function CookieConsent() {
         </div>
         <p>
           This website uses cookies to enhance your experience and analyze site traffic.
-          By continuing to use this site, you consent to our use of cookies.
+          By continuing to use this site, you consent to our use of cookies.{' '}
+          <Link href="/privacy" className="privacy-link">
+            Learn more
+          </Link>
         </p>
         <button
           onClick={acceptCookies}
