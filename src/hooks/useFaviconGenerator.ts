@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+import { gtmEvents } from '@/utils/gtm';
 
 interface FaviconSize {
   size: number;
@@ -61,6 +62,9 @@ export const useFaviconGenerator = () => {
 
     setSelectedFile(file);
 
+    // Track image upload
+    gtmEvents.imageUploaded(file.name, file.size, file.type);
+
     // Create preview URL and check image dimensions
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
@@ -70,6 +74,7 @@ export const useFaviconGenerator = () => {
     img.onload = () => {
       if (img.width < 512 || img.height < 512) {
         setImageWarning(`Warning: Your image is ${img.width}x${img.height}px. For best quality, use an image of 512x512px or larger. The favicons will still be generated but larger sizes may appear pixelated.`);
+        gtmEvents.smallImageWarning(img.width, img.height);
       }
     };
     img.src = url;
@@ -124,6 +129,13 @@ export const useFaviconGenerator = () => {
         toast.success('Favicons generated successfully!');
         setIsGenerating(false);
 
+        // Track successful generation
+        gtmEvents.faviconsGenerated(
+          FAVICON_SIZES.length + 1, // +1 for favicon.ico
+          appSettings.name,
+          `${img.width}x${img.height}`
+        );
+
         // Scroll to generated favicons section
         setTimeout(() => {
           const element = document.getElementById('generated-favicons');
@@ -142,9 +154,10 @@ export const useFaviconGenerator = () => {
 
       img.src = URL.createObjectURL(selectedFile);
 
-    } catch {
+    } catch (error) {
       toast.error('Failed to generate favicons. Please try again.');
       setIsGenerating(false);
+      gtmEvents.generationError(error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
@@ -315,9 +328,16 @@ Generated with Favicon Generator - Create professional favicons for your website
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       saveAs(zipBlob, 'favicons.zip');
 
+      // Track download
+      gtmEvents.faviconsDownloaded(
+        FAVICON_SIZES.length + 1, // +1 for favicon.ico
+        appSettings.name
+      );
+
       toast.success('Favicons and files downloaded successfully!');
-    } catch {
+    } catch (error) {
       toast.error('Failed to download favicons. Please try again.');
+      gtmEvents.generationError(error instanceof Error ? error.message : 'Download failed');
     } finally {
       setIsDownloading(false);
     }
@@ -333,16 +353,33 @@ Generated with Favicon Generator - Create professional favicons for your website
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
+
+    // Track clear action
+    gtmEvents.allCleared();
   };
 
   const updateAppSettings = (updates: Partial<AppSettings>) => {
-    setAppSettings(prev => ({ ...prev, ...updates }));
+    setAppSettings(prev => {
+      const newSettings = { ...prev, ...updates };
+
+      // Track app configuration changes
+      if (updates.name || updates.themeColor || updates.description) {
+        gtmEvents.appConfigured(
+          newSettings.name,
+          newSettings.themeColor,
+          !!newSettings.description
+        );
+      }
+
+      return newSettings;
+    });
   };
 
   const copyMetaTags = () => {
     const metaTags = getMetaTags();
     navigator.clipboard.writeText(metaTags);
     toast.success('Meta tags copied to clipboard!');
+    gtmEvents.metaTagsCopied();
   };
 
   const getMetaTags = () => {
@@ -395,6 +432,7 @@ Generated with Favicon Generator - Create professional favicons for your website
     const manifest = getManifest();
     navigator.clipboard.writeText(JSON.stringify(manifest, null, 2));
     toast.success('Manifest copied to clipboard!');
+    gtmEvents.manifestCopied();
   };
 
   // Helper functions for favicon table
