@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -72,10 +73,13 @@ export default function FaviconGenerator() {
         {selectedFile && (
           <div className="preview-section">
             <h2 className="preview-title">Original Image</h2>
-            <img
+            <Image
               src={previewUrl}
               alt="Preview"
+              width={200}
+              height={200}
               className="original-image"
+              style={{ objectFit: 'contain' }}
             />
             <div className="file-info">
               <div className="file-name-long" title={selectedFile.name}>
@@ -181,9 +185,11 @@ export default function FaviconGenerator() {
                       {/* Add favicon.ico row */}
                       <tr>
                         <td>
-                          <img
+                          <Image
                             src={generatedFavicons['32x32']}
                             alt="favicon.ico"
+                            width={32}
+                            height={32}
                             className="favicon-table-preview favicon-icon"
                           />
                         </td>
@@ -200,9 +206,11 @@ export default function FaviconGenerator() {
                         return (
                           <tr key={name}>
                             <td>
-                              <img
+                              <Image
                                 src={generatedFavicons[name]}
                                 alt={`${name} favicon`}
+                                width={32}
+                                height={32}
                                 className="favicon-table-preview favicon-icon"
                               />
                             </td>
