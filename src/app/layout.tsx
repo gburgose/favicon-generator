@@ -100,9 +100,9 @@ export default function RootLayout({
         <GoogleTagManager gtmId="GTM-P7FQSKFN" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable}`}>
-        <div className="app-layout">
+        <div className="layout">
           <Header />
-          <main className="main-content">
+          <main className="layout__content">
             {children}
           </main>
           <Footer />

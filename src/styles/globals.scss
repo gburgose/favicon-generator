@@ -1,6 +1,8 @@
 @use './_colors.scss' as *;
+@use './components/_layout.scss';
 @use './components/_header.scss';
 @use './components/_footer.scss';
+@use './components/_converter.scss';
 
 * {
   box-sizing: border-box;
@@ -931,18 +933,7 @@ a {
   }
 }
 
-/* App Layout */
-.app-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
 
 
 
