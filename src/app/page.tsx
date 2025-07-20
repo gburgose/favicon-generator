@@ -73,7 +73,7 @@ export default function FaviconGenerator() {
               alt="Preview"
               className="original-image"
             />
-            <p style={{ marginTop: '0.5rem', color: '#666' }}>
+            <p className="file-info">
               {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
             </p>
 
@@ -120,12 +120,11 @@ export default function FaviconGenerator() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+            <div className="buttons-container">
               <button
                 onClick={generateFavicons}
                 disabled={isGenerating}
-                className="btn-primary"
-                style={{ marginTop: 0 }}
+                className="btn-primary btn-no-margin"
               >
                 {isGenerating && <span className="loading"></span>}
                 {!isGenerating && <Sparkles size={18} />}
@@ -134,8 +133,7 @@ export default function FaviconGenerator() {
 
               <button
                 onClick={clearAll}
-                className="btn-secondary"
-                style={{ marginTop: 0 }}
+                className="btn-secondary btn-no-margin"
               >
                 <Trash2 size={18} />
                 Clear
@@ -168,8 +166,7 @@ export default function FaviconGenerator() {
                           <img
                             src={generatedFavicons['32x32']}
                             alt="favicon.ico"
-                            className="favicon-table-preview"
-                            style={{ width: 32, height: 32 }}
+                            className="favicon-table-preview favicon-icon"
                           />
                         </td>
                         <td className="file-name">favicon.ico</td>
@@ -188,8 +185,7 @@ export default function FaviconGenerator() {
                               <img
                                 src={generatedFavicons[name]}
                                 alt={`${name} favicon`}
-                                className="favicon-table-preview"
-                                style={{ width: 32, height: 32 }}
+                                className="favicon-table-preview favicon-icon"
                               />
                             </td>
                             <td className="file-name">{fileName}</td>
@@ -221,7 +217,7 @@ export default function FaviconGenerator() {
 
               {showMetaTags && (
                 <>
-                  <p style={{ color: '#666', marginBottom: '1rem' }}>
+                  <p className="section-description">
                     Copy and paste these meta tags into your HTML &lt;head&gt; section:
                   </p>
                   <div className="code-block">
@@ -264,7 +260,7 @@ export default function FaviconGenerator() {
 
               {showManifest && (
                 <>
-                  <p style={{ color: '#666', marginBottom: '1rem' }}>
+                  <p className="section-description">
                     This is the content of the site.webmanifest file that will be generated:
                   </p>
                   <div className="code-block">
@@ -298,7 +294,7 @@ export default function FaviconGenerator() {
         {Object.keys(generatedFavicons).length > 0 && (
           <div className="download-section">
             <h3>Ready to Download</h3>
-            <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+            <p className="download-description">
               All your favicons have been generated successfully. Download the complete package with all files and meta tags.
             </p>
             <button

@@ -545,6 +545,37 @@ a {
   }
 }
 
+/* Additional utility classes */
+.file-info {
+  margin-top: 0.5rem;
+  color: #666;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-no-margin {
+  margin-top: 0;
+}
+
+.favicon-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.section-description {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.download-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
