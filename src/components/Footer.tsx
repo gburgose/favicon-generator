@@ -5,10 +5,10 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__content">
-          <div className="footer__logo">
+          <a href="/" className="footer__logo">
             <Zap size={20} className="footer__icon" />
             <span>Favicon Generator</span>
-          </div>
+          </a>
 
           <ul className="footer__links">
             <li>

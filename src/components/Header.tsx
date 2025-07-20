@@ -5,10 +5,10 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header__container">
-        <div className="header__logo">
+        <a href="/" className="header__logo">
           <Zap size={24} className="header__icon" />
           <span className="header__text">Favicon Generator</span>
-        </div>
+        </a>
         <a
           href="https://github.com/gburgose"
           target="_blank"
@@ -22,7 +22,7 @@ export default function Header() {
             height={24}
             className="header__avatar"
           />
-          <span className="header__link-text">Sígueme en GitHub</span>
+          <span className="header__link-text">Follow me on GitHub</span>
         </a>
       </div>
     </header>

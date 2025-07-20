@@ -21,6 +21,12 @@
     color: #EFE6DD;
     font-weight: 600;
     font-size: 1.2rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #F3DFA2;
+    }
   }
 
   &__icon {
