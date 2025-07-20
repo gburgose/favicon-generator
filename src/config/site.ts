@@ -3,6 +3,7 @@ export const siteConfig = {
   description: 'Generate professional favicons in multiple sizes for your website',
   url: 'https://favicon-generator.vercel.app',
   ogImage: '/og-image.png',
+  gtmId: 'GTM-P7FQSKFN',
   links: {
     twitter: 'https://twitter.com/favicon_generator',
     github: 'https://github.com/yourusername/favicon-generator',

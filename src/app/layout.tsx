@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
+import GoogleTagManager from "@/components/GoogleTagManager";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -91,6 +92,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} ${poppins.variable}`}>
+        <GoogleTagManager />
         {children}
         <Toaster
           position="top-right"
