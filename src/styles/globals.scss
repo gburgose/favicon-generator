@@ -133,9 +133,7 @@ a {
     width: 100%;
     border-collapse: collapse;
     background: transparent;
-    border-radius: 6px;
     overflow: hidden;
-    border: 1px solid rgba(126, 189, 194, 0.3);
 
 
 
@@ -143,6 +141,10 @@ a {
       padding: 1rem;
       border-bottom: 1px solid rgba(64, 64, 64, 0.5);
       vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
     }
 
     tr:hover {

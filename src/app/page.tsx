@@ -186,7 +186,7 @@ export default function FaviconGenerator() {
                       <tr>
                         <td>
                           <Image
-                            src={generatedFavicons['32x32']}
+                            src={generatedFavicons['16x16']}
                             alt="favicon.ico"
                             width={32}
                             height={32}
@@ -194,9 +194,9 @@ export default function FaviconGenerator() {
                           />
                         </td>
                         <td className="file-name">favicon.ico</td>
-                        <td className="size">32x32</td>
+                        <td className="size">16x16</td>
                         <td className="purpose">Classic Favicon</td>
-                        <td className="file-size">{getFileSize(generatedFavicons['32x32'])}</td>
+                        <td className="file-size">{getFileSize(generatedFavicons['16x16'])}</td>
                       </tr>
                       {FAVICON_SIZES.map(({ name }) => {
                         const fileName = getFileName(name);

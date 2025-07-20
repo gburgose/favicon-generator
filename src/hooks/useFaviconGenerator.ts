@@ -204,9 +204,9 @@ export const useFaviconGenerator = () => {
         zip.file(fileName, blob);
       });
 
-      // Generate favicon.ico (using 32x32 as base)
-      if (generatedFavicons['32x32']) {
-        const icoData = generatedFavicons['32x32'].split(',')[1];
+      // Generate favicon.ico (using 16x16 as base)
+      if (generatedFavicons['16x16']) {
+        const icoData = generatedFavicons['16x16'].split(',')[1];
         const icoBlob = new Blob([Uint8Array.from(atob(icoData), c => c.charCodeAt(0))], {
           type: 'image/x-icon'
         });
@@ -268,7 +268,7 @@ This package contains all the favicon files needed for your website.
 
 ## Files Included
 
-- \`favicon.ico\` - Classic favicon for older browsers
+- \`favicon.ico\` - Classic 16x16 favicon for older browsers
 - \`favicon-16x16.png\` - Small favicon for modern browsers
 - \`favicon-32x32.png\` - Standard favicon for modern browsers
 - \`favicon-192x192.png\` - Large favicon for Android devices
