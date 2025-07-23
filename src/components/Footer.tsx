@@ -13,7 +13,10 @@ export default function Footer() {
 
           <ul className="footer__links">
             <li>
-              <Link href="/">Favicon Tools</Link>
+              <Link href="/">Favicon Converter</Link>
+            </li>
+            <li>
+              <Link href="/generator">Favicon Generator</Link>
             </li>
             <li>
               <Link href="/validator">Favicon Validator</Link>

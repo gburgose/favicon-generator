@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -29,6 +29,35 @@ export const useFaviconConverter = () => {
   const [selectedFaviconSizes, setSelectedFaviconSizes] = useState<string[]>(
     FAVICON_SIZES.filter(size => size.recommended).map(size => size.name)
   );
+
+  // Check if there's a generated favicon from the Generator
+  useEffect(() => {
+    const generatedFavicon = localStorage.getItem('generatedFavicon');
+    const faviconSource = localStorage.getItem('faviconSource');
+
+    if (generatedFavicon && faviconSource === 'generator') {
+      // Convert data URL to File object
+      const base64Data = generatedFavicon.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const file = new File([byteArray], 'generated-favicon.png', { type: 'image/png' });
+
+      // Set the file and preview
+      setSelectedFile(file);
+      setPreviewUrl(generatedFavicon);
+
+      // Clear localStorage
+      localStorage.removeItem('generatedFavicon');
+      localStorage.removeItem('faviconSource');
+
+      // Show success message
+      toast.success('Image from Generator loaded successfully!');
+    }
+  }, []);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
