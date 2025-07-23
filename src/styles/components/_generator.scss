@@ -80,7 +80,6 @@
   }
 
   &__controls {
-    margin-bottom: 2rem;
     padding: 1.5rem;
     background: #1e1e1e;
     border-radius: 6px;
@@ -241,8 +240,7 @@
   }
 
   &__preview {
-    margin-bottom: 2rem;
-    margin-top: 4rem;
+    margin: 2rem 0;
 
     h3 {
       font-size: 1.3rem;
@@ -257,7 +255,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem 0;
   }
 
   &__preview-image {
