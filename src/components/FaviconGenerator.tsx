@@ -25,7 +25,8 @@ import {
   Plus,
   Minus,
   Check,
-  X
+  X,
+  Zap
 } from 'lucide-react';
 import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
 
@@ -237,7 +238,8 @@ export default function FaviconGenerator() {
                   { name: 'plus', icon: Plus },
                   { name: 'minus', icon: Minus },
                   { name: 'check', icon: Check },
-                  { name: 'x', icon: X }
+                  { name: 'x', icon: X },
+                  { name: 'zap', icon: Zap }
                 ].map(({ name, icon: IconComponent }) => (
                   <button
                     key={name}
