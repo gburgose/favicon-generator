@@ -121,10 +121,14 @@ export const useFaviconGenerator = () => {
     ctx.fillRect(0, 0, 512, 512);
 
     // Create SVG with the selected icon - properly centered and sized
+    const iconSize = 300; // Icono de tamaño medio
+    const x = (512 / 2) - (iconSize / 2); // 256 - 150 = 106
+    const y = (512 / 2) - (iconSize / 2); // 256 - 150 = 106
+
     const svgContent = `
-      <svg width="512" height="512" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <rect width="512" height="512" fill="${textSettings.backgroundColor}"/>
-        <g transform="translate(12, 12) scale(0.6)" fill="none" stroke="${textSettings.textColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(${x}, ${y}) scale(12.5)" fill="none" stroke="${textSettings.textColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           ${getIconSvg(settings.selectedIcon)}
         </g>
       </svg>
