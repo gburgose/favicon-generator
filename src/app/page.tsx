@@ -1,9 +1,9 @@
-import Converter from '@/components/Converter';
+import FaviconConverter from '@/components/FaviconConverter';
 
 export default function FaviconGenerator() {
   return (
     <div className="page">
-      <Converter />
+      <FaviconConverter />
     </div>
   );
 }

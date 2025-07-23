@@ -5,11 +5,7 @@ import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { gtmEvents } from '@/utils/gtm';
-
-interface FaviconSize {
-  size: number;
-  name: string;
-}
+import { FAVICON_SIZES } from '@/config/favicon-sizes';
 
 interface AppSettings {
   name: string;
@@ -17,16 +13,7 @@ interface AppSettings {
   themeColor: string;
 }
 
-const FAVICON_SIZES: FaviconSize[] = [
-  { size: 16, name: '16x16' },
-  { size: 32, name: '32x32' },
-  { size: 192, name: '192x192' },
-  { size: 512, name: '512x512' },
-  { size: 180, name: '180x180' }, // Apple Touch Icon
-  { size: 144, name: '144x144' }, // Windows Tile
-];
-
-export const useFaviconGenerator = () => {
+export const useFaviconConverter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [generatedFavicons, setGeneratedFavicons] = useState<{ [key: string]: string }>({});
@@ -39,6 +26,9 @@ export const useFaviconGenerator = () => {
     description: 'Application description',
     themeColor: '#ffffff'
   });
+  const [selectedFaviconSizes, setSelectedFaviconSizes] = useState<string[]>(
+    FAVICON_SIZES.filter(size => size.recommended).map(size => size.name)
+  );
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
@@ -104,7 +94,8 @@ export const useFaviconGenerator = () => {
       img.onload = () => {
         const favicons: { [key: string]: string } = {};
 
-        FAVICON_SIZES.forEach(({ size, name }) => {
+        const selectedSizes = getSelectedFaviconSizes();
+        FAVICON_SIZES.filter(size => selectedSizes.includes(size.name)).forEach(({ size, name, format }) => {
           canvas.width = size;
           canvas.height = size;
 
@@ -121,8 +112,9 @@ export const useFaviconGenerator = () => {
           // Draw image centered
           ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
 
-          // Convert to data URL
-          favicons[name] = canvas.toDataURL('image/png');
+          // Convert to data URL based on format
+          const mimeType = format === 'ico' ? 'image/x-icon' : 'image/png';
+          favicons[name] = canvas.toDataURL(mimeType);
         });
 
         setGeneratedFavicons(favicons);
@@ -177,152 +169,32 @@ export const useFaviconGenerator = () => {
           type: 'image/png'
         });
 
-        // Use correct file names based on the meta tags
-        let fileName = '';
-        switch (name) {
-          case '16x16':
-            fileName = 'favicon-16x16.png';
-            break;
-          case '32x32':
-            fileName = 'favicon-32x32.png';
-            break;
-          case '192x192':
-            fileName = 'favicon-192x192.png';
-            break;
-          case '512x512':
-            fileName = 'favicon-512x512.png';
-            break;
-          case '180x180':
-            fileName = 'apple-touch-icon.png';
-            break;
-          case '144x144':
-            fileName = 'mstile-144x144.png';
-            break;
-          default:
-            fileName = `favicon-${name}.png`;
-        }
+        // Use correct file names based on the configuration
+        const faviconSize = FAVICON_SIZES.find(size => size.name === name);
+        const fileName = faviconSize ? faviconSize.fileName : `favicon-${name}.png`;
 
         zip.file(fileName, blob);
       });
 
-      // Generate favicon.ico (using 16x16 as base)
-      if (generatedFavicons['16x16']) {
-        const icoData = generatedFavicons['16x16'].split(',')[1];
+      // Generate favicon.ico (using the ICO format from config)
+      const icoFavicon = FAVICON_SIZES.find(size => size.format === 'ico');
+      if (icoFavicon && generatedFavicons[icoFavicon.name]) {
+        const icoData = generatedFavicons[icoFavicon.name].split(',')[1];
         const icoBlob = new Blob([Uint8Array.from(atob(icoData), c => c.charCodeAt(0))], {
           type: 'image/x-icon'
         });
-        zip.file('favicon.ico', icoBlob);
+        zip.file(icoFavicon.fileName, icoBlob);
       }
 
-      // Generate site.webmanifest
-      const manifest = {
-        name: appSettings.name,
-        short_name: appSettings.name,
-        description: appSettings.description,
-        start_url: "/",
-        display: "standalone",
-        background_color: appSettings.themeColor,
-        theme_color: appSettings.themeColor,
-        icons: [
-          {
-            src: "/favicon-192x192.png",
-            sizes: "192x192",
-            type: "image/png"
-          },
-          {
-            src: "/favicon-512x512.png",
-            sizes: "512x512",
-            type: "image/png"
-          }
-        ]
-      };
+      // Generate site.webmanifest dynamically
+      const manifest = getManifest();
 
       zip.file('manifest.json', JSON.stringify(manifest, null, 2));
 
       // Generate HTML snippet with all the favicon links
-      const htmlSnippet = `<!-- Classic Favicon -->
-<link rel="shortcut icon" href="/favicon.ico">
-
-<!-- Modern PNG Favicons -->
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-<!-- Windows Tiles -->
-<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
-
-<!-- Manifest and Theme Color -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="${appSettings.themeColor}">`;
+      const htmlSnippet = getMetaTags();
 
       zip.file('meta-tags.html', htmlSnippet);
-
-      // Generate README.md with installation instructions
-      const readmeContent = `# Favicon Package
-
-This package contains all the favicon files needed for your website.
-
-## Files Included
-
-- \`favicon.ico\` - Classic 16x16 favicon for older browsers
-- \`favicon-16x16.png\` - Small favicon for modern browsers
-- \`favicon-32x32.png\` - Standard favicon for modern browsers
-- \`favicon-192x192.png\` - Large favicon for Android devices
-- \`favicon-512x512.png\` - Extra large favicon for Android devices
-- \`apple-touch-icon.png\` - Icon for iOS devices
-- \`mstile-144x144.png\` - Icon for Windows tiles
-- \`manifest.json\` - Web app manifest for PWA support
-- \`meta-tags.html\` - HTML meta tags to include in your website
-
-## Installation
-
-1. Upload all the favicon files to your website's root directory (public folder)
-2. Add the following meta tags to your HTML <head> section:
-
-\`\`\`html
-<!-- Classic Favicon -->
-<link rel="shortcut icon" href="/favicon.ico">
-
-<!-- Modern PNG Favicons -->
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-<!-- Windows Tiles -->
-<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
-
-<!-- Manifest and Theme Color -->
-<link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="${appSettings.themeColor}">
-\`\`\`
-
-## Notes
-
-- Make sure all files are accessible from your website's root URL
-- The theme color in the meta tags should match your website's design
-- For PWA support, ensure your server serves the \`manifest.json\` file with the correct MIME type (\`application/manifest+json\`)
-
-## Browser Support
-
-- **Chrome, Firefox, Safari, Edge**: Modern PNG favicons
-- **Internet Explorer**: Classic .ico favicon
-- **iOS Safari**: Apple Touch Icon
-- **Android Chrome**: Large PNG favicons
-- **Windows**: Tile icons for pinned sites
-
-Generated with Favicon Generator - Create professional favicons for your website!`;
-
-      zip.file('README.md', readmeContent);
 
       // Generate and download zip
       const zipBlob = await zip.generateAsync({ type: 'blob' });
@@ -390,6 +262,27 @@ Generated with Favicon Generator - Create professional favicons for your website
     });
   };
 
+  const toggleFaviconSize = (name: string) => {
+    setSelectedFaviconSizes(prev => {
+      if (prev.includes(name)) {
+        return prev.filter(size => size !== name);
+      } else {
+        return [...prev, name];
+      }
+    });
+
+    // Limpiar favicons generados cuando cambie la selección
+    setGeneratedFavicons({});
+  };
+
+  const getSelectedFaviconSizes = () => {
+    return selectedFaviconSizes;
+  };
+
+  const isFaviconSelected = (name: string) => {
+    return selectedFaviconSizes.includes(name);
+  };
+
   const copyMetaTags = () => {
     const metaTags = getMetaTags();
     navigator.clipboard.writeText(metaTags);
@@ -398,28 +291,55 @@ Generated with Favicon Generator - Create professional favicons for your website
   };
 
   const getMetaTags = () => {
+    const selectedSizes = getSelectedFaviconSizes();
+
+    // Generate Apple Touch Icons (individual links like favicon-generator.org)
+    const appleTouchIcons = FAVICON_SIZES
+      .filter(size => size.purpose === 'Apple Touch Icon' && selectedSizes.includes(size.name))
+      .map(size => `<link rel="apple-touch-icon" sizes="${size.name}" href="/${size.fileName}">`)
+      .join('\n');
+
+    // Generate Modern PNG Favicons (excluding Android)
+    const faviconLinks = FAVICON_SIZES
+      .filter(size => size.purpose === 'Modern PNG Favicon' && selectedSizes.includes(size.name) && !size.fileName.includes('android'))
+      .map(size => `<link rel="icon" type="image/png" sizes="${size.name}" href="/${size.fileName}">`)
+      .join('\n');
+
+    // Generate Android Icons separately
+    const androidIcons = FAVICON_SIZES
+      .filter(size => size.fileName.includes('android') && selectedSizes.includes(size.name))
+      .map(size => `<link rel="icon" type="image/png" sizes="${size.name}" href="/${size.fileName}">`)
+      .join('\n');
+
+    // Windows Tile
+    const windowsTile = FAVICON_SIZES
+      .find(size => size.purpose === 'Windows Tiles' && selectedSizes.includes(size.name));
+
+    // ICO favicon
+    const icoFavicon = FAVICON_SIZES.find(size => size.format === 'ico' && selectedSizes.includes(size.name));
+
     return `<!-- Classic Favicon -->
-<link rel="shortcut icon" href="/favicon.ico">
+${icoFavicon ? `<link rel="shortcut icon" href="/${icoFavicon.fileName}">` : ''}
+
+<!-- Apple Touch Icons -->
+${appleTouchIcons}
 
 <!-- Modern PNG Favicons -->
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+${faviconLinks}
 
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-<!-- Windows Tiles -->
-<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+<!-- Android Icons -->
+${androidIcons}
 
 <!-- Manifest and Theme Color -->
 <link rel="manifest" href="/manifest.json">
+<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
+${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fileName}">` : ''}
 <meta name="theme-color" content="${appSettings.themeColor}">`;
   };
 
   const getManifest = () => {
+    const selectedSizes = getSelectedFaviconSizes();
+
     return {
       name: appSettings.name,
       short_name: appSettings.name,
@@ -428,18 +348,13 @@ Generated with Favicon Generator - Create professional favicons for your website
       display: "standalone",
       background_color: appSettings.themeColor,
       theme_color: appSettings.themeColor,
-      icons: [
-        {
-          src: "/favicon-192x192.png",
-          sizes: "192x192",
+      icons: FAVICON_SIZES
+        .filter(size => size.size >= 192 && selectedSizes.includes(size.name)) // Only include selected icons 192px and larger for manifest
+        .map(size => ({
+          src: `/${size.fileName}`,
+          sizes: size.name,
           type: "image/png"
-        },
-        {
-          src: "/favicon-512x512.png",
-          sizes: "512x512",
-          type: "image/png"
-        }
-      ]
+        }))
     };
   };
 
@@ -452,27 +367,13 @@ Generated with Favicon Generator - Create professional favicons for your website
 
   // Helper functions for favicon table
   const getFileName = (name: string) => {
-    switch (name) {
-      case '16x16': return 'favicon-16x16.png';
-      case '32x32': return 'favicon-32x32.png';
-      case '192x192': return 'favicon-192x192.png';
-      case '512x512': return 'favicon-512x512.png';
-      case '180x180': return 'apple-touch-icon.png';
-      case '144x144': return 'mstile-144x144.png';
-      default: return `favicon-${name}.png`;
-    }
+    const faviconSize = FAVICON_SIZES.find(size => size.name === name);
+    return faviconSize ? faviconSize.fileName : `favicon-${name}.png`;
   };
 
   const getFaviconPurpose = (name: string) => {
-    switch (name) {
-      case '16x16': return 'Modern PNG Favicon';
-      case '32x32': return 'Modern PNG Favicon';
-      case '192x192': return 'Modern PNG Favicon';
-      case '512x512': return 'Modern PNG Favicon';
-      case '180x180': return 'Apple Touch Icon';
-      case '144x144': return 'Windows Tiles';
-      default: return 'General favicon';
-    }
+    const faviconSize = FAVICON_SIZES.find(size => size.name === name);
+    return faviconSize ? faviconSize.purpose : 'General favicon';
   };
 
   const getFileSize = (dataUrl: string) => {
@@ -514,6 +415,12 @@ Generated with Favicon Generator - Create professional favicons for your website
     getFileSize,
 
     // Constants
-    FAVICON_SIZES
+    FAVICON_SIZES,
+
+    // Favicon selection
+    selectedFaviconSizes,
+    toggleFaviconSize,
+    getSelectedFaviconSizes,
+    isFaviconSelected
   };
 }; 

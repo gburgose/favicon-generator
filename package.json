@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "devt": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -22,7 +23,8 @@
     "react-hot-toast": "^2.5.2",
     "react-syntax-highlighter": "^15.6.1",
     "sass": "^1.89.2",
-    "sweetalert2": "^11.22.2"
+    "sweetalert2": "^11.22.2",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

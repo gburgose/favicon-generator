@@ -163,7 +163,7 @@
   .file-size {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9rem;
-    color: $persian-red;
+    color: $vanilla;
     text-align: right;
   }
 }
@@ -187,11 +187,11 @@
 
 .error {
   color: #dc3545;
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 5px;
-  padding: 1rem;
-  margin-top: 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .success {

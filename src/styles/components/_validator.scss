@@ -144,6 +144,8 @@
     margin-top: 2rem;
   }
 
+
+
   &__checks {
     margin-bottom: 2rem;
 
@@ -151,17 +153,23 @@
       font-size: 1.3rem;
       font-weight: 600;
       color: #EFE6DD;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
 
-  &__checks-grid {
-    margin-top: 1rem;
+  &__coverage-text {
+    color: $vanilla;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
 
+  &__checks-grid {
     table {
       width: 100%;
       border-collapse: collapse;
       background: transparent;
+
+
 
       td {
         padding: 0.75rem 0;
@@ -178,10 +186,20 @@
   &__check {
     &.success {
       color: #10b981;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
 
     &.error {
       color: #ef4444;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
   }
 
@@ -204,14 +222,54 @@
   &__check-size {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9rem;
-    color: $persian-red;
-    text-align: right;
+    color: $vanilla;
+    font-weight: 600;
+
+    .validator__format-badge {
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__check-format {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+    color: $verdigris;
+    font-weight: 500;
+  }
+
+  &__format-badge {
+    background: #404040;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  &__check-recommended {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__check-url {
+    font-size: 0.9rem;
+
+    a {
+      color: $verdigris;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        color: $vanilla;
+        text-decoration: underline;
+      }
+    }
   }
 
   &__actions {
-    text-align: center;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(126, 189, 194, 0.3);
+    display: flex;
+    justify-content: flex-end;
   }
 }
 

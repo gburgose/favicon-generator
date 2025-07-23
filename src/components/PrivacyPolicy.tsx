@@ -17,7 +17,7 @@ export default function PrivacyPolicy() {
       content: (
         <>
           <p className="privacy-policy__text">
-            We collect information you provide directly to us when using our Favicon Generator service:
+            We collect information you provide directly to us when using our Favicon Tools service:
           </p>
           <ul className="privacy-policy__list">
             <li className="privacy-policy__list-item"><strong>Uploaded Images:</strong> Images you upload for favicon generation are processed locally in your browser and are not stored on our servers.</li>
@@ -155,7 +155,7 @@ export default function PrivacyPolicy() {
       <div className="privacy-policy__header">
         <Link href="/" className="privacy-policy__back-link">
           <ArrowLeft size={20} />
-          Back to Favicon Generator
+          Back to Favicon Tools
         </Link>
         <h1 className="privacy-policy__title">
           <Shield size={32} />

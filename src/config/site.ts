@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Favicon Generator',
+  name: 'Favicon Tools',
   description: 'Generate professional favicons in multiple sizes for your website',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://favicon-generator-beige.vercel.app',
   ogImage: '/og-image.png',
@@ -8,9 +8,9 @@ export const siteConfig = {
     twitter: 'https://twitter.com/favicon_generator',
     github: 'https://github.com/yourusername/favicon-generator',
   },
-  creator: 'Favicon Generator',
+  creator: 'Favicon Tools',
   keywords: [
-    'favicon generator',
+    'favicon tools',
     'website icons',
     'favicon creator',
     'web development tools',

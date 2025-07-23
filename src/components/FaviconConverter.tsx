@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
+import { useFaviconConverter } from '@/hooks/useFaviconConverter';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
@@ -13,7 +13,8 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
-  Zap
+  Zap,
+  Check
 } from 'lucide-react';
 
 export default function Converter() {
@@ -41,14 +42,18 @@ export default function Converter() {
     getFileName,
     getFaviconPurpose,
     getFileSize,
-    FAVICON_SIZES
-  } = useFaviconGenerator();
+    FAVICON_SIZES,
+    selectedFaviconSizes,
+    toggleFaviconSize,
+    getSelectedFaviconSizes,
+    isFaviconSelected
+  } = useFaviconConverter();
 
   return (
     <section className="converter">
       <h1 className="converter__title">
         <Zap size={40} className="converter__title-icon" />
-        Favicon Generator
+        Favicon Converter
       </h1>
       <p className="converter__subtitle">
         Upload an image and generate favicons in multiple sizes for your website
@@ -142,6 +147,42 @@ export default function Converter() {
               </div>
             </div>
 
+            <div className="converter__favicon-selection">
+              <h3>Select Favicon Sizes</h3>
+              <p className="converter__settings-subtitle">
+                Choose which favicon sizes you want to generate. Required sizes are pre-selected for optimal compatibility.
+              </p>
+
+              <div className="converter__favicon-grid">
+                {FAVICON_SIZES.map((faviconSize) => {
+                  const isSelected = isFaviconSelected(faviconSize.name);
+
+                  return (
+                    <div
+                      key={faviconSize.name}
+                      className={`converter__favicon-option ${isSelected ? 'selected' : ''}`}
+                      onClick={() => toggleFaviconSize(faviconSize.name)}
+                    >
+                      <div className="converter__favicon-checkbox">
+                        <div className="converter__checkbox-custom">
+                          {isSelected && <Check size={12} color="#231F20" />}
+                        </div>
+                      </div>
+                      <div className="converter__favicon-info">
+                        <div className="converter__favicon-title">
+                          {faviconSize.name.replace('-ico', '')}
+                          <span className="converter__format-badge">{faviconSize.format.toUpperCase()}</span>
+                        </div>
+                        <div className="converter__favicon-description">
+                          {faviconSize.purpose}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="converter__buttons-container">
               <button
                 onClick={generateFavicons}
@@ -183,22 +224,8 @@ export default function Converter() {
                   <table>
                     <tbody>
                       {/* Add favicon.ico row */}
-                      <tr>
-                        <td>
-                          <Image
-                            src={generatedFavicons['16x16']}
-                            alt="favicon.ico"
-                            width={32}
-                            height={32}
-                            className="converter__favicon-table-preview"
-                          />
-                        </td>
-                        <td className="converter__file-name">favicon.ico</td>
-                        <td className="converter__size">16x16</td>
-                        <td className="converter__purpose">Classic Favicon</td>
-                        <td className="converter__file-size">{getFileSize(generatedFavicons['16x16'])}</td>
-                      </tr>
-                      {FAVICON_SIZES.map(({ name }) => {
+
+                      {FAVICON_SIZES.filter(({ name }) => isFaviconSelected(name)).map(({ name }) => {
                         const fileName = getFileName(name);
                         const purpose = getFaviconPurpose(name);
                         const fileSize = getFileSize(generatedFavicons[name]);

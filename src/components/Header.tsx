@@ -8,7 +8,7 @@ export default function Header() {
       <div className="header__container">
         <Link href="/" className="header__logo">
           <Zap size={24} className="header__icon" />
-          <span className="header__text">Favicon Generator</span>
+          <span className="header__text">Favicon Tools</span>
         </Link>
         <a
           href="https://github.com/gburgose"

@@ -7,7 +7,7 @@ export const gtmEvent = (eventName: string, data: Record<string, unknown> = {}) 
   }
 };
 
-// Eventos específicos para el favicon generator
+// Eventos específicos para el favicon tools
 export const gtmEvents = {
   // Usuario sube una imagen
   imageUploaded: (fileName: string, fileSize: number, fileType: string) => {

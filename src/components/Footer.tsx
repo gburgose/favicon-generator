@@ -1,4 +1,4 @@
-import { Heart, Github, Zap } from "lucide-react";
+import { Heart, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -8,21 +8,18 @@ export default function Footer() {
         <div className="footer__content">
           <Link href="/" className="footer__logo">
             <Zap size={20} className="footer__icon" />
-            <span>Favicon Generator</span>
+            <span>Favicon Tools</span>
           </Link>
 
           <ul className="footer__links">
             <li>
-              <a href="https://github.com/gburgose" target="_blank" rel="noopener noreferrer">
-                <Github size={16} />
-                GitHub
-              </a>
-            </li>
-            <li>
-              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/">Favicon Tools</Link>
             </li>
             <li>
               <Link href="/validator">Favicon Validator</Link>
+            </li>
+            <li>
+              <Link href="/privacy">Privacy Policy</Link>
             </li>
           </ul>
         </div>
@@ -40,7 +37,7 @@ export default function Footer() {
             </a>
           </p>
           <p className="footer__copyright">
-            © {new Date().getFullYear()} Favicon Generator. All rights reserved.
+            © {new Date().getFullYear()} Favicon Tools. All rights reserved.
           </p>
         </div>
       </div>
