@@ -84,6 +84,7 @@
     padding: 1.5rem;
     background: #1e1e1e;
     border-radius: 6px;
+    overflow: hidden;
 
     h3 {
       font-size: 1.3rem;
@@ -103,6 +104,7 @@
   &__svg-controls,
   &__icons-controls {
     // Estilos específicos se agregarán cuando implementemos cada opción
+    overflow: hidden;
   }
 
   &__form-row {
@@ -194,6 +196,7 @@
     padding: 1.5rem;
     background: #1e1e1e;
     border-radius: 6px;
+    overflow: hidden;
 
     h3 {
       font-size: 1.3rem;
@@ -380,5 +383,48 @@
     to {
       transform: rotate(360deg);
     }
+  }
+
+  // Icon Grid Styles
+  &__icons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-items: center;
+  }
+
+  &__icon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 60px;
+    height: 60px;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &--selected {
+      transform: scale(1.1);
+    }
+  }
+
+  &__icon-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: #EFE6DD;
+  }
+
+  &__icon-name {
+    display: none;
   }
 }

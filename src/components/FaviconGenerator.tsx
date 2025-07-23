@@ -6,7 +6,26 @@ import {
   FileText,
   Palette,
   Download,
-  Sparkles
+  Sparkles,
+  Heart,
+  Star,
+  Home,
+  User,
+  Settings,
+  Search,
+  Mail,
+  Phone,
+  Camera,
+  Music,
+  Bookmark,
+  Upload,
+  Share,
+  ThumbsUp,
+  Eye,
+  Plus,
+  Minus,
+  Check,
+  X
 } from 'lucide-react';
 import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
 
@@ -25,18 +44,22 @@ export default function FaviconGenerator() {
     updateSvgSettings,
     updateIconSettings,
     generateFavicon,
-    generateTextPreview
+    generateTextPreview,
+    generateIconPreview,
+    getIconSvg
   } = useFaviconGenerator();
 
   const tabs = [
     { id: 'text', label: 'Text', icon: Type },
-    { id: 'svg', label: 'SVG', icon: FileText },
-    { id: 'icons', label: 'Icons', icon: Palette }
+    { id: 'icons', label: 'Icons', icon: Palette },
+    { id: 'svg', label: 'SVG', icon: FileText }
   ];
 
   const handleGenerateFavicon = () => {
     generateFavicon();
   };
+
+
 
   return (
     <section className="generator">
@@ -155,6 +178,20 @@ export default function FaviconGenerator() {
                     <option value="Playfair Display">Playfair Display</option>
                   </select>
                 </div>
+
+                <div className="generator__form-group">
+                  <label htmlFor="size-select">Size</label>
+                  <select
+                    id="size-select"
+                    value={textSettings.size}
+                    onChange={(e) => updateTextSettings({ size: e.target.value })}
+                    className="generator__select"
+                  >
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                  </select>
+                </div>
               </div>
 
               <button
@@ -165,23 +202,61 @@ export default function FaviconGenerator() {
               </button>
             </div>
           )}
+
+          {activeTab === 'svg' && (
+            <div className="generator__svg-controls">
+              <h3>SVG Settings</h3>
+              <p>Upload an SVG file to create your favicon</p>
+              {/* TODO: Implementar controles de SVG */}
+            </div>
+          )}
+
+          {activeTab === 'icons' && (
+            <div className="generator__icons-controls">
+              <h3>Icon Settings</h3>
+              <p>Choose from our icon library</p>
+
+              <div className="generator__icons-grid">
+                {[
+                  { name: 'heart', icon: Heart },
+                  { name: 'star', icon: Star },
+                  { name: 'home', icon: Home },
+                  { name: 'user', icon: User },
+                  { name: 'settings', icon: Settings },
+                  { name: 'search', icon: Search },
+                  { name: 'mail', icon: Mail },
+                  { name: 'phone', icon: Phone },
+                  { name: 'camera', icon: Camera },
+                  { name: 'music', icon: Music },
+                  { name: 'bookmark', icon: Bookmark },
+                  { name: 'download', icon: Download },
+                  { name: 'upload', icon: Upload },
+                  { name: 'share', icon: Share },
+                  { name: 'thumbsup', icon: ThumbsUp },
+                  { name: 'eye', icon: Eye },
+                  { name: 'plus', icon: Plus },
+                  { name: 'minus', icon: Minus },
+                  { name: 'check', icon: Check },
+                  { name: 'x', icon: X }
+                ].map(({ name, icon: IconComponent }) => (
+                  <button
+                    key={name}
+                    className={`generator__icon-item ${iconSettings.selectedIcon === name ? 'generator__icon-item--selected' : ''}`}
+                    onClick={() => {
+                      updateIconSettings({ selectedIcon: name });
+                      generateIconPreview({ ...iconSettings, selectedIcon: name });
+                    }}
+                  >
+                    <div className="generator__icon-preview">
+                      <IconComponent size={32} />
+                    </div>
+                    <span className="generator__icon-name">{name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-
-        {activeTab === 'svg' && (
-          <div className="generator__svg-controls">
-            <h3>SVG Settings</h3>
-            <p>Upload an SVG file to create your favicon</p>
-            {/* TODO: Implementar controles de SVG */}
-          </div>
-        )}
-
-        {activeTab === 'icons' && (
-          <div className="generator__icons-controls">
-            <h3>Icon Settings</h3>
-            <p>Choose from our icon library</p>
-            {/* TODO: Implementar controles de iconos */}
-          </div>
-        )}
 
         {/* Preview Section */}
         <div className="generator__preview">
