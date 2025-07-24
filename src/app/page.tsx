@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Sparkles, FileText, Palette, CheckCircle } from 'lucide-react';
+import { FileText, Palette, CheckCircle } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -10,7 +10,7 @@ export default function HomePage() {
             Create, Convert & Validate Favicons
           </h1>
           <p className="home__subtitle">
-            Optimize your website's visual identity from the browser tab
+            Optimize your website&apos;s visual identity from the browser tab
           </p>
         </div>
 
