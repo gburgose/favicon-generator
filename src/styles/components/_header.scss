@@ -51,26 +51,7 @@
   }
 
   &__logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #EFE6DD;
-    font-weight: 600;
-    font-size: 1.2rem;
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #F3DFA2;
-    }
-  }
-
-  &__icon {
-    color: #F3DFA2;
-  }
-
-  &__text {
-    font-family: var(--font-poppins);
+    // Logo component handles its own styling
   }
 
   &__link {

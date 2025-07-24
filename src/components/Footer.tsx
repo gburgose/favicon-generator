@@ -2,7 +2,9 @@
 
 import { Heart, Zap } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -18,10 +20,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__content">
-          <Link href="/" className="footer__logo">
-            <Zap size={20} className="footer__icon" />
-            <span>Favicon Tools</span>
-          </Link>
+          <Logo size="large" className="footer__logo" />
 
           <ul className="footer__links">
             <li>

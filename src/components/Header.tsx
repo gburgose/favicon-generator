@@ -4,6 +4,7 @@ import { Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,10 +19,7 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header__container">
-        <Link href="/" className="header__logo">
-          <Zap size={24} className="header__icon" />
-          <span className="header__text">Favicon Tools</span>
-        </Link>
+        <Logo size="large" className="header__logo" />
 
         <nav className="header__nav">
           <ul className="header__menu">
