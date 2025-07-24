@@ -13,6 +13,12 @@ interface AppSettings {
   themeColor: string;
 }
 
+const DEFAULT_APP_SETTINGS: AppSettings = {
+  name: 'My App',
+  description: 'Demo description',
+  themeColor: '#ffffff'
+};
+
 export const useFaviconConverter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -21,16 +27,8 @@ export const useFaviconConverter = () => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const [imageWarning, setImageWarning] = useState<string>('');
-  const [appSettings, setAppSettings] = useState<AppSettings>({
-    name: 'My App',
-    description: 'Application description',
-    themeColor: '#ffffff'
-  });
-  const [tempAppSettings, setTempAppSettings] = useState<AppSettings>({
-    name: 'My App',
-    description: 'Application description',
-    themeColor: '#ffffff'
-  });
+  const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS);
+  const [tempAppSettings, setTempAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS);
   const [selectedFaviconSizes, setSelectedFaviconSizes] = useState<string[]>(
     FAVICON_SIZES.filter(size => size.recommended).map(size => size.name)
   );
@@ -270,11 +268,7 @@ export const useFaviconConverter = () => {
         setPreviewUrl('');
         setGeneratedFavicons({});
         setImageWarning('');
-        setTempAppSettings({
-          name: 'My App',
-          description: 'Application description',
-          themeColor: '#ffffff'
-        });
+        setTempAppSettings(DEFAULT_APP_SETTINGS);
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
         }
