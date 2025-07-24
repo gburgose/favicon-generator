@@ -7,7 +7,7 @@ export default function HomePage() {
       <section className="home">
         <div className="home__header">
           <h1 className="home__title">
-            Create, Convert & Validate Favicons
+            Convert, Create & Validate Favicons
           </h1>
           <p className="home__subtitle">
             Optimize your website&apos;s visual identity from the browser tab.
