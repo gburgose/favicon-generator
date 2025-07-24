@@ -7,11 +7,10 @@ export default function HomePage() {
       <section className="home">
         <div className="home__header">
           <h1 className="home__title">
-            <Sparkles size={48} className="home__title-icon" />
-            Favicon Tools
+            Create, Convert & Validate Favicons
           </h1>
           <p className="home__subtitle">
-            Create, convert, and validate professional favicons for your website
+            Optimize your website's visual identity from the browser tab
           </p>
         </div>
 
