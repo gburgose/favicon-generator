@@ -106,6 +106,30 @@ export default function FaviconValidator() {
                     Found {validationResult.foundFavicons} out of {validationResult.totalFavicons} favicon sizes
                     ({Math.round((validationResult.foundFavicons / validationResult.totalFavicons) * 100)}% coverage).
                   </p>
+
+                  {/* Mostrar favicons genéricos encontrados */}
+                  {validationResult.genericFavicons && validationResult.genericFavicons.length > 0 && (
+                    <div className="validator__generic-favicons">
+                      <h4>Generic Favicons Found:</h4>
+                      <div className="validator__generic-list">
+                        {validationResult.genericFavicons.map((favicon, index) => (
+                          <div key={index} className="validator__generic-item">
+                            <span className="validator__generic-icon">🔗</span>
+                            <span className="validator__generic-rel">{favicon.rel}</span>
+                            <a
+                              href={favicon.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="validator__generic-url"
+                            >
+                              {favicon.url}
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="validator__checks-grid">
                     <table>
                       <tbody>
@@ -118,6 +142,9 @@ export default function FaviconValidator() {
                             <td className="validator__check-size">
                               {validation.name.replace('-ico', '')}
                               <span className="validator__format-badge">{validation.format.toUpperCase()}</span>
+                              {validation.isGeneric && (
+                                <span className="validator__generic-badge">Generic</span>
+                              )}
                             </td>
                             <td className="validator__check-url">
                               {validation.found ? (

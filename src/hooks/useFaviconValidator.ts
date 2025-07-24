@@ -9,6 +9,7 @@ interface FaviconFound {
   rel?: string;
   width?: number;
   height?: number;
+  isGeneric?: boolean;
 }
 
 interface FaviconValidation {
@@ -21,6 +22,7 @@ interface FaviconValidation {
   found: boolean;
   foundUrl?: string;
   foundSizes?: string;
+  isGeneric?: boolean;
 }
 
 interface ValidationResult {
@@ -30,6 +32,7 @@ interface ValidationResult {
   validations: FaviconValidation[];
   loading: boolean;
   error?: string;
+  genericFavicons?: FaviconFound[];
 }
 
 export const useFaviconValidator = () => {
@@ -58,6 +61,18 @@ export const useFaviconValidator = () => {
 
     // Verificar si el tamaño objetivo está en la lista
     return sizes.includes(targetSize);
+  };
+
+  const normalizeUrl = (url: string, baseUrl: string): string => {
+    try {
+      // Si la URL comienza con //, agregar https:
+      if (url.startsWith('//')) {
+        url = 'https:' + url;
+      }
+      return new URL(url, baseUrl).href;
+    } catch {
+      return url;
+    }
   };
 
   const findFaviconsInHTML = async (url: string): Promise<FaviconFound[]> => {
@@ -118,16 +133,20 @@ export const useFaviconValidator = () => {
 
       const favicons: FaviconFound[] = [];
 
-      // Función 1: Buscar ICO (por extensión o rel específico)
-      const icoLinks = doc.querySelectorAll('link[href*=".ico"], link[rel="shortcut icon"]');
+      // Función 1: Buscar ICO genéricos (más flexible)
+      const icoLinks = doc.querySelectorAll('link[href*=".ico"], link[rel="icon"], link[rel="shortcut icon"]');
       icoLinks.forEach(link => {
         const href = link.getAttribute('href');
+        const rel = link.getAttribute('rel');
+        const type = link.getAttribute('type');
+
         if (href) {
-          const absoluteUrl = new URL(href, url).href;
+          const absoluteUrl = normalizeUrl(href, url);
           favicons.push({
             url: absoluteUrl,
-            type: 'image/x-icon',
-            rel: 'shortcut icon'
+            type: type || 'image/x-icon',
+            rel: rel || 'icon',
+            isGeneric: true
           });
         }
       });
@@ -141,7 +160,7 @@ export const useFaviconValidator = () => {
         const rel = link.getAttribute('rel');
 
         if (href && sizes) {
-          const absoluteUrl = new URL(href, url).href;
+          const absoluteUrl = normalizeUrl(href, url);
           favicons.push({
             url: absoluteUrl,
             sizes: sizes,
@@ -151,12 +170,30 @@ export const useFaviconValidator = () => {
         }
       });
 
-      // Función 3: Buscar Windows Tiles (meta tags)
+      // Función 3: Buscar Apple Touch Icons sin sizes
+      const appleTouchLinks = doc.querySelectorAll('link[rel="apple-touch-icon"]');
+      appleTouchLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const sizes = link.getAttribute('sizes');
+        const type = link.getAttribute('type');
+
+        if (href) {
+          const absoluteUrl = normalizeUrl(href, url);
+          favicons.push({
+            url: absoluteUrl,
+            sizes: sizes || '180x180', // Tamaño por defecto
+            type: type || 'image/png',
+            rel: 'apple-touch-icon'
+          });
+        }
+      });
+
+      // Función 4: Buscar Windows Tiles (meta tags)
       const windowsMeta = doc.querySelector('meta[name="msapplication-TileImage"]');
       if (windowsMeta) {
         const content = windowsMeta.getAttribute('content');
         if (content) {
-          const absoluteUrl = new URL(content, url).href;
+          const absoluteUrl = normalizeUrl(content, url);
           favicons.push({
             url: absoluteUrl,
             type: 'image/png',
@@ -165,14 +202,30 @@ export const useFaviconValidator = () => {
         }
       }
 
+      // Función 5: Buscar Android Chrome Icons
+      const androidLinks = doc.querySelectorAll('link[rel="android-chrome"]');
+      androidLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const sizes = link.getAttribute('sizes');
+        const type = link.getAttribute('type');
+
+        if (href) {
+          const absoluteUrl = normalizeUrl(href, url);
+          favicons.push({
+            url: absoluteUrl,
+            sizes: sizes || '192x192',
+            type: type || 'image/png',
+            rel: 'android-chrome'
+          });
+        }
+      });
+
       console.log('Total favicons found:', favicons.length);
       return favicons;
     } catch {
       return [];
     }
   };
-
-
 
   const validateFavicons = async (url: string) => {
     if (!url) return;
@@ -186,6 +239,9 @@ export const useFaviconValidator = () => {
 
       // Buscar todos los favicons en la página
       const foundFavicons = await findFaviconsInHTML(normalizedUrl);
+
+      // Separar favicons genéricos
+      const genericFavicons = foundFavicons.filter(favicon => favicon.isGeneric);
 
       // Crear validaciones basadas en nuestra configuración
       const validations: FaviconValidation[] = FAVICON_SIZES.map(faviconSize => {
@@ -213,18 +269,22 @@ export const useFaviconValidator = () => {
           ...faviconSize,
           found: !!matchingFavicon,
           foundUrl: matchingFavicon?.url,
-          foundSizes: matchingFavicon?.sizes
+          foundSizes: matchingFavicon?.sizes,
+          isGeneric: matchingFavicon?.isGeneric
         };
       });
 
+      // Contar favicons encontrados (incluyendo genéricos)
       const foundCount = validations.filter(v => v.found).length;
+      const totalWithGenerics = foundCount + genericFavicons.length;
 
       setValidationResult({
         url: normalizedUrl,
         totalFavicons: FAVICON_SIZES.length,
-        foundFavicons: foundCount,
+        foundFavicons: totalWithGenerics,
         validations,
-        loading: false
+        loading: false,
+        genericFavicons: genericFavicons.length > 0 ? genericFavicons : undefined
       });
 
     } catch {

@@ -271,6 +271,74 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  &__generic-favicons {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(243, 223, 162, 0.1);
+    border: 1px solid rgba(243, 223, 162, 0.3);
+    border-radius: 8px;
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #F3DFA2;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__generic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__generic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+
+  &__generic-icon {
+    font-size: 1rem;
+  }
+
+  &__generic-rel {
+    background: #404040;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  &__generic-url {
+    color: $verdigris;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+
+    &:hover {
+      color: $vanilla;
+      text-decoration: underline;
+    }
+  }
+
+  &__generic-badge {
+    background: #F3DFA2;
+    color: #1e1e1e;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
 }
 
 @keyframes spin {
