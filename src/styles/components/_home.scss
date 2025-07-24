@@ -1,3 +1,5 @@
+@use '../_colors.scss' as *;
+
 .home {
   max-width: 1200px;
   margin: 0 auto;
@@ -58,6 +60,7 @@
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
+    outline: none;
     position: relative;
     overflow: hidden;
     width: 320px;
@@ -76,14 +79,21 @@
     }
 
     &:hover {
-      border-color: var(--accent-color);
+      outline: 1px solid rgba($vanilla, 0.6);
+      outline-offset: 2px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: outline 0s, box-shadow 0.3s ease;
 
       &::before {
         transform: scaleX(1);
       }
 
       .home__tool-icon {
-        color: #F3DFA2;
+        color: $vanilla;
+      }
+
+      .logo__icon {
+        filter: brightness(1.1);
       }
     }
   }
@@ -92,8 +102,8 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: linear-gradient(135deg, #F3DFA2, #E6D18A);
-    color: #231F20;
+    background: linear-gradient(135deg, $vanilla, darken($vanilla, 10%));
+    color: $raisin-black;
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.25rem 0.75rem;
@@ -112,7 +122,7 @@
   &__tool-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #F3DFA2;
+    color: $vanilla;
     margin-bottom: 1rem;
   }
 
@@ -136,7 +146,7 @@
 
       &::before {
         content: '•';
-        color: var(--accent-color);
+        color: $vanilla;
         font-weight: bold;
       }
     }
