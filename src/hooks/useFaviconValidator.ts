@@ -201,6 +201,11 @@ export const useFaviconValidator = () => {
             return sizesMatch(favicon.sizes, faviconSize.size);
           }
 
+          // Para Windows Tiles (144x144): buscar por rel específico
+          if (faviconSize.purpose === 'Windows Tiles' && faviconSize.size === 144) {
+            return favicon.rel === 'msapplication-TileImage' || favicon.url.includes('ms-icon-144x144');
+          }
+
           return false;
         });
 
