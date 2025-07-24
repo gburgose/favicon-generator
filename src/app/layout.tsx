@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': siteConfig.name,
   },
-  manifest: '/manifest.json',
+  manifest: '/favicons/manifest.json',
 };
 
 export default function RootLayout({
@@ -101,6 +101,33 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Source+Sans+Pro:wght@400;600;700&family=Ubuntu:wght@400;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+
+        {/* Classic Favicon */}
+        <link rel="shortcut icon" href="/favicons/favicon.ico" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicons/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicons/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicons/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-icon-180x180.png" />
+
+        {/* Modern PNG Favicons */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicons/favicon-96x96.png" />
+
+        {/* Android Icons */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicons/android-icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicons/android-icon-512x512.png" />
+
+        {/* Microsoft Icons */}
+        <meta name="msapplication-TileColor" content="#F3DFA2" />
+        <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
+        <meta name="msapplication-config" content="/favicons/browserconfig.xml" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable}`}>
         <div className="layout">
