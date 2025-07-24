@@ -38,6 +38,7 @@
     margin: 0;
     display: flex;
     gap: 1.5rem;
+    align-items: center;
 
     li {
       margin: 0;
@@ -56,6 +57,12 @@
         color: #F3DFA2;
       }
     }
+  }
+
+  &__separator {
+    color: #666;
+    font-size: 0.8rem;
+    margin: 0 0.5rem;
   }
 
   &__bottom {
