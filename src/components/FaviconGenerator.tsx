@@ -307,7 +307,7 @@ export default function FaviconGenerator() {
                   // Guardar la imagen en localStorage para que el Converter la pueda usar
                   localStorage.setItem('generatedFavicon', previewUrl);
                   localStorage.setItem('faviconSource', 'generator');
-                  window.location.href = '/';
+                  window.location.href = '/converter';
                 }
               }}
               disabled={!previewUrl}
