@@ -1,8 +1,20 @@
+"use client";
+
 import { Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(path);
+  };
+
   return (
     <header className="header">
       <div className="header__container">
@@ -10,6 +22,35 @@ export default function Header() {
           <Zap size={24} className="header__icon" />
           <span className="header__text">Favicon Tools</span>
         </Link>
+
+        <nav className="header__nav">
+          <ul className="header__menu">
+            <li>
+              <Link href="/" className={isActive('/') ? 'header__menu-link--active' : 'header__menu-link'}>
+                Home
+              </Link>
+            </li>
+            <li className="header__separator">•</li>
+            <li>
+              <Link href="/converter" className={isActive('/converter') ? 'header__menu-link--active' : 'header__menu-link'}>
+                Converter
+              </Link>
+            </li>
+            <li className="header__separator">•</li>
+            <li>
+              <Link href="/generator" className={isActive('/generator') ? 'header__menu-link--active' : 'header__menu-link'}>
+                Generator
+              </Link>
+            </li>
+            <li className="header__separator">•</li>
+            <li>
+              <Link href="/validator" className={isActive('/validator') ? 'header__menu-link--active' : 'header__menu-link'}>
+                Validator
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
         <a
           href="https://github.com/gburgose"
           target="_blank"

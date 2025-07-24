@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useFaviconConverter } from '@/hooks/useFaviconConverter';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -56,26 +57,30 @@ export default function Converter() {
       </h1>
       <p className="converter__subtitle">
         Upload an image and generate favicons in multiple sizes for your website.
+        <br />
+        Don't have a favicon? Create one with our <Link href="/generator" className="converter__subtitle-link">Generator tool</Link>.
       </p>
 
       <div className="converter__card">
-        <div
-          {...dropzoneProps.getRootProps()}
-          className={`converter__dropzone ${dropzoneProps.isDragActive ? 'active' : ''}`}
-        >
-          <input {...dropzoneProps.getInputProps()} />
-          <div className="converter__dropzone-text">
-            {dropzoneProps.isDragActive
-              ? 'Drop the image here...'
-              : 'Drag & drop an image here, or click to select'}
+        {!selectedFile && (
+          <div
+            {...dropzoneProps.getRootProps()}
+            className={`converter__dropzone ${dropzoneProps.isDragActive ? 'active' : ''}`}
+          >
+            <input {...dropzoneProps.getInputProps()} />
+            <div className="converter__dropzone-text">
+              {dropzoneProps.isDragActive
+                ? 'Drop the image here...'
+                : 'Drag & drop an image here, or click to select'}
+            </div>
+            <div className="converter__dropzone-subtext">
+              Supports PNG, JPG, JPEG, GIF, BMP, WebP (max 10MB)
+            </div>
           </div>
-          <div className="converter__dropzone-subtext">
-            Supports PNG, JPG, JPEG, GIF, BMP, WebP (max 10MB)
-          </div>
-        </div>
+        )}
 
         {selectedFile && (
-          <div className="converter__preview-section">
+          <div className="converter__original-preview">
             <h2 className="converter__preview-title">Original Image</h2>
             <Image
               src={previewUrl}

@@ -25,6 +25,17 @@
     margin-bottom: 3rem;
   }
 
+  &__subtitle-link {
+    color: #F3DFA2;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #E6D18A;
+    }
+  }
+
   &__card {
     background: #2d2d2d;
     border-radius: 8px;
@@ -66,10 +77,16 @@
     color: #EFE6DD;
   }
 
-  &__preview-section {
-    margin-top: 2rem;
+  &__original-preview {
     max-width: 100%;
     overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  &__preview-section {
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 2rem;
   }
 
   &__preview-title {
