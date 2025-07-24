@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Search, Check, X, RefreshCw, Trash2 } from 'lucide-react';
+import { Search, Check, X, RefreshCw, Trash2, CheckCircle } from 'lucide-react';
 import { useFaviconValidator } from '@/hooks/useFaviconValidator';
 import { useValidatorStore } from '@/stores/validatorStore';
 import Swal from 'sweetalert2';
@@ -51,7 +51,7 @@ export default function FaviconValidator() {
     <section className="validator">
       <div className="validator__header">
         <h1 className="validator__title">
-          <Search size={32} className="validator__icon" />
+          <CheckCircle size={32} className="validator__icon" />
           Favicon Validator
         </h1>
         <p className="validator__subtitle">

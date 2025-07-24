@@ -50,7 +50,7 @@ export default function Converter() {
   return (
     <section className="converter">
       <h1 className="converter__title">
-        <Zap size={40} className="converter__title-icon" />
+        <Sparkles size={40} className="converter__title-icon" />
         Favicon Converter
       </h1>
       <p className="converter__subtitle">
@@ -148,7 +148,7 @@ export default function Converter() {
             <div className="converter__favicon-selection">
               <h3>Select Favicon Sizes</h3>
               <p className="converter__settings-subtitle">
-                Choose which favicon sizes you want to generate. Required sizes are pre-selected for optimal compatibility.
+                Choose which favicon sizes you want to generate. Recommended sizes are pre-selected for optimal compatibility.
               </p>
 
               <div className="converter__favicon-grid">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FileText, Palette, CheckCircle } from 'lucide-react';
+import { Sparkles, Palette, CheckCircle } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -17,7 +17,7 @@ export default function HomePage() {
         <div className="home__tools">
           <Link href="/converter" className="home__tool-card">
             <div className="home__tool-icon">
-              <FileText size={40} />
+              <Sparkles size={40} />
             </div>
             <h3 className="home__tool-title">Convert Favicon</h3>
             <p className="home__tool-description">

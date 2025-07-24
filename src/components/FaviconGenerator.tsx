@@ -63,7 +63,7 @@ export default function FaviconGenerator() {
   return (
     <section className="generator">
       <h1 className="generator__title">
-        <Sparkles size={40} className="generator__title-icon" />
+        <Palette size={40} className="generator__title-icon" />
         Favicon Generator
       </h1>
       <p className="generator__subtitle">
