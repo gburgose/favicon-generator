@@ -120,6 +120,12 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+
+      &::before {
+        content: '•';
+        color: var(--accent-color);
+        font-weight: bold;
+      }
     }
   }
 }
