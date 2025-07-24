@@ -54,7 +54,7 @@ export default function Converter() {
         Favicon Converter
       </h1>
       <p className="converter__subtitle">
-        Upload an image and generate favicons in multiple sizes for your website
+        Upload an image and generate favicons in multiple sizes for your website.
       </p>
 
       <div className="converter__card">
@@ -267,7 +267,7 @@ export default function Converter() {
               {showMetaTags && (
                 <>
                   <p className="converter__section-description">
-                    Copy and paste these meta tags into your HTML &lt;head&gt; section:
+                    Copy and paste these meta tags into your HTML &lt;head&gt; section.
                   </p>
                   <div className="converter__code-block">
                     <SyntaxHighlighter
@@ -310,7 +310,7 @@ export default function Converter() {
               {showManifest && (
                 <>
                   <p className="converter__section-description">
-                    This is the content of the site.webmanifest file that will be generated:
+                    This is the content of the site.webmanifest file that will be generated.
                   </p>
                   <div className="converter__code-block">
                     <SyntaxHighlighter

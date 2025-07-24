@@ -67,14 +67,14 @@ export default function FaviconGenerator() {
         Favicon Generator
       </h1>
       <p className="generator__subtitle">
-        Create custom favicons from text, SVG files, or icon libraries
+        Create custom favicons from text, SVG files, or icon libraries.
       </p>
 
       <div className="generator__card">
         {/* Color Settings Section */}
         <div className="generator__color-settings">
           <h3>Color Settings</h3>
-          <p>Customize the colors of your favicon</p>
+          <p>Customize the colors of your favicon.</p>
 
           <div className="generator__form-row">
             <div className="generator__form-group">
@@ -141,7 +141,7 @@ export default function FaviconGenerator() {
           {activeTab === 'text' && (
             <div className="generator__text-controls">
               <h3>Text Settings</h3>
-              <p>Create a favicon from custom text (max 2 characters)</p>
+              <p>Create a favicon from custom text (max 2 characters).</p>
 
               <div className="generator__form-row">
                 <div className="generator__form-group">
@@ -205,7 +205,7 @@ export default function FaviconGenerator() {
           {activeTab === 'svg' && (
             <div className="generator__svg-controls">
               <h3>SVG Settings</h3>
-              <p>Upload an SVG file to create your favicon</p>
+              <p>Upload an SVG file to create your favicon.</p>
               {/* TODO: Implementar controles de SVG */}
             </div>
           )}
@@ -213,7 +213,7 @@ export default function FaviconGenerator() {
           {activeTab === 'icons' && (
             <div className="generator__icons-controls">
               <h3>Icon Settings</h3>
-              <p>Choose from our icon library</p>
+              <p>Choose from our icon library.</p>
 
               <div className="generator__icons-grid">
                 {[
@@ -273,7 +273,7 @@ export default function FaviconGenerator() {
             ) : (
               <div className="generator__preview-placeholder">
                 <Sparkles size={48} />
-                <p>Your favicon preview will appear here</p>
+                <p>Your favicon preview will appear here.</p>
               </div>
             )}
           </div>

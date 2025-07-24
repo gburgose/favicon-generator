@@ -10,7 +10,7 @@ export default function HomePage() {
             Create, Convert & Validate Favicons
           </h1>
           <p className="home__subtitle">
-            Optimize your website&apos;s visual identity from the browser tab
+            Optimize your website&apos;s visual identity from the browser tab.
           </p>
         </div>
 
@@ -21,7 +21,7 @@ export default function HomePage() {
             </div>
             <h3 className="home__tool-title">Convert Favicon</h3>
             <p className="home__tool-description">
-              Upload an image and convert it to multiple favicon sizes for all devices
+              Upload an image and convert it to multiple favicon sizes for all devices.
             </p>
             <div className="home__tool-features">
               <span>Multiple sizes</span>
@@ -36,7 +36,7 @@ export default function HomePage() {
             </div>
             <h3 className="home__tool-title">Generate Favicon</h3>
             <p className="home__tool-description">
-              Create custom favicons from text, SVG files, or icon libraries
+              Create custom favicons from text, SVG files, or icon libraries.
             </p>
             <div className="home__tool-features">
               <span>Text input</span>
@@ -51,7 +51,7 @@ export default function HomePage() {
             </div>
             <h3 className="home__tool-title">Validate Favicon</h3>
             <p className="home__tool-description">
-              Check if your website has proper favicon implementation
+              Check if your website has proper favicon implementation.
             </p>
             <div className="home__tool-features">
               <span>URL validation</span>
