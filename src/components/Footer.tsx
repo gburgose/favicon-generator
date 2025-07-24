@@ -1,7 +1,19 @@
+"use client";
+
 import { Heart, Zap } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(path);
+  };
+
   return (
     <footer className="footer">
       <div className="footer__container">
@@ -13,23 +25,33 @@ export default function Footer() {
 
           <ul className="footer__links">
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/" className={isActive('/') ? 'footer__link--active' : ''}>
+                Home
+              </Link>
             </li>
             <li className="footer__separator">•</li>
             <li>
-              <Link href="/converter">Converter</Link>
+              <Link href="/converter" className={isActive('/converter') ? 'footer__link--active' : ''}>
+                Converter
+              </Link>
             </li>
             <li className="footer__separator">•</li>
             <li>
-              <Link href="/generator">Generator</Link>
+              <Link href="/generator" className={isActive('/generator') ? 'footer__link--active' : ''}>
+                Generator
+              </Link>
             </li>
             <li className="footer__separator">•</li>
             <li>
-              <Link href="/validator">Validator</Link>
+              <Link href="/validator" className={isActive('/validator') ? 'footer__link--active' : ''}>
+                Validator
+              </Link>
             </li>
             <li className="footer__separator">•</li>
             <li>
-              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/privacy" className={isActive('/privacy') ? 'footer__link--active' : ''}>
+                Privacy Policy
+              </Link>
             </li>
           </ul>
         </div>
