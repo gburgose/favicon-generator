@@ -26,6 +26,11 @@ export const useFaviconConverter = () => {
     description: 'Application description',
     themeColor: '#ffffff'
   });
+  const [tempAppSettings, setTempAppSettings] = useState<AppSettings>({
+    name: 'My App',
+    description: 'Application description',
+    themeColor: '#ffffff'
+  });
   const [selectedFaviconSizes, setSelectedFaviconSizes] = useState<string[]>(
     FAVICON_SIZES.filter(size => size.recommended).map(size => size.name)
   );
@@ -109,6 +114,9 @@ export const useFaviconConverter = () => {
 
   const generateFavicons = async () => {
     if (!selectedFile) return;
+
+    // Apply temporary app settings when generating
+    setAppSettings(tempAppSettings);
 
     setIsGenerating(true);
 
@@ -262,6 +270,11 @@ export const useFaviconConverter = () => {
         setPreviewUrl('');
         setGeneratedFavicons({});
         setImageWarning('');
+        setTempAppSettings({
+          name: 'My App',
+          description: 'Application description',
+          themeColor: '#ffffff'
+        });
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
         }
@@ -275,7 +288,7 @@ export const useFaviconConverter = () => {
   };
 
   const updateAppSettings = (updates: Partial<AppSettings>) => {
-    setAppSettings(prev => {
+    setTempAppSettings(prev => {
       const newSettings = { ...prev, ...updates };
 
       // Track app configuration changes
@@ -359,10 +372,12 @@ ${faviconLinks}
 <!-- Android Icons -->
 ${androidIcons}
 
-<!-- Manifest and Theme Color -->
-<link rel="manifest" href="/manifest.json">
+<!-- Microsoft Tile Icons -->
 <meta name="msapplication-TileColor" content="${appSettings.themeColor}">
 ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fileName}">` : ''}
+
+<!-- Manifest and Theme Color -->
+<link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="${appSettings.themeColor}">`;
   };
 
@@ -421,6 +436,7 @@ ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fi
     isGenerating,
     isDownloading,
     appSettings,
+    tempAppSettings,
     imageWarning,
 
     // Dropzone

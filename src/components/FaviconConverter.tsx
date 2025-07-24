@@ -29,6 +29,7 @@ export default function Converter() {
     isGenerating,
     isDownloading,
     appSettings,
+    tempAppSettings,
     imageWarning,
     dropzoneProps,
     generateFavicons,
@@ -110,7 +111,7 @@ export default function Converter() {
                   <label>App Name</label>
                   <input
                     type="text"
-                    value={appSettings.name}
+                    value={tempAppSettings.name}
                     onChange={(e) => updateAppSettings({ name: e.target.value })}
                     placeholder="My App"
                   />
@@ -121,12 +122,12 @@ export default function Converter() {
                   <div className="color-input-group">
                     <input
                       type="color"
-                      value={appSettings.themeColor}
+                      value={tempAppSettings.themeColor}
                       onChange={(e) => updateAppSettings({ themeColor: e.target.value })}
                     />
                     <input
                       type="text"
-                      value={appSettings.themeColor}
+                      value={tempAppSettings.themeColor}
                       onChange={(e) => updateAppSettings({ themeColor: e.target.value })}
                       placeholder="#ffffff"
                     />
@@ -138,7 +139,7 @@ export default function Converter() {
                 <label>App Description</label>
                 <input
                   type="text"
-                  value={appSettings.description}
+                  value={tempAppSettings.description}
                   onChange={(e) => updateAppSettings({ description: e.target.value })}
                   placeholder="App description"
                 />

@@ -122,9 +122,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="192x192" href="/favicons/android-icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/favicons/android-icon-512x512.png" />
 
-        {/* Microsoft Icons */}
+        {/* Microsoft Tile Icons */}
         <meta name="msapplication-TileColor" content="#F3DFA2" />
         <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
+
+        {/* Microsoft Browser Config */}
         <meta name="msapplication-config" content="/favicons/browserconfig.xml" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable}`}>
