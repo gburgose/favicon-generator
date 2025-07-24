@@ -48,12 +48,7 @@ export const useFaviconGenerator = () => {
     iconColor: '#231F20'
   });
 
-  // Generar preview inicial
-  useEffect(() => {
-    if (textSettings.text) {
-      generateTextPreview(textSettings);
-    }
-  }, []);
+
 
   const updateTextSettings = useCallback((updates: Partial<TextSettings>) => {
     setTextSettings(prev => {
@@ -277,12 +272,19 @@ export const useFaviconGenerator = () => {
       URL.revokeObjectURL(url);
 
       toast.success('Favicon downloaded successfully!');
-    } catch (error) {
+    } catch {
       toast.error('Failed to download favicon');
     } finally {
       setIsGenerating(false);
     }
   }, [previewUrl]);
+
+  // Generar preview inicial
+  useEffect(() => {
+    if (textSettings.text) {
+      generateTextPreview(textSettings);
+    }
+  }, [textSettings, generateTextPreview]);
 
   return {
     // State

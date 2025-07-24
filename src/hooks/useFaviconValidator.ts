@@ -167,8 +167,7 @@ export const useFaviconValidator = () => {
 
       console.log('Total favicons found:', favicons.length);
       return favicons;
-    } catch (error) {
-      console.error('Error in findFaviconsInHTML:', error);
+    } catch {
       return [];
     }
   };
@@ -223,7 +222,7 @@ export const useFaviconValidator = () => {
         loading: false
       });
 
-    } catch (error) {
+    } catch {
       setValidationResult({
         url,
         totalFavicons: 0,

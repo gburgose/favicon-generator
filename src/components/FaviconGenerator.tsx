@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   Type,
   FileText,
@@ -39,15 +40,12 @@ export default function FaviconGenerator() {
     previewUrl,
     isGenerating,
     textSettings,
-    svgSettings,
     iconSettings,
     updateTextSettings,
-    updateSvgSettings,
     updateIconSettings,
     generateFavicon,
     generateTextPreview,
-    generateIconPreview,
-    getIconSvg
+    generateIconPreview
   } = useFaviconGenerator();
 
   const tabs = [
@@ -265,9 +263,11 @@ export default function FaviconGenerator() {
           <h3>Preview</h3>
           <div className="generator__preview-container">
             {previewUrl ? (
-              <img
+              <Image
                 src={previewUrl}
                 alt="Favicon preview"
+                width={512}
+                height={512}
                 className="generator__preview-image"
               />
             ) : (
