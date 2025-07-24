@@ -1,8 +1,7 @@
 "use client";
 
-import { Zap } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 

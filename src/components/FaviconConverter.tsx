@@ -14,7 +14,6 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
-  Zap,
   Check
 } from 'lucide-react';
 
@@ -29,7 +28,6 @@ export default function Converter() {
     generatedFavicons,
     isGenerating,
     isDownloading,
-    appSettings,
     tempAppSettings,
     imageWarning,
     dropzoneProps,
@@ -58,7 +56,7 @@ export default function Converter() {
       <p className="converter__subtitle">
         Upload an image and generate favicons in multiple sizes for your website.
         <br />
-        Don't have a favicon? Create one with our <Link href="/generator" className="converter__subtitle-link">Generator tool</Link>.
+        Don&apos;t have a favicon? Create one with our <Link href="/generator" className="converter__subtitle-link">Generator tool</Link>.
       </p>
 
       <div className="converter__card">
