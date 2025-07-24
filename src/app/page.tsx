@@ -16,6 +16,7 @@ export default function HomePage() {
 
         <div className="home__tools">
           <Link href="/converter" className="home__tool-card">
+            <div className="home__tool-beta">BETA</div>
             <div className="home__tool-icon">
               <Sparkles size={40} />
             </div>
@@ -31,6 +32,7 @@ export default function HomePage() {
           </Link>
 
           <Link href="/generator" className="home__tool-card">
+            <div className="home__tool-beta">BETA</div>
             <div className="home__tool-icon">
               <Palette size={40} />
             </div>
@@ -46,6 +48,7 @@ export default function HomePage() {
           </Link>
 
           <Link href="/validator" className="home__tool-card">
+            <div className="home__tool-beta">BETA</div>
             <div className="home__tool-icon">
               <CheckCircle size={40} />
             </div>

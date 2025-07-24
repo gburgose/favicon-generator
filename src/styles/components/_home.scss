@@ -86,8 +86,21 @@
         color: #F3DFA2;
       }
     }
+  }
 
-
+  &__tool-beta {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #F3DFA2, #E6D18A);
+    color: #231F20;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 1;
   }
 
   &__tool-icon {
