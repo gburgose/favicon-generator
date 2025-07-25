@@ -142,4 +142,4 @@ export const useGeneratorStore = create<GeneratorStore>()(
       })
     }
   )
-); 
+);

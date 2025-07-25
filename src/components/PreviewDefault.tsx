@@ -460,4 +460,4 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
 PreviewDefault.displayName = 'PreviewDefault';
 
-export default PreviewDefault; 
+export default PreviewDefault;

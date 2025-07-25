@@ -86,54 +86,6 @@ export default function FaviconGenerator() {
           })}
         </div>
 
-        {/* Color Settings Section */}
-        <div className="generator__color-settings">
-          <h3>Color Settings</h3>
-          <p>Customize the colors of your favicon.</p>
-
-          <div className="generator__form-row">
-            <div className="generator__form-group">
-              <label htmlFor="bg-color">Background Color</label>
-              <div className="generator__color-input-group">
-                <input
-                  type="color"
-                  id="bg-color"
-                  value={textSettings.backgroundColor}
-                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
-                  className="generator__color-input"
-                />
-                <input
-                  type="text"
-                  value={textSettings.backgroundColor}
-                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
-                  placeholder="#F3DFA2"
-                  className="generator__input"
-                />
-              </div>
-            </div>
-
-            <div className="generator__form-group">
-              <label htmlFor="text-color">Text Color</label>
-              <div className="generator__color-input-group">
-                <input
-                  type="color"
-                  id="text-color"
-                  value={textSettings.textColor}
-                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
-                  className="generator__color-input"
-                />
-                <input
-                  type="text"
-                  value={textSettings.textColor}
-                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
-                  placeholder="#333"
-                  className="generator__input"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Controls Section */}
         <div className="generator__controls">
           {activeTab === 'text' && (
@@ -300,6 +252,51 @@ export default function FaviconGenerator() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Color Settings Section */}
+        <div className="generator__color-settings">
+          <div className="generator__form-row">
+            <div className="generator__form-group">
+              <label htmlFor="bg-color">Background Color</label>
+              <div className="generator__color-input-group">
+                <input
+                  type="color"
+                  id="bg-color"
+                  value={textSettings.backgroundColor}
+                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
+                  className="generator__color-input"
+                />
+                <input
+                  type="text"
+                  value={textSettings.backgroundColor}
+                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
+                  placeholder="#F3DFA2"
+                  className="generator__input"
+                />
+              </div>
+            </div>
+
+            <div className="generator__form-group">
+              <label htmlFor="text-color">Text Color</label>
+              <div className="generator__color-input-group">
+                <input
+                  type="color"
+                  id="text-color"
+                  value={textSettings.textColor}
+                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
+                  className="generator__color-input"
+                />
+                <input
+                  type="text"
+                  value={textSettings.textColor}
+                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
+                  placeholder="#333"
+                  className="generator__input"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Preview Section */}

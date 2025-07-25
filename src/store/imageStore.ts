@@ -19,4 +19,4 @@ export const useImageStore = create<ImageStore>((set) => ({
   imageData: null,
   setGeneratedImage: (image, data) => set({ generatedImage: image, imageData: data }),
   clearImage: () => set({ generatedImage: null, imageData: null }),
-})); 
+}));
