@@ -58,7 +58,7 @@ export default function Footer() {
           <p>
             Made with <Heart size={14} className="footer__heart" /> by{" "}
             <a
-              href="https://github.com/gburgose"
+              href="https://buymeacoffee.com/gburgose"
               target="_blank"
               rel="noopener noreferrer"
               className="footer__author-link"

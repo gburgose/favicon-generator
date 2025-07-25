@@ -49,7 +49,7 @@ export default function Header() {
         </nav>
 
         <a
-          href="https://github.com/gburgose"
+          href="https://buymeacoffee.com/gburgose"
           target="_blank"
           rel="noopener noreferrer"
           className="header__link"
@@ -61,7 +61,7 @@ export default function Header() {
             height={24}
             className="header__avatar"
           />
-          <span className="header__link-text">Follow me on GitHub</span>
+          <span className="header__link-text">Buy me a coffee</span>
         </a>
       </div>
     </header>
