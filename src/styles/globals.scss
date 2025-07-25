@@ -4,6 +4,10 @@
 @use './components/_header.scss';
 @use './components/_footer.scss';
 @use './components/_logo.scss';
+@use './components/_card.scss';
+@use './components/_dropzone.scss';
+@use './components/_preview-default.scss';
+
 @use './components/_converter.scss';
 @use './components/_privacy-policy.scss';
 @use './components/_sweetalert.scss';
@@ -56,37 +60,9 @@
   margin-bottom: 2rem;
 }
 
-.dropzone {
-  border: 2px dashed $verdigris;
-  border-radius: 6px;
-  padding: 3rem 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: #1e1e1e;
 
-  &:hover {
-    border-color: $vanilla;
-    background: #252525;
-  }
 
-  &.active {
-    border-color: $vanilla;
-    background: #252525;
-  }
-}
 
-.dropzone-text {
-  font-size: 1.2rem;
-  color: $verdigris;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-.dropzone-subtext {
-  font-size: 0.9rem;
-  color: $vanilla;
-}
 
 .preview-section {
   margin-top: 2rem;

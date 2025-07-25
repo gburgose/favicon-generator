@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Sparkles, Palette, CheckCircle } from 'lucide-react';
+import CardHome from '@/components/CardHome';
 
 export default function HomePage() {
   return (
@@ -15,53 +15,32 @@ export default function HomePage() {
         </div>
 
         <div className="home__tools">
-          <Link href="/converter" className="home__tool-card">
-            <div className="home__tool-beta">BETA</div>
-            <div className="home__tool-icon">
-              <Sparkles size={40} />
-            </div>
-            <h3 className="home__tool-title">Convert Favicon</h3>
-            <p className="home__tool-description">
-              Upload an image and convert it to multiple favicon sizes for all devices.
-            </p>
-            <div className="home__tool-features">
-              <span>Multiple sizes</span>
-              <span>All formats</span>
-              <span>Instant download</span>
-            </div>
-          </Link>
+          <CardHome
+            href="/converter"
+            icon={Sparkles}
+            title="Convert Favicon"
+            description="Upload an image and convert it to multiple favicon sizes for all devices."
+            features={["Multiple sizes", "All formats", "Instant download"]}
+            isBeta={true}
+          />
 
-          <Link href="/generator" className="home__tool-card">
-            <div className="home__tool-beta">BETA</div>
-            <div className="home__tool-icon">
-              <Palette size={40} />
-            </div>
-            <h3 className="home__tool-title">Generate Favicon</h3>
-            <p className="home__tool-description">
-              Create custom favicons from text, SVG files, or icon libraries.
-            </p>
-            <div className="home__tool-features">
-              <span>Text input</span>
-              <span>Icon library</span>
-              <span>SVG upload</span>
-            </div>
-          </Link>
+          <CardHome
+            href="/generator"
+            icon={Palette}
+            title="Generate Favicon"
+            description="Create custom favicons from text, SVG files, or icon libraries."
+            features={["Text input", "Icon library", "SVG upload"]}
+            isBeta={true}
+          />
 
-          <Link href="/validator" className="home__tool-card">
-            <div className="home__tool-beta">BETA</div>
-            <div className="home__tool-icon">
-              <CheckCircle size={40} />
-            </div>
-            <h3 className="home__tool-title">Validate Favicon</h3>
-            <p className="home__tool-description">
-              Check if your website has proper favicon implementation.
-            </p>
-            <div className="home__tool-features">
-              <span>URL validation</span>
-              <span>Size checking</span>
-              <span>Format analysis</span>
-            </div>
-          </Link>
+          <CardHome
+            href="/validator"
+            icon={CheckCircle}
+            title="Validate Favicon"
+            description="Check if your website has proper favicon implementation."
+            features={["URL validation", "Size checking", "Format analysis"]}
+            isBeta={true}
+          />
         </div>
       </section>
     </div>

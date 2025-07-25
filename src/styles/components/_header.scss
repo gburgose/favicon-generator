@@ -34,6 +34,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     transition: color 0.2s ease;
+    display: inline-block;
 
     &:hover {
       color: #F3DFA2;
@@ -43,6 +44,9 @@
   &__menu-link--active {
     color: #F3DFA2;
     text-decoration: underline;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-block;
   }
 
   &__separator {

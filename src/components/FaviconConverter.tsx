@@ -44,8 +44,11 @@ export default function Converter() {
     getFileSize,
     FAVICON_SIZES,
     toggleFaviconSize,
-    isFaviconSelected
+    isFaviconSelected,
+    onDrop
   } = useFaviconConverter();
+
+
 
   return (
     <section className="converter">

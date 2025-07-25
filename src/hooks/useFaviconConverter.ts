@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { gtmEvents } from '@/utils/gtm';
-import { FAVICON_SIZES } from '@/config/favicon-sizes';
+import { FAVICON_SIZES } from '@/config/favicons';
 
 interface AppSettings {
   name: string;
@@ -435,6 +435,7 @@ ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fi
 
     // Dropzone
     dropzoneProps,
+    onDrop,
 
     // Actions
     generateFavicons,

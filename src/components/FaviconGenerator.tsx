@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Type,
@@ -29,24 +29,37 @@ import {
   X,
   Zap
 } from 'lucide-react';
-import { useFaviconGenerator } from '@/hooks/useFaviconGenerator';
+import { useGeneratorStore } from '@/store/generatorStore';
+import Dropzone from './Dropzone';
+import dynamic from 'next/dynamic';
+import { ICONS } from '@/config/icons';
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
+
+const PreviewDefault = dynamic(() => import('./PreviewDefault'), { ssr: false });
+import type { PreviewDefaultRef } from './PreviewDefault';
 
 type TabType = 'text' | 'svg' | 'icons';
 
 export default function FaviconGenerator() {
-  const [activeTab, setActiveTab] = useState<TabType>('text');
+  const previewRef = useRef<PreviewDefaultRef>(null);
 
   const {
-    previewUrl,
-    isGenerating,
+    activeTab,
     textSettings,
+    svgSettings,
     iconSettings,
+    elementPosition,
+    textSize,
+    setActiveTab,
     updateTextSettings,
+    updateSvgSettings,
     updateIconSettings,
-    generateFavicon,
-    generateTextPreview,
-    generateIconPreview
-  } = useFaviconGenerator();
+    setElementPosition,
+    setTextSize
+  } = useGeneratorStore();
+
+
 
   const tabs = [
     { id: 'text', label: 'Text', icon: Type },
@@ -55,8 +68,15 @@ export default function FaviconGenerator() {
   ];
 
   const handleGenerateFavicon = () => {
-    generateFavicon();
+    previewRef.current?.downloadImage();
   };
+
+  // Seleccionar primer icono cuando se cambie al tab Icons
+  useEffect(() => {
+    if (activeTab === 'icons' && !iconSettings.selectedIcon) {
+      updateIconSettings({ selectedIcon: 'heart' });
+    }
+  }, [activeTab, iconSettings.selectedIcon, updateIconSettings]);
 
 
 
@@ -149,10 +169,10 @@ export default function FaviconGenerator() {
                   <input
                     id="text-input"
                     type="text"
-                    maxLength={2}
+                    maxLength={3}
                     value={textSettings.text}
                     onChange={(e) => updateTextSettings({ text: e.target.value })}
-                    placeholder="Enter 1-2 characters"
+                    placeholder="Enter 1-3 characters"
                     className="generator__input"
                   />
                 </div>
@@ -178,27 +198,10 @@ export default function FaviconGenerator() {
                   </select>
                 </div>
 
-                <div className="generator__form-group">
-                  <label htmlFor="size-select">Size</label>
-                  <select
-                    id="size-select"
-                    value={textSettings.size}
-                    onChange={(e) => updateTextSettings({ size: e.target.value })}
-                    className="generator__select"
-                  >
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                  </select>
-                </div>
+
               </div>
 
-              <button
-                className="generator__btn-apply"
-                onClick={() => generateTextPreview(textSettings)}
-              >
-                Apply Changes
-              </button>
+
             </div>
           )}
 
@@ -206,7 +209,84 @@ export default function FaviconGenerator() {
             <div className="generator__svg-controls">
               <h3>SVG Settings</h3>
               <p>Upload an SVG file to create your favicon.</p>
-              {/* TODO: Implementar controles de SVG */}
+
+              {svgSettings.svgContent ? (
+                // Mostrar archivo cargado desde el store
+                <div className="dropzone">
+                  <div className="dropzone__file-selected">
+                    <div className="dropzone__file-info">
+                      <FileText size={24} className="dropzone__file-icon" />
+                      <div className="dropzone__file-details">
+                        <h4 className="dropzone__file-name">{svgSettings.fileName || 'SVG File'}</h4>
+                        <p className="dropzone__file-size">
+                          {svgSettings.fileSize ? `${(svgSettings.fileSize / 1024).toFixed(1)} KB` : 'SVG loaded'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Delete SVG?',
+                          text: 'Are you sure you want to delete the loaded SVG?',
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Yes, delete',
+                          cancelButtonText: 'Cancel'
+                        }).then((result: any) => {
+                          if (result.isConfirmed) {
+                            updateSvgSettings({
+                              file: null,
+                              svgContent: '',
+                              fileName: '',
+                              fileSize: 0
+                            });
+                            toast.success('SVG deleted successfully!');
+                          }
+                        });
+                      }}
+                      className="dropzone__remove-btn"
+                      title="Eliminar archivo"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // Mostrar dropzone normal
+                <Dropzone
+                  onFileSelect={(file) => {
+                    if (file) {
+                      updateSvgSettings({
+                        file,
+                        fileName: file.name,
+                        fileSize: file.size
+                      });
+
+                      // Cargar el contenido del SVG y guardarlo en el store
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        const content = e.target?.result as string;
+                        updateSvgSettings({ svgContent: content });
+                      };
+                      reader.readAsText(file);
+                    } else {
+                      updateSvgSettings({
+                        file: null,
+                        svgContent: '',
+                        fileName: '',
+                        fileSize: 0
+                      });
+                    }
+                  }}
+                  acceptedFileType=".svg"
+                  maxSize={1024 * 1024} // 1MB
+                />
+              )}
+
+
             </div>
           )}
 
@@ -216,39 +296,25 @@ export default function FaviconGenerator() {
               <p>Choose from our icon library.</p>
 
               <div className="generator__icons-grid">
-                {[
-                  { name: 'heart', icon: Heart },
-                  { name: 'star', icon: Star },
-                  { name: 'home', icon: Home },
-                  { name: 'user', icon: User },
-                  { name: 'settings', icon: Settings },
-                  { name: 'search', icon: Search },
-                  { name: 'mail', icon: Mail },
-                  { name: 'phone', icon: Phone },
-                  { name: 'camera', icon: Camera },
-                  { name: 'music', icon: Music },
-                  { name: 'bookmark', icon: Bookmark },
-                  { name: 'download', icon: Download },
-                  { name: 'upload', icon: Upload },
-                  { name: 'share', icon: Share },
-                  { name: 'thumbsup', icon: ThumbsUp },
-                  { name: 'eye', icon: Eye },
-                  { name: 'plus', icon: Plus },
-                  { name: 'minus', icon: Minus },
-                  { name: 'check', icon: Check },
-                  { name: 'x', icon: X },
-                  { name: 'zap', icon: Zap }
-                ].map(({ name, icon: IconComponent }) => (
+                {Object.keys(ICONS).map((name) => (
                   <button
                     key={name}
                     className={`generator__icon-item ${iconSettings.selectedIcon === name ? 'generator__icon-item--selected' : ''}`}
                     onClick={() => {
                       updateIconSettings({ selectedIcon: name });
-                      generateIconPreview({ ...iconSettings, selectedIcon: name });
                     }}
                   >
                     <div className="generator__icon-preview">
-                      <IconComponent size={32} />
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          filter: 'brightness(0) invert(1)'
+                        }}
+                        dangerouslySetInnerHTML={{
+                          __html: ICONS[name].replace('width="24" height="24"', 'width="32" height="32"')
+                        }}
+                      />
                     </div>
                     <span className="generator__icon-name">{name}</span>
                   </button>
@@ -260,22 +326,8 @@ export default function FaviconGenerator() {
 
         {/* Preview Section */}
         <div className="generator__preview">
-          <h3>Preview</h3>
           <div className="generator__preview-container">
-            {previewUrl ? (
-              <Image
-                src={previewUrl}
-                alt="Favicon preview"
-                width={512}
-                height={512}
-                className="generator__preview-image"
-              />
-            ) : (
-              <div className="generator__preview-placeholder">
-                <Sparkles size={48} />
-                <p>Your favicon preview will appear here.</p>
-              </div>
-            )}
+            <PreviewDefault ref={previewRef} />
           </div>
         </div>
 
@@ -285,32 +337,58 @@ export default function FaviconGenerator() {
             <button
               className="generator__btn-download"
               onClick={handleGenerateFavicon}
-              disabled={!previewUrl || isGenerating}
             >
-              {isGenerating ? (
-                <>
-                  <div className="generator__loading"></div>
-                  Downloading...
-                </>
-              ) : (
-                <>
-                  <Download size={20} />
-                  Download PNG
-                </>
-              )}
+              <Download size={20} />
+              Download PNG
             </button>
 
             <button
               className="generator__btn-converter"
-              onClick={() => {
-                if (previewUrl) {
-                  // Guardar la imagen en localStorage para que el Converter la pueda usar
-                  localStorage.setItem('generatedFavicon', previewUrl);
-                  localStorage.setItem('faviconSource', 'generator');
-                  window.location.href = '/converter';
+              onClick={async () => {
+                try {
+                  console.log('Botón Send to Converter clickeado');
+
+                  // Generar la imagen como blob
+                  console.log('Generando imagen...');
+                  const blob = await previewRef.current?.generateImageBlob();
+                  console.log('Blob generado:', blob);
+
+                  if (!blob) {
+                    console.error('No se pudo generar el blob');
+                    return;
+                  }
+
+                  // Convertir blob a base64 y guardar en localStorage
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    const base64 = reader.result as string;
+                    localStorage.setItem('generatedFavicon', base64);
+                    localStorage.setItem('faviconSource', 'generator');
+
+                    // Guardar también los datos del generator para referencia
+                    localStorage.setItem('generatorData', JSON.stringify({
+                      activeTab,
+                      textSettings,
+                      svgSettings: {
+                        backgroundColor: svgSettings.backgroundColor,
+                        iconColor: svgSettings.iconColor,
+                        svgContent: svgSettings.svgContent,
+                        fileName: svgSettings.fileName,
+                        fileSize: svgSettings.fileSize
+                      },
+                      iconSettings,
+                      elementPosition,
+                      textSize
+                    }));
+
+                    console.log('Imagen guardada en localStorage, redirigiendo...');
+                    window.location.href = '/converter';
+                  };
+                  reader.readAsDataURL(blob);
+                } catch (error) {
+                  console.error('Error generating image:', error);
                 }
               }}
-              disabled={!previewUrl}
             >
               <Sparkles size={20} />
               Send to Converter

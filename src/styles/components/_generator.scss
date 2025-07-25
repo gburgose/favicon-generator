@@ -53,7 +53,6 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
-    transition: all 0.2s ease;
 
     &:first-child {
       border-radius: 6px 0 0 6px;
@@ -67,11 +66,6 @@
       border-left: none;
     }
 
-    &:hover {
-      background: rgba(126, 189, 194, 0.1);
-      border-color: rgba(126, 189, 194, 0.5);
-    }
-
     &.active {
       background: #F3DFA2;
       border-color: #F3DFA2;
@@ -80,7 +74,7 @@
   }
 
   &__controls {
-    padding: 1.5rem;
+    padding: 1rem;
     background: #1e1e1e;
     border-radius: 6px;
     overflow: hidden;
@@ -95,7 +89,7 @@
     p {
       color: #999;
       font-size: 0.9rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
   }
 
@@ -181,13 +175,8 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
     width: 100%;
     margin-top: 0.5rem;
-
-    &:hover {
-      background: #6BA8AD;
-    }
   }
 
   &__color-settings {
@@ -241,14 +230,6 @@
 
   &__preview {
     margin: 2rem 0;
-
-    h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #EFE6DD;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
   }
 
   &__preview-container {
@@ -285,8 +266,8 @@
   &__actions-buttons {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    width: 620px;
+    margin: 0 auto;
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -303,15 +284,11 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-
-    &:hover {
-      background: #EFE6DD;
-      color: #231F20;
-    }
+    flex: 1;
 
     &:disabled {
       opacity: 0.6;
@@ -330,14 +307,11 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-
-    &:hover {
-      background: #6BA8AD;
-    }
+    flex: 1;
 
     &:disabled {
       opacity: 0.6;
@@ -399,16 +373,12 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    transition: all 0.2s ease;
     width: 60px;
     height: 60px;
 
-    &:hover {
-      transform: scale(1.1);
-    }
-
     &--selected {
-      transform: scale(1.1);
+      background: rgba(243, 223, 162, 0.2);
+      border-radius: 4px;
     }
   }
 
@@ -424,4 +394,6 @@
   &__icon-name {
     display: none;
   }
+
+
 }

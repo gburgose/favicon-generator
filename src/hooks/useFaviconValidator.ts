@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FAVICON_SIZES } from '@/config/favicon-sizes';
+import { FAVICON_SIZES } from '@/config/favicons';
 import { useValidatorStore } from '@/stores/validatorStore';
 
 interface FaviconFound {

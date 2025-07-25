@@ -1,0 +1,103 @@
+@use '../_colors.scss' as *;
+@use 'sass:color';
+
+.card-home {
+  background: #2d2d2d;
+  // border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  width: 320px;
+  flex-shrink: 0;
+  display: block;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    outline: 1px solid rgba($vanilla, 0.6);
+    outline-offset: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: outline 0s, box-shadow 0.3s ease;
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .card-home__icon {
+      color: $vanilla;
+    }
+
+    .logo__icon {
+      filter: brightness(1.1);
+    }
+  }
+
+  &__beta {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, $vanilla, color.adjust($vanilla, $lightness: -10%));
+    color: $raisin-black;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 1;
+  }
+
+  &__icon {
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    color: #F3DFA2;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $vanilla;
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    span {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '•';
+        color: $vanilla;
+        font-weight: bold;
+      }
+    }
+  }
+}
