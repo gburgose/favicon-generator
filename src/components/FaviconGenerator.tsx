@@ -15,6 +15,7 @@ import dynamic from 'next/dynamic';
 import { ICONS } from '@/config/icons';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
+import ColorSelector from './ColorSelector';
 
 const PreviewDefault = dynamic(() => import('./PreviewDefault'), { ssr: false });
 import type { PreviewDefaultRef } from './PreviewDefault';
@@ -258,43 +259,20 @@ export default function FaviconGenerator() {
         <div className="generator__color-settings">
           <div className="generator__form-row">
             <div className="generator__form-group">
-              <label htmlFor="bg-color">Background Color</label>
-              <div className="generator__color-input-group">
-                <input
-                  type="color"
-                  id="bg-color"
-                  value={textSettings.backgroundColor}
-                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
-                  className="generator__color-input"
-                />
-                <input
-                  type="text"
-                  value={textSettings.backgroundColor}
-                  onChange={(e) => updateTextSettings({ backgroundColor: e.target.value })}
-                  placeholder="#F3DFA2"
-                  className="generator__input"
-                />
-              </div>
+              <ColorSelector
+                label="Background Color"
+                value={textSettings.backgroundColor}
+                onChange={(value) => updateTextSettings({ backgroundColor: value })}
+                placeholder="#F3DFA2"
+              />
             </div>
-
             <div className="generator__form-group">
-              <label htmlFor="text-color">Text Color</label>
-              <div className="generator__color-input-group">
-                <input
-                  type="color"
-                  id="text-color"
-                  value={textSettings.textColor}
-                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
-                  className="generator__color-input"
-                />
-                <input
-                  type="text"
-                  value={textSettings.textColor}
-                  onChange={(e) => updateTextSettings({ textColor: e.target.value })}
-                  placeholder="#333"
-                  className="generator__input"
-                />
-              </div>
+              <ColorSelector
+                label="Text Color"
+                value={textSettings.textColor}
+                onChange={(value) => updateTextSettings({ textColor: value })}
+                placeholder="#333"
+              />
             </div>
           </div>
         </div>
