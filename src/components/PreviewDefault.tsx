@@ -153,7 +153,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const scaledFontSize = textSize * scale;
-      ctx.font = `${scaledFontSize}px "${font}"`;
+      // Aplicar el peso de fuente correcto (bold)
+      ctx.font = `bold ${scaledFontSize}px "${font}"`;
       ctx.fillText(text.substring(0, 3).toUpperCase(), scaledX + scaledWidth / 2, scaledY + scaledHeight / 2);
     } else if (type === 'icon' && iconName) {
       // Calcular escala del preview (620px) al canvas (512px)
@@ -166,12 +167,12 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scaledHeight = elementPosition.height * scale;
 
       // Para iconos, crear SVG temporal
-      const iconSvg = getIconSvg(iconName);
+      const iconSvg = getIconSvgComplete(iconName);
       if (iconSvg) {
         const svgContent = `
           <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
             <rect width="512" height="512" fill="${backgroundColor}"/>
-            <g transform="translate(${scaledX}, ${scaledY}) scale(${scaledWidth / 24})" fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(${scaledX}, ${scaledY}) scale(${scaledWidth / 24})">
               ${iconSvg}
             </g>
           </svg>
@@ -206,7 +207,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scaledWidth = elementPosition.width * scale;
       const scaledHeight = elementPosition.height * scale;
 
-      const coloredSvg = svgContent.replace(/fill="[^"]*"/g, `fill="${textColor}"`);
+      // Crear SVG con el color correcto
+      const coloredSvg = svgContent
+        .replace(/fill="[^"]*"/g, `fill="${textColor}"`)
+        .replace(/stroke="[^"]*"/g, `stroke="${textColor}"`);
+
       const img = new Image();
       img.onload = () => {
         ctx.drawImage(img, scaledX, scaledY, scaledWidth, scaledHeight);
@@ -274,7 +279,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           const scaledFontSize = textSize * scale;
-          ctx.font = `${scaledFontSize}px "${font}"`;
+          // Aplicar el peso de fuente correcto (bold)
+          ctx.font = `bold ${scaledFontSize}px "${font}"`;
           ctx.fillText(text.substring(0, 3).toUpperCase(), scaledX + scaledWidth / 2, scaledY + scaledHeight / 2);
 
           canvas.toBlob((blob) => {
@@ -439,7 +445,9 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                   justifyContent: 'center'
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: svgContent.replace(/fill="[^"]*"/g, `fill="${textColor}"`)
+                  __html: svgContent
+                    .replace(/fill="[^"]*"/g, `fill="${textColor}"`)
+                    .replace(/stroke="[^"]*"/g, `stroke="${textColor}"`)
                 }}
               />
             )}
