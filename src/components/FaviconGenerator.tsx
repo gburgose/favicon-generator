@@ -69,6 +69,23 @@ export default function FaviconGenerator() {
       </p>
 
       <div className="generator__card">
+        {/* Tabs */}
+        <div className="generator__tabs">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`generator__tab ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id as TabType)}
+              >
+                <IconComponent size={20} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
         {/* Color Settings Section */}
         <div className="generator__color-settings">
           <h3>Color Settings</h3>
@@ -115,23 +132,6 @@ export default function FaviconGenerator() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="generator__tabs">
-          {tabs.map((tab) => {
-            const IconComponent = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                className={`generator__tab ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id as TabType)}
-              >
-                <IconComponent size={20} />
-                {tab.label}
-              </button>
-            );
-          })}
         </div>
 
         {/* Controls Section */}
