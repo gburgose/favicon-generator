@@ -10,7 +10,7 @@ interface ImageStore {
     font: string;
     icon: string;
   } | null;
-  setGeneratedImage: (image: Blob, data: any) => void;
+  setGeneratedImage: (image: Blob, data: ImageStore['imageData']) => void;
   clearImage: () => void;
 }
 

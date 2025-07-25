@@ -1,33 +1,13 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
+import { useRef, useEffect } from 'react';
 import {
   Type,
   FileText,
   Palette,
   Download,
   Sparkles,
-  Heart,
-  Star,
-  Home,
-  User,
-  Settings,
-  Search,
-  Mail,
-  Phone,
-  Camera,
-  Music,
-  Bookmark,
-  Upload,
-  Share,
-  ThumbsUp,
-  Eye,
-  Plus,
-  Minus,
-  Check,
-  X,
-  Zap
+  X
 } from 'lucide-react';
 import { useGeneratorStore } from '@/store/generatorStore';
 import Dropzone from './Dropzone';
@@ -54,9 +34,7 @@ export default function FaviconGenerator() {
     setActiveTab,
     updateTextSettings,
     updateSvgSettings,
-    updateIconSettings,
-    setElementPosition,
-    setTextSize
+    updateIconSettings
   } = useGeneratorStore();
 
 
@@ -235,7 +213,7 @@ export default function FaviconGenerator() {
                           cancelButtonColor: '#d33',
                           confirmButtonText: 'Yes, delete',
                           cancelButtonText: 'Cancel'
-                        }).then((result: any) => {
+                        }).then((result) => {
                           if (result.isConfirmed) {
                             updateSvgSettings({
                               file: null,

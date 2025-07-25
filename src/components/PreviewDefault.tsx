@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, forwardRef, useImperativeHandle, useState } from 'react';
+import { useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Rnd } from 'react-rnd';
 import { ICONS } from '@/config/icons';
 import { useGeneratorStore } from '@/store/generatorStore';
 
 interface PreviewDefaultProps {
   // Este componente ahora usa el store directamente
+  [key: string]: unknown;
 }
 
 export interface PreviewDefaultRef {
