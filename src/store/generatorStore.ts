@@ -41,17 +41,25 @@ interface GeneratorStore {
   svgSettings: SvgSettings;
   iconSettings: IconSettings;
 
-  // Element position and size (for interactive preview)
-  elementPosition: ElementPosition;
+  // Element positions and sizes (for interactive preview) - independent for each type
+  textPosition: ElementPosition;
+  iconPosition: ElementPosition;
+  svgPosition: ElementPosition;
   textSize: number;
+  iconSize: number;
+  svgSize: number;
 
   // Actions
   setActiveTab: (tab: 'text' | 'svg' | 'icons') => void;
   updateTextSettings: (updates: Partial<TextSettings>) => void;
   updateSvgSettings: (updates: Partial<SvgSettings>) => void;
   updateIconSettings: (updates: Partial<IconSettings>) => void;
-  setElementPosition: (position: ElementPosition) => void;
+  setTextPosition: (position: ElementPosition) => void;
+  setIconPosition: (position: ElementPosition) => void;
+  setSvgPosition: (position: ElementPosition) => void;
   setTextSize: (size: number) => void;
+  setIconSize: (size: number) => void;
+  setSvgSize: (size: number) => void;
   resetStore: () => void;
 }
 
@@ -94,8 +102,12 @@ export const useGeneratorStore = create<GeneratorStore>()(
       textSettings: defaultTextSettings,
       svgSettings: defaultSvgSettings,
       iconSettings: defaultIconSettings,
-      elementPosition: defaultElementPosition,
+      textPosition: defaultElementPosition,
+      iconPosition: defaultElementPosition,
+      svgPosition: defaultElementPosition,
       textSize: 120,
+      iconSize: 120,
+      svgSize: 120,
 
       // Actions
       setActiveTab: (tab) => set({ activeTab: tab }),
@@ -112,17 +124,29 @@ export const useGeneratorStore = create<GeneratorStore>()(
         iconSettings: { ...state.iconSettings, ...updates }
       })),
 
-      setElementPosition: (position) => set({ elementPosition: position }),
+      setTextPosition: (position) => set({ textPosition: position }),
+
+      setIconPosition: (position) => set({ iconPosition: position }),
+
+      setSvgPosition: (position) => set({ svgPosition: position }),
 
       setTextSize: (size) => set({ textSize: size }),
+
+      setIconSize: (size) => set({ iconSize: size }),
+
+      setSvgSize: (size) => set({ svgSize: size }),
 
       resetStore: () => set({
         activeTab: 'text',
         textSettings: defaultTextSettings,
         svgSettings: defaultSvgSettings,
         iconSettings: defaultIconSettings,
-        elementPosition: defaultElementPosition,
-        textSize: 120
+        textPosition: defaultElementPosition,
+        iconPosition: defaultElementPosition,
+        svgPosition: defaultElementPosition,
+        textSize: 120,
+        iconSize: 120,
+        svgSize: 120
       })
     }),
     {
@@ -140,8 +164,12 @@ export const useGeneratorStore = create<GeneratorStore>()(
           fileSize: state.svgSettings.fileSize
         },
         iconSettings: state.iconSettings,
-        elementPosition: state.elementPosition,
-        textSize: state.textSize
+        textPosition: state.textPosition,
+        iconPosition: state.iconPosition,
+        svgPosition: state.svgPosition,
+        textSize: state.textSize,
+        iconSize: state.iconSize,
+        svgSize: state.svgSize
       })
     }
   )

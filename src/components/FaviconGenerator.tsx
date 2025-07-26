@@ -32,13 +32,22 @@ export default function FaviconGenerator() {
     textSettings,
     svgSettings,
     iconSettings,
-    elementPosition,
+    textPosition,
+    iconPosition,
+    svgPosition,
     textSize,
+    iconSize,
+    svgSize,
     setActiveTab,
     updateTextSettings,
     updateSvgSettings,
     updateIconSettings,
-    setElementPosition
+    setTextPosition,
+    setIconPosition,
+    setSvgPosition,
+    setTextSize,
+    setIconSize,
+    setSvgSize
   } = useGeneratorStore();
 
 
@@ -412,8 +421,12 @@ export default function FaviconGenerator() {
                         fileSize: svgSettings.fileSize
                       },
                       iconSettings,
-                      elementPosition,
-                      textSize
+                      textPosition,
+                      iconPosition,
+                      svgPosition,
+                      textSize,
+                      iconSize,
+                      svgSize
                     }));
 
                     console.log('Imagen guardada en localStorage, redirigiendo...');

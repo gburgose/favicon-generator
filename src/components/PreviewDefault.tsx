@@ -5,6 +5,13 @@ import { Rnd } from 'react-rnd';
 import { ICONS } from '@/config/icons';
 import { useGeneratorStore } from '@/store/generatorStore';
 
+interface ElementPosition {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 interface PreviewDefaultProps {
   // Este componente ahora usa el store directamente
   [key: string]: unknown;
@@ -23,10 +30,18 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     textSettings,
     svgSettings,
     iconSettings,
-    elementPosition,
+    textPosition,
+    iconPosition,
+    svgPosition,
     textSize,
-    setElementPosition,
+    iconSize,
+    svgSize,
+    setTextPosition,
+    setIconPosition,
+    setSvgPosition,
     setTextSize,
+    setIconSize,
+    setSvgSize,
     updateSvgSettings
   } = useGeneratorStore();
 
@@ -39,6 +54,44 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
   const svgFile = svgSettings.file;
   const svgContent = svgSettings.svgContent;
   const iconName = iconSettings.selectedIcon;
+
+  // Obtener posición y tamaño según el tipo activo
+  const getCurrentPosition = () => {
+    switch (type) {
+      case 'text': return textPosition;
+      case 'icon': return iconPosition;
+      case 'svg': return svgPosition;
+      default: return textPosition;
+    }
+  };
+
+  const getCurrentSize = () => {
+    switch (type) {
+      case 'text': return textSize;
+      case 'icon': return iconSize;
+      case 'svg': return svgSize;
+      default: return textSize;
+    }
+  };
+
+  const setCurrentPosition = (position: ElementPosition) => {
+    switch (type) {
+      case 'text': setTextPosition(position); break;
+      case 'icon': setIconPosition(position); break;
+      case 'svg': setSvgPosition(position); break;
+    }
+  };
+
+  const setCurrentSize = (size: number) => {
+    switch (type) {
+      case 'text': setTextSize(size); break;
+      case 'icon': setIconSize(size); break;
+      case 'svg': setSvgSize(size); break;
+    }
+  };
+
+  const currentPosition = getCurrentPosition();
+  const currentSize = getCurrentSize();
 
   // Función para extraer solo el contenido del path del SVG
   const extractSvgPath = (svgContent: string): string => {
@@ -245,10 +298,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
   useEffect(() => {
     if (type === 'text' && text.trim() && textSize === 120) {
       // Solo inicializar si el tamaño actual es el default
-      const newSize = Math.min(elementPosition.width, elementPosition.height) * 0.6;
+      const newSize = Math.min(currentPosition.width, currentPosition.height) * 0.6;
       setTextSize(Math.max(newSize, 12));
     }
-  }, [type, text, textSize, elementPosition.width, elementPosition.height, setTextSize]);
+  }, [type, text, textSize, currentPosition.width, currentPosition.height, setTextSize]);
 
   // Función para descargar imagen (crear canvas temporalmente solo para descarga)
   const downloadImage = () => {
@@ -269,10 +322,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scale = 512 / 620;
 
       // Calcular posición y tamaño escalados
-      const scaledX = elementPosition.x * scale;
-      const scaledY = elementPosition.y * scale;
-      const scaledWidth = elementPosition.width * scale;
-      const scaledHeight = elementPosition.height * scale;
+      const scaledX = currentPosition.x * scale;
+      const scaledY = currentPosition.y * scale;
+      const scaledWidth = currentPosition.width * scale;
+      const scaledHeight = currentPosition.height * scale;
 
       ctx.fillStyle = textColor;
       ctx.textAlign = 'center';
@@ -286,10 +339,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scale = 512 / 620;
 
       // Calcular posición y tamaño escalados
-      const scaledX = elementPosition.x * scale;
-      const scaledY = elementPosition.y * scale;
-      const scaledWidth = elementPosition.width * scale;
-      const scaledHeight = elementPosition.height * scale;
+      const scaledX = currentPosition.x * scale;
+      const scaledY = currentPosition.y * scale;
+      const scaledWidth = currentPosition.width * scale;
+      const scaledHeight = currentPosition.height * scale;
 
       // Para iconos, crear SVG temporal
       const iconSvg = getIconSvgComplete(iconName);
@@ -331,10 +384,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scale = 512 / 620;
 
       // Calcular posición y tamaño escalados
-      const scaledX = elementPosition.x * scale;
-      const scaledY = elementPosition.y * scale;
-      const scaledWidth = elementPosition.width * scale;
-      const scaledHeight = elementPosition.height * scale;
+      const scaledX = currentPosition.x * scale;
+      const scaledY = currentPosition.y * scale;
+      const scaledWidth = currentPosition.width * scale;
+      const scaledHeight = currentPosition.height * scale;
 
       // Crear SVG con el color correcto
       const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
@@ -397,10 +450,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const scale = 512 / 620;
 
           // Calcular posición y tamaño escalados
-          const scaledX = elementPosition.x * scale;
-          const scaledY = elementPosition.y * scale;
-          const scaledWidth = elementPosition.width * scale;
-          const scaledHeight = elementPosition.height * scale;
+          const scaledX = currentPosition.x * scale;
+          const scaledY = currentPosition.y * scale;
+          const scaledWidth = currentPosition.width * scale;
+          const scaledHeight = currentPosition.height * scale;
 
           ctx.fillStyle = textColor;
           ctx.textAlign = 'center';
@@ -418,10 +471,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const scale = 512 / 620;
 
           // Calcular posición y tamaño escalados
-          const scaledX = elementPosition.x * scale;
-          const scaledY = elementPosition.y * scale;
-          const scaledWidth = elementPosition.width * scale;
-          const scaledHeight = elementPosition.height * scale;
+          const scaledX = currentPosition.x * scale;
+          const scaledY = currentPosition.y * scale;
+          const scaledWidth = currentPosition.width * scale;
+          const scaledHeight = currentPosition.height * scale;
 
           // Para iconos, crear SVG temporal
           const iconSvg = getIconSvgComplete(iconName);
@@ -452,10 +505,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const scale = 512 / 620;
 
           // Calcular posición y tamaño escalados
-          const scaledX = elementPosition.x * scale;
-          const scaledY = elementPosition.y * scale;
-          const scaledWidth = elementPosition.width * scale;
-          const scaledHeight = elementPosition.height * scale;
+          const scaledX = currentPosition.x * scale;
+          const scaledY = currentPosition.y * scale;
+          const scaledWidth = currentPosition.width * scale;
+          const scaledHeight = currentPosition.height * scale;
 
           const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
           const img = new Image();
@@ -470,18 +523,24 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       });
     },
     centerVertically: () => {
-      const newPosition = {
-        ...elementPosition,
-        y: (620 - elementPosition.height) / 2
-      };
-      setElementPosition(newPosition);
+      // Solo alinear si hay un elemento activo según el tipo
+      if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+        const newPosition = {
+          ...currentPosition,
+          y: (620 - currentPosition.height) / 2
+        };
+        setCurrentPosition(newPosition);
+      }
     },
     centerHorizontally: () => {
-      const newPosition = {
-        ...elementPosition,
-        x: (620 - elementPosition.width) / 2
-      };
-      setElementPosition(newPosition);
+      // Solo alinear si hay un elemento activo según el tipo
+      if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+        const newPosition = {
+          ...currentPosition,
+          x: (620 - currentPosition.width) / 2
+        };
+        setCurrentPosition(newPosition);
+      }
     }
   }));
 
@@ -503,12 +562,12 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         {(type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent) ? (
           <Rnd
             position={{
-              x: elementPosition.x,
-              y: elementPosition.y,
+              x: currentPosition.x,
+              y: currentPosition.y,
             }}
             size={{
-              width: elementPosition.width,
-              height: elementPosition.height,
+              width: currentPosition.width,
+              height: currentPosition.height,
             }}
             minWidth={50}
             minHeight={50}
@@ -523,15 +582,15 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                 width: ref.offsetWidth,
                 height: ref.offsetHeight
               };
-              setElementPosition(newPosition);
+              setCurrentPosition(newPosition);
               if (type === 'text') {
                 const newSize = Math.min(ref.offsetWidth, ref.offsetHeight) * 0.6;
                 setTextSize(Math.max(newSize, 12));
               }
             }}
             onDragStop={(e, d) => {
-              setElementPosition({
-                ...elementPosition,
+              setCurrentPosition({
+                ...currentPosition,
                 x: d.x,
                 y: d.y
               });
