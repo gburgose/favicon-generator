@@ -72,5 +72,92 @@ export const gtmEvents = {
   // 10. Limpieza total
   converterAllCleared: () => {
     gtmEvent('converter_all_cleared');
+  },
+
+  // Generator Events
+
+  // 1. Cambio de tab en generator
+  generatorTabChanged: (tabName: string) => {
+    gtmEvent('generator_tab_changed', {
+      tab_name: tabName
+    });
+  },
+
+  // 2. Subida de SVG en generator
+  generatorSvgUploaded: (fileName: string, fileSize: number) => {
+    gtmEvent('generator_svg_uploaded', {
+      file_name: fileName,
+      file_size_mb: (fileSize / 1024 / 1024).toFixed(2)
+    });
+  },
+
+  // 3. Cambio de texto en generator
+  generatorTextChanged: (text: string) => {
+    gtmEvent('generator_text_changed', {
+      text_length: text.length,
+      text_content: text
+    });
+  },
+
+  // 4. Cambio de fuente en generator
+  generatorFontChanged: (fontName: string) => {
+    gtmEvent('generator_font_changed', {
+      font_name: fontName
+    });
+  },
+
+  // 5. Selección de icono en generator
+  generatorIconSelected: (iconName: string) => {
+    gtmEvent('generator_icon_selected', {
+      icon_name: iconName
+    });
+  },
+
+  // 6. Cambio de color de fondo en generator
+  generatorBackgroundColorChanged: (color: string) => {
+    gtmEvent('generator_background_color_changed', {
+      color: color
+    });
+  },
+
+  // 7. Cambio de color de texto en generator
+  generatorTextColorChanged: (color: string) => {
+    gtmEvent('generator_text_color_changed', {
+      color: color
+    });
+  },
+
+  // 8. Cambio de fill color en generator
+  generatorFillColorChanged: (color: string) => {
+    gtmEvent('generator_fill_color_changed', {
+      color: color
+    });
+  },
+
+  // 9. Cambio de stroke color en generator
+  generatorStrokeColorChanged: (color: string) => {
+    gtmEvent('generator_stroke_color_changed', {
+      color: color
+    });
+  },
+
+  // 10. Alineación vertical en generator
+  generatorAlignVertical: () => {
+    gtmEvent('generator_align_vertical');
+  },
+
+  // 11. Alineación horizontal en generator
+  generatorAlignHorizontal: () => {
+    gtmEvent('generator_align_horizontal');
+  },
+
+  // 12. Descarga de favicon desde generator
+  generatorDownload: () => {
+    gtmEvent('generator_download');
+  },
+
+  // 13. Envío al converter desde generator
+  generatorSendToConverter: () => {
+    gtmEvent('generator_send_to_converter');
   }
 }; 

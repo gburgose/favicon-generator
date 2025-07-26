@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import ColorSelector from './ColorSelector';
 import LightboxThankYou from './LightboxThankYou';
+import { gtmEvents } from '@/utils/gtm';
 
 const PreviewDefault = dynamic(() => import('./PreviewDefault'), { ssr: false });
 import type { PreviewDefaultRef } from './PreviewDefault';
@@ -93,7 +94,10 @@ export default function FaviconGenerator() {
               <button
                 key={tab.id}
                 className={`generator__tab ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id as TabType)}
+                onClick={() => {
+                  setActiveTab(tab.id as TabType);
+                  gtmEvents.generatorTabChanged(tab.id);
+                }}
               >
                 <IconComponent size={20} />
                 {tab.label}
@@ -117,7 +121,10 @@ export default function FaviconGenerator() {
                     type="text"
                     maxLength={3}
                     value={textSettings.text}
-                    onChange={(e) => updateTextSettings({ text: e.target.value })}
+                    onChange={(e) => {
+                      updateTextSettings({ text: e.target.value });
+                      gtmEvents.generatorTextChanged(e.target.value);
+                    }}
                     placeholder="Enter 1-3 characters"
                     className="generator__input"
                   />
@@ -128,7 +135,10 @@ export default function FaviconGenerator() {
                   <select
                     id="font-select"
                     value={textSettings.font}
-                    onChange={(e) => updateTextSettings({ font: e.target.value })}
+                    onChange={(e) => {
+                      updateTextSettings({ font: e.target.value });
+                      gtmEvents.generatorFontChanged(e.target.value);
+                    }}
                     className="generator__select"
                   >
                     <option value="Inter">Inter</option>
@@ -278,6 +288,7 @@ export default function FaviconGenerator() {
                     className={`generator__icon-item ${iconSettings.selectedIcon === name ? 'generator__icon-item--selected' : ''}`}
                     onClick={() => {
                       updateIconSettings({ selectedIcon: name });
+                      gtmEvents.generatorIconSelected(name);
                     }}
                   >
                     <div className="generator__icon-preview">
@@ -308,7 +319,10 @@ export default function FaviconGenerator() {
                 <ColorSelector
                   label="Background Color"
                   value={textSettings.backgroundColor}
-                  onChange={(value) => updateTextSettings({ backgroundColor: value })}
+                  onChange={(value) => {
+                    updateTextSettings({ backgroundColor: value });
+                    gtmEvents.generatorBackgroundColorChanged(value);
+                  }}
                   placeholder="#F3DFA2"
                 />
               </div>
@@ -316,7 +330,10 @@ export default function FaviconGenerator() {
                 <ColorSelector
                   label="Text Color"
                   value={textSettings.textColor}
-                  onChange={(value) => updateTextSettings({ textColor: value })}
+                  onChange={(value) => {
+                    updateTextSettings({ textColor: value });
+                    gtmEvents.generatorTextColorChanged(value);
+                  }}
                   placeholder="#333"
                 />
               </div>
@@ -330,6 +347,7 @@ export default function FaviconGenerator() {
                     } else {
                       updateSvgSettings({ fillColor: value });
                     }
+                    gtmEvents.generatorFillColorChanged(value);
                   }}
                   placeholder="#333"
                 />
@@ -344,6 +362,7 @@ export default function FaviconGenerator() {
                     } else {
                       updateSvgSettings({ strokeColor: value });
                     }
+                    gtmEvents.generatorStrokeColorChanged(value);
                   }}
                   placeholder="#333"
                 />
@@ -353,7 +372,10 @@ export default function FaviconGenerator() {
             <div className="generator__alignment-controls">
               <button
                 className="generator__align-btn"
-                onClick={() => previewRef.current?.centerVertically()}
+                onClick={() => {
+                  previewRef.current?.centerVertically();
+                  gtmEvents.generatorAlignVertical();
+                }}
                 title="Centrar verticalmente"
               >
                 <AlignVerticalJustifyCenter size={20} />
@@ -361,7 +383,10 @@ export default function FaviconGenerator() {
 
               <button
                 className="generator__align-btn"
-                onClick={() => previewRef.current?.centerHorizontally()}
+                onClick={() => {
+                  previewRef.current?.centerHorizontally();
+                  gtmEvents.generatorAlignHorizontal();
+                }}
                 title="Centrar horizontalmente"
               >
                 <AlignCenter size={20} />

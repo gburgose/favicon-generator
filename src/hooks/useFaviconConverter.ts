@@ -226,7 +226,7 @@ export const useFaviconConverter = () => {
     img.onload = () => {
       if (img.width < 512 || img.height < 512) {
         setImageWarning(`Warning: Your image is ${img.width}x${img.height}px. For best quality, use an image of 512x512px or larger. The favicons will still be generated but larger sizes may appear pixelated.`);
-        gtmEvents.smallImageWarning(img.width, img.height);
+        gtmEvents.converterSmallImageWarning(img.width, img.height);
       }
 
       // Detectar color predominante y aplicarlo al Theme Color
@@ -323,7 +323,7 @@ export const useFaviconConverter = () => {
     } catch (error) {
       toast.error('Failed to generate favicons. Please try again.');
       setIsGenerating(false);
-      gtmEvents.generationError(error instanceof Error ? error.message : 'Unknown error');
+      gtmEvents.converterGenerationError(error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
@@ -382,7 +382,7 @@ export const useFaviconConverter = () => {
       toast.success('Favicons and files downloaded successfully!');
     } catch (error) {
       toast.error('Failed to download favicons. Please try again.');
-      gtmEvents.generationError(error instanceof Error ? error.message : 'Download failed');
+      gtmEvents.converterGenerationError(error instanceof Error ? error.message : 'Download failed');
     } finally {
       setIsDownloading(false);
     }
@@ -408,7 +408,7 @@ export const useFaviconConverter = () => {
         }
 
         // Track clear action
-        gtmEvents.allCleared();
+        gtmEvents.converterAllCleared();
 
         toast.success('All data cleared successfully!');
       }
@@ -421,7 +421,7 @@ export const useFaviconConverter = () => {
     // Track app configuration changes
     if (updates.name || updates.themeColor || updates.description) {
       const newSettings = { ...tempAppSettings, ...updates };
-      gtmEvents.appConfigured(
+      gtmEvents.converterAppConfigured(
         newSettings.name,
         newSettings.themeColor,
         !!newSettings.description
@@ -441,7 +441,7 @@ export const useFaviconConverter = () => {
     const metaTags = getMetaTags();
     navigator.clipboard.writeText(metaTags);
     toast.success('Meta tags copied to clipboard!');
-    gtmEvents.metaTagsCopied();
+    gtmEvents.converterMetaTagsCopied();
   };
 
   const getMetaTags = () => {
@@ -518,7 +518,7 @@ ${androidIcons}
     const manifest = getManifest();
     navigator.clipboard.writeText(JSON.stringify(manifest, null, 2));
     toast.success('Manifest copied to clipboard!');
-    gtmEvents.manifestCopied();
+    gtmEvents.converterManifestCopied();
   };
 
   // Helper functions for favicon table
