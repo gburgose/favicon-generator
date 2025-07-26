@@ -141,6 +141,9 @@ export default function RootLayout({
 
         {/* Microsoft Browser Config */}
         <meta name="msapplication-config" content="/favicons/browserconfig.xml" />
+
+        {/* Google Site Verification */}
+        <meta name="google-site-verification" content="ZGmqB_iCvwVhAWkyyY5htrL_3HU-grU4wIO6AH5u6po" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable}`} style={{
         backgroundColor: '#100709',
