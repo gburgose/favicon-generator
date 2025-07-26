@@ -330,35 +330,72 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
   // Función para descargar imagen usando html2canvas
   const downloadImage = () => {
-    // Capturar directamente el contenedor del preview
-    const previewContainer = document.querySelector('.preview-default__canvas') as HTMLElement;
-    if (!previewContainer) return;
+    // Crear un contenedor temporal sin controles para la captura
+    const tempContainer = document.createElement('div');
+    tempContainer.style.width = '620px';
+    tempContainer.style.height = '620px';
+    tempContainer.style.backgroundColor = backgroundColor;
+    tempContainer.style.borderRadius = '8px';
+    tempContainer.style.position = 'relative';
+    tempContainer.style.overflow = 'hidden';
 
-    // Ocultar temporalmente todos los elementos de resize y el borde
-    const allResizeHandles = document.querySelectorAll('[class*="resizable-handle"], [class*="react-resizable-handle"], [class*="react-rnd-handle"], [class*="handle"]');
-    const rndElement = previewContainer.querySelector('[data-testid="rnd"]') as HTMLElement;
+    // Crear el contenido directamente sin controles
+    const contentDiv = document.createElement('div');
+    contentDiv.style.position = 'absolute';
+    contentDiv.style.left = currentPosition.x + 'px';
+    contentDiv.style.top = currentPosition.y + 'px';
+    contentDiv.style.width = (type === 'text' ? textContainerSize.width : currentPosition.width) + 'px';
+    contentDiv.style.height = (type === 'text' ? textContainerSize.height : currentPosition.height) + 'px';
+    contentDiv.style.display = 'flex';
+    contentDiv.style.alignItems = 'center';
+    contentDiv.style.justifyContent = 'center';
 
-    const originalDisplay: string[] = [];
-    const originalBorder = rndElement?.style.border || '';
-    const originalVisibility: string[] = [];
-    const originalOpacity: string[] = [];
-
-    allResizeHandles.forEach((handle) => {
-      originalDisplay.push((handle as HTMLElement).style.display);
-      originalVisibility.push((handle as HTMLElement).style.visibility);
-      originalOpacity.push((handle as HTMLElement).style.opacity);
-      (handle as HTMLElement).style.display = 'none';
-      (handle as HTMLElement).style.visibility = 'hidden';
-      (handle as HTMLElement).style.opacity = '0';
-    });
-
-    if (rndElement) {
-      rndElement.style.border = 'none';
+    if (type === 'text' && text.trim()) {
+      const textDiv = document.createElement('div');
+      textDiv.style.color = textColor;
+      textDiv.style.fontFamily = font;
+      textDiv.style.fontSize = textSize + 'px';
+      textDiv.style.fontWeight = 'bold';
+      textDiv.style.width = 'fit-content';
+      textDiv.style.height = 'fit-content';
+      textDiv.style.display = 'flex';
+      textDiv.style.alignItems = 'center';
+      textDiv.style.justifyContent = 'center';
+      textDiv.style.userSelect = 'none';
+      textDiv.style.padding = '8px';
+      textDiv.textContent = text.substring(0, 3).toUpperCase();
+      contentDiv.appendChild(textDiv);
+    } else if (type === 'icon' && iconName) {
+      const iconDiv = document.createElement('div');
+      iconDiv.style.width = '100%';
+      iconDiv.style.height = '100%';
+      iconDiv.style.display = 'flex';
+      iconDiv.style.alignItems = 'center';
+      iconDiv.style.justifyContent = 'center';
+      iconDiv.innerHTML = getIconSvgComplete(iconName)
+        .replace('width="24" height="24"', 'width="100%" height="100%"')
+        .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
+        .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
+      contentDiv.appendChild(iconDiv);
+    } else if (type === 'svg' && svgContent) {
+      const svgDiv = document.createElement('div');
+      svgDiv.style.width = '100%';
+      svgDiv.style.height = '100%';
+      svgDiv.style.display = 'flex';
+      svgDiv.style.alignItems = 'center';
+      svgDiv.style.justifyContent = 'center';
+      svgDiv.innerHTML = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
+      contentDiv.appendChild(svgDiv);
     }
 
-    // Usar html2canvas para capturar el contenedor
+    tempContainer.appendChild(contentDiv);
+
+    // Agregar temporalmente al DOM
+    document.body.appendChild(tempContainer);
+
+    // Usar html2canvas para capturar el contenedor temporal
     import('html2canvas').then(({ default: html2canvas }) => {
-      html2canvas(previewContainer, {
+      html2canvas(tempContainer, {
         width: 620,
         height: 620,
         scale: 512 / 620, // Escalar a 512x512
@@ -366,16 +403,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         useCORS: true,
         allowTaint: true
       }).then((canvas) => {
-        // Restaurar los handles de resize y el borde
-        allResizeHandles.forEach((handle, index) => {
-          (handle as HTMLElement).style.display = originalDisplay[index];
-          (handle as HTMLElement).style.visibility = originalVisibility[index];
-          (handle as HTMLElement).style.opacity = originalOpacity[index];
-        });
-
-        if (rndElement) {
-          rndElement.style.border = originalBorder;
-        }
+        // Remover el contenedor temporal
+        document.body.removeChild(tempContainer);
 
         canvas.toBlob((blob) => {
           if (blob) {
@@ -398,38 +427,72 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     downloadImage,
     generateImageBlob: () => {
       return new Promise<Blob>((resolve) => {
-        // Capturar directamente el contenedor del preview
-        const previewContainer = document.querySelector('.preview-default__canvas') as HTMLElement;
-        if (!previewContainer) {
-          resolve(new Blob());
-          return;
+        // Crear un contenedor temporal sin controles para la captura
+        const tempContainer = document.createElement('div');
+        tempContainer.style.width = '620px';
+        tempContainer.style.height = '620px';
+        tempContainer.style.backgroundColor = backgroundColor;
+        tempContainer.style.borderRadius = '8px';
+        tempContainer.style.position = 'relative';
+        tempContainer.style.overflow = 'hidden';
+
+        // Crear el contenido directamente sin controles
+        const contentDiv = document.createElement('div');
+        contentDiv.style.position = 'absolute';
+        contentDiv.style.left = currentPosition.x + 'px';
+        contentDiv.style.top = currentPosition.y + 'px';
+        contentDiv.style.width = (type === 'text' ? textContainerSize.width : currentPosition.width) + 'px';
+        contentDiv.style.height = (type === 'text' ? textContainerSize.height : currentPosition.height) + 'px';
+        contentDiv.style.display = 'flex';
+        contentDiv.style.alignItems = 'center';
+        contentDiv.style.justifyContent = 'center';
+
+        if (type === 'text' && text.trim()) {
+          const textDiv = document.createElement('div');
+          textDiv.style.color = textColor;
+          textDiv.style.fontFamily = font;
+          textDiv.style.fontSize = textSize + 'px';
+          textDiv.style.fontWeight = 'bold';
+          textDiv.style.width = 'fit-content';
+          textDiv.style.height = 'fit-content';
+          textDiv.style.display = 'flex';
+          textDiv.style.alignItems = 'center';
+          textDiv.style.justifyContent = 'center';
+          textDiv.style.userSelect = 'none';
+          textDiv.style.padding = '8px';
+          textDiv.textContent = text.substring(0, 3).toUpperCase();
+          contentDiv.appendChild(textDiv);
+        } else if (type === 'icon' && iconName) {
+          const iconDiv = document.createElement('div');
+          iconDiv.style.width = '100%';
+          iconDiv.style.height = '100%';
+          iconDiv.style.display = 'flex';
+          iconDiv.style.alignItems = 'center';
+          iconDiv.style.justifyContent = 'center';
+          iconDiv.innerHTML = getIconSvgComplete(iconName)
+            .replace('width="24" height="24"', 'width="100%" height="100%"')
+            .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
+            .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
+          contentDiv.appendChild(iconDiv);
+        } else if (type === 'svg' && svgContent) {
+          const svgDiv = document.createElement('div');
+          svgDiv.style.width = '100%';
+          svgDiv.style.height = '100%';
+          svgDiv.style.display = 'flex';
+          svgDiv.style.alignItems = 'center';
+          svgDiv.style.justifyContent = 'center';
+          svgDiv.innerHTML = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
+          contentDiv.appendChild(svgDiv);
         }
 
-        // Ocultar temporalmente todos los elementos de resize y el borde
-        const allResizeHandles = document.querySelectorAll('[class*="resizable-handle"], [class*="react-resizable-handle"], [class*="react-rnd-handle"], [class*="handle"]');
-        const rndElement = previewContainer.querySelector('[data-testid="rnd"]') as HTMLElement;
+        tempContainer.appendChild(contentDiv);
 
-        const originalDisplay: string[] = [];
-        const originalBorder = rndElement?.style.border || '';
-        const originalVisibility: string[] = [];
-        const originalOpacity: string[] = [];
+        // Agregar temporalmente al DOM
+        document.body.appendChild(tempContainer);
 
-        allResizeHandles.forEach((handle) => {
-          originalDisplay.push((handle as HTMLElement).style.display);
-          originalVisibility.push((handle as HTMLElement).style.visibility);
-          originalOpacity.push((handle as HTMLElement).style.opacity);
-          (handle as HTMLElement).style.display = 'none';
-          (handle as HTMLElement).style.visibility = 'hidden';
-          (handle as HTMLElement).style.opacity = '0';
-        });
-
-        if (rndElement) {
-          rndElement.style.border = 'none';
-        }
-
-        // Usar html2canvas para capturar el contenedor
+        // Usar html2canvas para capturar el contenedor temporal
         import('html2canvas').then(({ default: html2canvas }) => {
-          html2canvas(previewContainer, {
+          html2canvas(tempContainer, {
             width: 620,
             height: 620,
             scale: 512 / 620, // Escalar a 512x512
@@ -437,16 +500,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
             useCORS: true,
             allowTaint: true
           }).then((canvas) => {
-            // Restaurar los handles de resize y el borde
-            allResizeHandles.forEach((handle, index) => {
-              (handle as HTMLElement).style.display = originalDisplay[index];
-              (handle as HTMLElement).style.visibility = originalVisibility[index];
-              (handle as HTMLElement).style.opacity = originalOpacity[index];
-            });
-
-            if (rndElement) {
-              rndElement.style.border = originalBorder;
-            }
+            // Remover el contenedor temporal
+            document.body.removeChild(tempContainer);
 
             canvas.toBlob((blob) => {
               if (blob) resolve(blob);
