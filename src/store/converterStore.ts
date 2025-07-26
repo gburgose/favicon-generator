@@ -121,7 +121,6 @@ export const useConverterStore = create<ConverterState>()(
       partialize: (state) => ({
         fileDataUrl: state.fileDataUrl,
         previewUrl: state.previewUrl,
-        generatedFavicons: state.generatedFavicons,
         appSettings: state.appSettings,
         tempAppSettings: state.tempAppSettings,
         selectedFaviconSizes: state.selectedFaviconSizes,

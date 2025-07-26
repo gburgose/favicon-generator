@@ -89,8 +89,11 @@ export const useFaviconConverter = () => {
 
       setSelectedFile(file);
       setPreviewUrl(fileDataUrl);
+
+      // Clear generated favicons when restoring image (they need to be regenerated)
+      setGeneratedFavicons({});
     }
-  }, [fileDataUrl, selectedFile, setSelectedFile, setPreviewUrl]);
+  }, [fileDataUrl, selectedFile, setSelectedFile, setPreviewUrl, setGeneratedFavicons]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
