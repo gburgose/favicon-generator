@@ -201,6 +201,36 @@ export default function FaviconGenerator() {
                       reader.onload = (e) => {
                         const content = e.target?.result as string;
                         updateSvgSettings({ svgContent: content });
+
+                        // Detectar colores del SVG y actualizar el store
+                        // Necesitamos crear una función temporal para detectar colores
+                        const detectSvgColors = (svgContent: string): { fillColor: string; strokeColor: string } => {
+                          let detectedFillColor = '#333';
+                          let detectedStrokeColor = '#333';
+
+                          try {
+                            // Usar regex simple para detectar colores
+                            const fillMatch = svgContent.match(/fill="([^"]*)"/);
+                            const strokeMatch = svgContent.match(/stroke="([^"]*)"/);
+
+                            if (fillMatch && fillMatch[1] !== 'none' && fillMatch[1] !== 'currentColor') {
+                              detectedFillColor = fillMatch[1];
+                            }
+                            if (strokeMatch && strokeMatch[1] !== 'none' && strokeMatch[1] !== 'currentColor') {
+                              detectedStrokeColor = strokeMatch[1];
+                            }
+                          } catch (error) {
+                            console.warn('Error detecting SVG colors:', error);
+                          }
+
+                          return { fillColor: detectedFillColor, strokeColor: detectedStrokeColor };
+                        };
+
+                        const { fillColor, strokeColor } = detectSvgColors(content);
+                        updateSvgSettings({
+                          fillColor,
+                          strokeColor
+                        });
                       };
                       reader.readAsText(file);
                     } else {
@@ -277,16 +307,28 @@ export default function FaviconGenerator() {
             <div className="generator__form-group">
               <ColorSelector
                 label="Fill Color"
-                value={textSettings.textColor}
-                onChange={(value) => updateTextSettings({ textColor: value })}
+                value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.fillColor}
+                onChange={(value) => {
+                  if (activeTab === 'icons') {
+                    updateIconSettings({ iconColor: value });
+                  } else {
+                    updateSvgSettings({ fillColor: value });
+                  }
+                }}
                 placeholder="#333"
               />
             </div>
             <div className="generator__form-group">
               <ColorSelector
                 label="Stroke Color"
-                value={svgSettings.iconColor || '#333'}
-                onChange={(value) => updateSvgSettings({ iconColor: value })}
+                value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.strokeColor}
+                onChange={(value) => {
+                  if (activeTab === 'icons') {
+                    updateIconSettings({ iconColor: value });
+                  } else {
+                    updateSvgSettings({ strokeColor: value });
+                  }
+                }}
                 placeholder="#333"
               />
             </div>
@@ -340,7 +382,8 @@ export default function FaviconGenerator() {
                       textSettings,
                       svgSettings: {
                         backgroundColor: svgSettings.backgroundColor,
-                        iconColor: svgSettings.iconColor,
+                        fillColor: svgSettings.fillColor,
+                        strokeColor: svgSettings.strokeColor,
                         svgContent: svgSettings.svgContent,
                         fileName: svgSettings.fileName,
                         fileSize: svgSettings.fileSize

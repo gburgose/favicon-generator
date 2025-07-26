@@ -61,6 +61,122 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     return '';
   };
 
+  // Función para detectar colores del SVG
+  const detectSvgColors = (svgContent: string): { fillColor: string; strokeColor: string } => {
+    let detectedFillColor = '#333';
+    let detectedStrokeColor = '#333';
+
+    // Verificar si estamos en el navegador
+    if (typeof window === 'undefined' || typeof DOMParser === 'undefined') {
+      // Fallback para SSR: usar regex simple
+      const fillMatch = svgContent.match(/fill="([^"]*)"/);
+      const strokeMatch = svgContent.match(/stroke="([^"]*)"/);
+
+      if (fillMatch && fillMatch[1] !== 'none') {
+        detectedFillColor = fillMatch[1];
+      }
+      if (strokeMatch) {
+        detectedStrokeColor = strokeMatch[1];
+      }
+
+      return { fillColor: detectedFillColor, strokeColor: detectedStrokeColor };
+    }
+
+    try {
+      // Crear un parser temporal para analizar el SVG
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+      const svgElement = doc.querySelector('svg');
+
+      if (!svgElement) return { fillColor: detectedFillColor, strokeColor: detectedStrokeColor };
+
+      // Función recursiva para detectar colores en todos los elementos
+      const detectColorsInElement = (element: Element) => {
+        // Detectar fill color
+        const fill = element.getAttribute('fill');
+        if (fill && fill !== 'none' && fill !== 'currentColor') {
+          detectedFillColor = fill;
+        }
+
+        // Detectar stroke color
+        const stroke = element.getAttribute('stroke');
+        if (stroke && stroke !== 'none' && stroke !== 'currentColor') {
+          detectedStrokeColor = stroke;
+        }
+
+        // Recursivamente detectar en elementos hijos
+        Array.from(element.children).forEach(detectColorsInElement);
+      };
+
+      // Detectar colores en todos los elementos dentro del SVG
+      Array.from(svgElement.children).forEach(detectColorsInElement);
+
+      return { fillColor: detectedFillColor, strokeColor: detectedStrokeColor };
+    } catch (error) {
+      console.warn('Error detecting SVG colors, using fallback method:', error);
+      // Fallback en caso de error: usar regex simple
+      const fillMatch = svgContent.match(/fill="([^"]*)"/);
+      const strokeMatch = svgContent.match(/stroke="([^"]*)"/);
+
+      if (fillMatch && fillMatch[1] !== 'none') {
+        detectedFillColor = fillMatch[1];
+      }
+      if (strokeMatch) {
+        detectedStrokeColor = strokeMatch[1];
+      }
+
+      return { fillColor: detectedFillColor, strokeColor: detectedStrokeColor };
+    }
+  };
+
+  // Función para aplicar colores a SVG personalizado
+  const applyColorsToSvg = (svgContent: string, fillColor: string, strokeColor: string): string => {
+    // Verificar si estamos en el navegador
+    if (typeof window === 'undefined' || typeof DOMParser === 'undefined') {
+      // Fallback para SSR: usar regex simple
+      return svgContent
+        .replace(/fill="[^"]*"/g, `fill="${fillColor}"`)
+        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`);
+    }
+
+    try {
+      // Crear un parser temporal para manipular el SVG
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+      const svgElement = doc.querySelector('svg');
+
+      if (!svgElement) return svgContent;
+
+      // Función recursiva para aplicar colores a todos los elementos
+      const applyColorsToElement = (element: Element) => {
+        // Aplicar fill color si el elemento no tiene fill="none"
+        if (element.getAttribute('fill') !== 'none') {
+          element.setAttribute('fill', fillColor);
+        }
+
+        // Aplicar stroke color si el elemento tiene stroke
+        if (element.hasAttribute('stroke')) {
+          element.setAttribute('stroke', strokeColor);
+        }
+
+        // Recursivamente aplicar a elementos hijos
+        Array.from(element.children).forEach(applyColorsToElement);
+      };
+
+      // Aplicar colores a todos los elementos dentro del SVG
+      Array.from(svgElement.children).forEach(applyColorsToElement);
+
+      // Convertir de vuelta a string
+      return new XMLSerializer().serializeToString(svgElement);
+    } catch (error) {
+      // Fallback en caso de error: usar regex simple
+      console.warn('Error parsing SVG, using fallback method:', error);
+      return svgContent
+        .replace(/fill="[^"]*"/g, `fill="${fillColor}"`)
+        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`);
+    }
+  };
+
   // Función para obtener el SVG del icono
   const getIconSvg = (iconName: string): string => {
     const iconContent = ICONS[iconName];
@@ -88,7 +204,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconContent}</svg>`;
     }
 
-    // Si es contenido SVG completo, mantener el color original #333333
+    // Si es contenido SVG completo, devolverlo tal como está
     return iconContent;
   };
 
@@ -111,6 +227,13 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       reader.onload = (e) => {
         const content = e.target?.result as string;
         updateSvgSettings({ svgContent: content });
+
+        // Detectar colores del SVG y actualizar el store
+        const { fillColor, strokeColor } = detectSvgColors(content);
+        updateSvgSettings({
+          fillColor,
+          strokeColor
+        });
       };
       reader.readAsText(svgFile);
     }
@@ -170,8 +293,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const iconSvg = getIconSvgComplete(iconName);
       if (iconSvg) {
         const coloredIconSvg = iconSvg
-          .replace(/fill="none"/g, `fill="${textColor}"`)
-          .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`);
+          .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
+          .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`);
 
         const svgContent = `
           <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -212,9 +335,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const scaledHeight = elementPosition.height * scale;
 
       // Crear SVG con el color correcto
-      const coloredSvg = svgContent
-        .replace(/fill="[^"]*"/g, `fill="${textColor}"`)
-        .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`);
+      const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
 
       const img = new Image();
       img.onload = () => {
@@ -304,8 +425,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const iconSvg = getIconSvgComplete(iconName);
           if (iconSvg) {
             const coloredIconSvg = iconSvg
-              .replace(/fill="none"/g, `fill="${textColor}"`)
-              .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`);
+              .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
+              .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`);
 
             const svgContent = `
               <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -334,9 +455,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const scaledWidth = elementPosition.width * scale;
           const scaledHeight = elementPosition.height * scale;
 
-          const coloredSvg = svgContent
-            .replace(/fill="[^"]*"/g, `fill="${textColor}"`)
-            .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`);
+          const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
           const img = new Image();
           img.onload = () => {
             ctx.drawImage(img, scaledX, scaledY, scaledWidth, scaledHeight);
@@ -443,9 +562,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                 dangerouslySetInnerHTML={{
                   __html: getIconSvgComplete(iconName)
                     .replace('width="24" height="24"', 'width="100%" height="100%"')
-                    .replace(/fill="none"/g, `fill="${textColor}"`)
-                    .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`)
-                    .replace(/stroke-width="[^"]*"/g, `stroke-width="2"`)
+                    .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
+                    .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`)
                 }}
               />
             )}
@@ -459,9 +577,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                   justifyContent: 'center'
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: svgContent
-                    .replace(/fill="[^"]*"/g, `fill="${textColor}"`)
-                    .replace(/stroke="[^"]*"/g, `stroke="${svgSettings.iconColor || '#333'}"`)
+                  __html: applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor)
                 }}
               />
             )}

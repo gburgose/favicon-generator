@@ -15,7 +15,8 @@ interface SvgSettings {
   fileName: string; // Para persistir el nombre del archivo
   fileSize: number; // Para persistir el tamaño del archivo
   backgroundColor: string;
-  iconColor: string;
+  fillColor: string;
+  strokeColor: string;
 }
 
 interface IconSettings {
@@ -68,7 +69,8 @@ const defaultSvgSettings: SvgSettings = {
   fileName: '',
   fileSize: 0,
   backgroundColor: '#F3DFA2',
-  iconColor: '#333'
+  fillColor: '#333',
+  strokeColor: '#333'
 };
 
 const defaultIconSettings: IconSettings = {
@@ -131,7 +133,8 @@ export const useGeneratorStore = create<GeneratorStore>()(
         textSettings: state.textSettings,
         svgSettings: {
           backgroundColor: state.svgSettings.backgroundColor,
-          iconColor: state.svgSettings.iconColor,
+          fillColor: state.svgSettings.fillColor,
+          strokeColor: state.svgSettings.strokeColor,
           svgContent: state.svgSettings.svgContent,
           fileName: state.svgSettings.fileName,
           fileSize: state.svgSettings.fileSize
