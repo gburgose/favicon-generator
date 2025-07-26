@@ -141,16 +141,16 @@ export default function FaviconGenerator() {
                     }}
                     className="generator__select"
                   >
-                    <option value="Inter">Inter</option>
                     <option value="Roboto">Roboto</option>
                     <option value="Open Sans">Open Sans</option>
                     <option value="Lato">Lato</option>
-                    <option value="Poppins">Poppins</option>
                     <option value="Montserrat">Montserrat</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Raleway">Raleway</option>
+                    <option value="Poppins">Poppins</option>
                     <option value="Source Sans Pro">Source Sans Pro</option>
-                    <option value="Ubuntu">Ubuntu</option>
-                    <option value="Nunito">Nunito</option>
-                    <option value="Playfair Display">Playfair Display</option>
+                    <option value="Merriweather">Merriweather</option>
+                    <option value="Noto Sans">Noto Sans</option>
                   </select>
                 </div>
 

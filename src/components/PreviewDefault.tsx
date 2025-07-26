@@ -101,7 +101,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.font = `bold ${textSize}px "${font}"`;
-        const textMetrics = ctx.measureText(text.substring(0, 3).toUpperCase());
+        const textMetrics = ctx.measureText(text.substring(0, 3));
         const textWidth = textMetrics.width;
         const textHeight = textSize * 1.2; // Aproximación de la altura del texto
 
@@ -372,7 +372,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       textDiv.style.justifyContent = 'center';
       textDiv.style.userSelect = 'none';
       textDiv.style.padding = '8px';
-      textDiv.textContent = text.substring(0, 3).toUpperCase();
+      textDiv.textContent = text.substring(0, 3);
       contentDiv.appendChild(textDiv);
     } else if (type === 'icon' && iconName) {
       const iconDiv = document.createElement('div');
@@ -469,7 +469,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           textDiv.style.justifyContent = 'center';
           textDiv.style.userSelect = 'none';
           textDiv.style.padding = '8px';
-          textDiv.textContent = text.substring(0, 3).toUpperCase();
+          textDiv.textContent = text.substring(0, 3);
           contentDiv.appendChild(textDiv);
         } else if (type === 'icon' && iconName) {
           const iconDiv = document.createElement('div');
@@ -625,7 +625,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                   padding: '8px'
                 }}
               >
-                {text.substring(0, 3).toUpperCase()}
+                {text.substring(0, 3)}
               </div>
             )}
             {type === 'icon' && iconName && (

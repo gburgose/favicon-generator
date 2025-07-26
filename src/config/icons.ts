@@ -21,8 +21,8 @@ import xSvg from '@/assets/icons/x.svg';
 import zapSvg from '@/assets/icons/zap.svg';
 
 export const ICONS: { [key: string]: string } = {
-  heart: heartSvg,
   star: starSvg,
+  heart: heartSvg,
   home: homeSvg,
   user: userSvg,
   settings: settingsSvg,

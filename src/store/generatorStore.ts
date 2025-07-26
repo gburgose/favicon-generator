@@ -66,7 +66,7 @@ interface GeneratorStore {
 
 const defaultTextSettings: TextSettings = {
   text: 'FT',
-  font: 'Inter',
+  font: 'Roboto',
   size: 'medium',
   backgroundColor: '#F3DFA2',
   textColor: '#333'
@@ -78,14 +78,14 @@ const defaultSvgSettings: SvgSettings = {
   fileName: '',
   fileSize: 0,
   backgroundColor: '#F3DFA2',
-  fillColor: '#333',
+  fillColor: '#F3DFA2',
   strokeColor: '#333'
 };
 
 const defaultIconSettings: IconSettings = {
   selectedIcon: 'heart',
   backgroundColor: '#F3DFA2',
-  fillColor: '#333',
+  fillColor: '#F3DFA2',
   strokeColor: '#333'
 };
 
