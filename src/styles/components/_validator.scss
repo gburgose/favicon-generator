@@ -214,6 +214,12 @@
     color: $vanilla;
   }
 
+  &__check-recommended {
+    text-align: center;
+    font-size: 1rem;
+    color: $vanilla;
+  }
+
   &__check-purpose {
     color: $verdigris;
     font-weight: 600;
@@ -269,7 +275,7 @@
 
   &__actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
   }
 
   &__generic-favicons {

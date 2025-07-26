@@ -159,5 +159,37 @@ export const gtmEvents = {
   // 13. Envío al converter desde generator
   generatorSendToConverter: () => {
     gtmEvent('generator_send_to_converter');
+  },
+
+  // Validator Events
+
+  // 1. Validación de favicons iniciada
+  validatorValidationStarted: (url: string) => {
+    gtmEvent('validator_validation_started', {
+      url: url
+    });
+  },
+
+  // 2. Validación de favicons completada exitosamente
+  validatorValidationCompleted: (url: string, foundFavicons: number, totalFavicons: number, coveragePercentage: number) => {
+    gtmEvent('validator_validation_completed', {
+      url: url,
+      found_favicons: foundFavicons,
+      total_favicons: totalFavicons,
+      coverage_percentage: coveragePercentage
+    });
+  },
+
+  // 3. Error en validación de favicons
+  validatorValidationError: (url: string, error: string) => {
+    gtmEvent('validator_validation_error', {
+      url: url,
+      error_type: error
+    });
+  },
+
+  // 4. Limpieza de resultados de validación
+  validatorResultsCleared: () => {
+    gtmEvent('validator_results_cleared');
   }
 }; 

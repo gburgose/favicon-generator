@@ -6,6 +6,7 @@ import { useFaviconValidator } from '@/hooks/useFaviconValidator';
 import { useValidatorStore } from '@/stores/validatorStore';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
+import { gtmEvents } from '@/utils/gtm';
 
 export default function FaviconValidator() {
   const { lastUrl, setLastUrl, clearLastUrl } = useValidatorStore();
@@ -21,6 +22,7 @@ export default function FaviconValidator() {
     e.preventDefault();
     if (url.trim()) {
       setLastUrl(url.trim());
+      gtmEvents.validatorValidationStarted(url.trim());
       validateFavicons(url.trim());
     }
   };
@@ -42,6 +44,7 @@ export default function FaviconValidator() {
         setUrl('');
         clearLastUrl();
         resetValidation();
+        gtmEvents.validatorResultsCleared();
         toast.success('Validation cleared successfully!');
       }
     });
@@ -117,7 +120,14 @@ export default function FaviconValidator() {
                             <td className="validator__check-icon">
                               {validation.found ? <Check size={16} /> : <X size={16} />}
                             </td>
-                            <td className="validator__check-purpose">{validation.purpose}</td>
+                            <td className="validator__check-recommended">
+                              {validation.recommended && (
+                                <span title="Recommended favicon">⭐</span>
+                              )}
+                            </td>
+                            <td className="validator__check-purpose">
+                              {validation.purpose}
+                            </td>
                             <td className="validator__check-size">
                               {validation.name.replace('-ico', '')}
                               <span className="validator__format-badge">{validation.format.toUpperCase()}</span>

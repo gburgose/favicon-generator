@@ -14,7 +14,7 @@ export const FAVICON_SIZES: FaviconSize[] = [
     fileName: 'favicon.ico',
     purpose: 'Classic ICO Favicon',
     format: 'ico',
-    recommended: true
+    recommended: false
   },
   {
     size: 16,
@@ -126,6 +126,6 @@ export const FAVICON_SIZES: FaviconSize[] = [
     fileName: 'android-icon-512x512.png',
     purpose: 'Android Icon',
     format: 'png',
-    recommended: true
+    recommended: false
   }
 ]; 

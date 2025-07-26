@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FAVICON_SIZES } from '@/config/favicons';
 import { useValidatorStore } from '@/stores/validatorStore';
+import { gtmEvents } from '@/utils/gtm';
 
 interface FaviconFound {
   url: string;
@@ -274,28 +275,35 @@ export const useFaviconValidator = () => {
         };
       });
 
-      // Contar favicons encontrados (incluyendo genéricos)
+      // Contar favicons encontrados (solo los que coinciden con nuestra configuración)
       const foundCount = validations.filter(v => v.found).length;
-      const totalWithGenerics = foundCount + genericFavicons.length;
+      const coveragePercentage = Math.round((foundCount / FAVICON_SIZES.length) * 100);
 
       setValidationResult({
         url: normalizedUrl,
         totalFavicons: FAVICON_SIZES.length,
-        foundFavicons: totalWithGenerics,
+        foundFavicons: foundCount,
         validations,
         loading: false,
         genericFavicons: genericFavicons.length > 0 ? genericFavicons : undefined
       });
 
-    } catch {
+      // GTM Event: Validación completada exitosamente
+      gtmEvents.validatorValidationCompleted(normalizedUrl, foundCount, FAVICON_SIZES.length, coveragePercentage);
+
+    } catch (error) {
+      const errorMessage = 'Error al validar la URL';
       setValidationResult({
         url,
         totalFavicons: 0,
         foundFavicons: 0,
         validations: [],
         loading: false,
-        error: 'Error al validar la URL'
+        error: errorMessage
       });
+
+      // GTM Event: Error en validación
+      gtmEvents.validatorValidationError(url, errorMessage);
     } finally {
       setLoading(false);
     }

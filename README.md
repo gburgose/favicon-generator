@@ -140,3 +140,18 @@ The following events are triggered in the `/generator` page, ordered by user flo
 12. **`generator_download`** - When user downloads the generated favicon
 
 13. **`generator_send_to_converter`** - When user sends the favicon to the converter tool
+
+### Validator Events
+
+The following events are triggered in the `/validator` page, ordered by user flow:
+
+1. **`validator_validation_started`** - When user starts favicon validation
+   - Data: `url`
+
+2. **`validator_validation_completed`** - When favicon validation completes successfully
+   - Data: `url`, `found_favicons`, `total_favicons`, `coverage_percentage`
+
+3. **`validator_validation_error`** - When favicon validation fails
+   - Data: `url`, `error_type`
+
+4. **`validator_results_cleared`** - When user clears validation results
