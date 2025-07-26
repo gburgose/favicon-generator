@@ -394,6 +394,29 @@ export default function FaviconGenerator() {
                 try {
                   console.log('Botón Send to Converter clickeado');
 
+                  // Verificar si ya hay una imagen en el converter
+                  const converterStore = JSON.parse(localStorage.getItem('converter-storage') || '{}');
+                  const hasExistingImage = converterStore.state?.fileDataUrl || converterStore.state?.previewUrl;
+
+                  if (hasExistingImage) {
+                    const result = await Swal.fire({
+                      title: 'Image Already Exists',
+                      text: 'You are already working on an image in the Converter. Do you want to replace it with this new image?',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#F3DFA2',
+                      cancelButtonColor: '#666',
+                      confirmButtonText: 'Yes, replace it',
+                      cancelButtonText: 'Cancel',
+                      background: '#1e1e1e',
+                      color: '#EFE6DD'
+                    });
+
+                    if (!result.isConfirmed) {
+                      return;
+                    }
+                  }
+
                   // Generar la imagen como blob
                   console.log('Generando imagen...');
                   const blob = await previewRef.current?.generateImageBlob();
