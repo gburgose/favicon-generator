@@ -216,7 +216,9 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       // Fallback para SSR: usar regex simple
       return svgContent
         .replace(/fill="[^"]*"/g, `fill="${fillColor}"`)
-        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`);
+        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`)
+        .replace(/width="[^"]*"/g, 'width="100%"')
+        .replace(/height="[^"]*"/g, 'height="100%"');
     }
 
     try {
@@ -226,6 +228,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const svgElement = doc.querySelector('svg');
 
       if (!svgElement) return svgContent;
+
+      // Ajustar dimensiones del SVG para que se adapte al contenedor
+      svgElement.setAttribute('width', '100%');
+      svgElement.setAttribute('height', '100%');
+      svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
       // Función recursiva para aplicar colores a todos los elementos
       const applyColorsToElement = (element: Element) => {
@@ -253,7 +260,9 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       console.warn('Error parsing SVG, using fallback method:', error);
       return svgContent
         .replace(/fill="[^"]*"/g, `fill="${fillColor}"`)
-        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`);
+        .replace(/stroke="[^"]*"/g, `stroke="${strokeColor}"`)
+        .replace(/width="[^"]*"/g, 'width="100%"')
+        .replace(/height="[^"]*"/g, 'height="100%"');
     }
   };
 
