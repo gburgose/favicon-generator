@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
-import { GoogleTagManager } from '@next/third-parties/google';
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
@@ -9,6 +8,7 @@ import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LogRocketInit from "@/components/LogRocketInit";
+import GTM from "@/components/GTM";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -99,9 +99,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <GoogleTagManager gtmId="GTM-P7FQSKFN" />
-
-
+        <GTM />
         {/* Classic Favicon */}
         <link rel="shortcut icon" href="/favicons/favicon.ico" />
 
@@ -137,6 +135,16 @@ export default function RootLayout({
         backgroundAttachment: 'fixed',
         backgroundSize: 'cover'
       }}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-P7FQSKFN"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+
         <div className="layout">
           <Header />
           <main className="layout__content">
