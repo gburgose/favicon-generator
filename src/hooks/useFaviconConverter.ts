@@ -69,6 +69,21 @@ export const useFaviconConverter = () => {
       localStorage.removeItem('generatedFavicon');
       localStorage.removeItem('faviconSource');
 
+      // Detect dominant color for image from generator
+      const img = new Image();
+      img.onload = () => {
+        try {
+          console.log('Detecting color for image from generator:', img.width, 'x', img.height);
+          const dominantColor = detectDominantColor(img);
+          console.log('Setting theme color to:', dominantColor);
+          updateTempAppSettings({ themeColor: dominantColor });
+          toast.success(`Theme color automatically set to ${dominantColor}`);
+        } catch (error) {
+          console.warn('Could not detect dominant color for image from generator:', error);
+        }
+      };
+      img.src = generatedFavicon;
+
       // Show success message
       toast.success('Image from Generator loaded successfully!');
     }
@@ -92,8 +107,79 @@ export const useFaviconConverter = () => {
 
       // Clear generated favicons when restoring image (they need to be regenerated)
       setGeneratedFavicons({});
+
+      // Detect dominant color when restoring image
+      const img = new Image();
+      img.onload = () => {
+        try {
+          console.log('Detecting color for restored image:', img.width, 'x', img.height);
+          const dominantColor = detectDominantColor(img);
+          console.log('Setting theme color to:', dominantColor);
+          updateTempAppSettings({ themeColor: dominantColor });
+          toast.success(`Theme color automatically set to ${dominantColor}`);
+        } catch (error) {
+          console.warn('Could not detect dominant color for restored image:', error);
+        }
+      };
+      img.src = fileDataUrl;
     }
-  }, [fileDataUrl, selectedFile, setSelectedFile, setPreviewUrl, setGeneratedFavicons]);
+  }, [fileDataUrl, selectedFile, setSelectedFile, setPreviewUrl, setGeneratedFavicons, updateTempAppSettings]);
+
+  // Función para detectar el color predominante de una imagen
+  const detectDominantColor = (imageElement: HTMLImageElement): string => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '#ffffff';
+
+    // Reducir el tamaño para mejorar el rendimiento
+    const maxSize = 50;
+    const scale = Math.min(maxSize / imageElement.width, maxSize / imageElement.height);
+    canvas.width = imageElement.width * scale;
+    canvas.height = imageElement.height * scale;
+
+    // Dibujar la imagen en el canvas
+    ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+
+    // Obtener los datos de píxeles
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // Contar colores
+    const colorCounts: { [key: string]: number } = {};
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const a = data[i + 3];
+
+      // Ignorar píxeles transparentes o muy claros
+      if (a < 128 || (r > 240 && g > 240 && b > 240)) continue;
+
+      // Redondear colores para agrupar similares (más agresivo)
+      const roundedR = Math.round(r / 20) * 20;
+      const roundedG = Math.round(g / 20) * 20;
+      const roundedB = Math.round(b / 20) * 20;
+
+      const colorKey = `${roundedR},${roundedG},${roundedB}`;
+      colorCounts[colorKey] = (colorCounts[colorKey] || 0) + 1;
+    }
+
+    // Encontrar el color más frecuente
+    let dominantColor = '#ffffff';
+    let maxCount = 0;
+
+    for (const [colorKey, count] of Object.entries(colorCounts)) {
+      if (count > maxCount) {
+        maxCount = count;
+        const [r, g, b] = colorKey.split(',').map(Number);
+        dominantColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+      }
+    }
+
+    console.log('Detected dominant color:', dominantColor, 'from', Object.keys(colorCounts).length, 'color groups');
+    return dominantColor;
+  };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
@@ -132,16 +218,27 @@ export const useFaviconConverter = () => {
     };
     reader.readAsDataURL(file);
 
-    // Check image dimensions
+    // Check image dimensions and detect dominant color
     const img = new Image();
     img.onload = () => {
       if (img.width < 512 || img.height < 512) {
         setImageWarning(`Warning: Your image is ${img.width}x${img.height}px. For best quality, use an image of 512x512px or larger. The favicons will still be generated but larger sizes may appear pixelated.`);
         gtmEvents.smallImageWarning(img.width, img.height);
       }
+
+      // Detectar color predominante y aplicarlo al Theme Color
+      try {
+        console.log('Starting color detection for image:', img.width, 'x', img.height);
+        const dominantColor = detectDominantColor(img);
+        console.log('Setting theme color to:', dominantColor);
+        updateTempAppSettings({ themeColor: dominantColor });
+        toast.success(`Theme color automatically set to ${dominantColor}`);
+      } catch (error) {
+        console.warn('Could not detect dominant color:', error);
+      }
     };
     img.src = url;
-  }, [setGeneratedFavicons, setImageWarning, setSelectedFile, setPreviewUrl]);
+  }, [setGeneratedFavicons, setImageWarning, setSelectedFile, setPreviewUrl, updateTempAppSettings]);
 
   const dropzoneProps = useDropzone({
     onDrop,
@@ -490,6 +587,9 @@ ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fi
     // UI state setters
     setShowFavicons,
     setShowMetaTags,
-    setShowManifest
+    setShowManifest,
+
+    // Color detection
+    detectDominantColor
   };
 }; 

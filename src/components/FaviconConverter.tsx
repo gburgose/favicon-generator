@@ -17,6 +17,7 @@ import {
   Check
 } from 'lucide-react';
 import LightboxThankYou from './LightboxThankYou';
+import toast from 'react-hot-toast';
 
 export default function Converter() {
   const [showThankYou, setShowThankYou] = useState(false);
@@ -50,7 +51,8 @@ export default function Converter() {
     onDrop,
     setShowFavicons,
     setShowMetaTags,
-    setShowManifest
+    setShowManifest,
+    detectDominantColor
   } = useFaviconConverter();
 
   const handleDownload = async () => {
@@ -145,6 +147,7 @@ export default function Converter() {
                       onChange={(e) => updateAppSettings({ themeColor: e.target.value })}
                       placeholder="#ffffff"
                     />
+
                   </div>
                 </div>
               </div>
