@@ -30,18 +30,9 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     textSettings,
     svgSettings,
     iconSettings,
-    textPosition,
-    iconPosition,
-    svgPosition,
-    iconSize,
-    svgSize,
-    setTextPosition,
-    setIconPosition,
-    setSvgPosition,
-    setIconSize,
-    setSvgSize,
     updateSvgSettings,
-    updateTextSettings
+    updateTextSettings,
+    updateIconSettings
   } = useGeneratorStore();
 
   // Determinar el tipo basado en el tab activo
@@ -57,35 +48,35 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
   // Obtener posición y tamaño según el tipo activo
   const getCurrentPosition = () => {
     switch (type) {
-      case 'text': return textPosition;
-      case 'icon': return iconPosition;
-      case 'svg': return svgPosition;
-      default: return textPosition;
+      case 'text': return textSettings.position;
+      case 'icon': return iconSettings.position;
+      case 'svg': return svgSettings.position;
+      default: return textSettings.position;
     }
   };
 
   const getCurrentSize = () => {
     switch (type) {
       case 'text': return textSettings.size;
-      case 'icon': return iconSize;
-      case 'svg': return svgSize;
+      case 'icon': return iconSettings.size;
+      case 'svg': return svgSettings.size;
       default: return textSettings.size;
     }
   };
 
   const setCurrentPosition = (position: ElementPosition) => {
     switch (type) {
-      case 'text': setTextPosition(position); break;
-      case 'icon': setIconPosition(position); break;
-      case 'svg': setSvgPosition(position); break;
+      case 'text': updateTextSettings({ position }); break;
+      case 'icon': updateIconSettings({ position }); break;
+      case 'svg': updateSvgSettings({ position }); break;
     }
   };
 
   const setCurrentSize = (size: number) => {
     switch (type) {
       case 'text': updateTextSettings({ size }); break;
-      case 'icon': setIconSize(size); break;
-      case 'svg': setSvgSize(size); break;
+      case 'icon': updateIconSettings({ size }); break;
+      case 'svg': updateSvgSettings({ size }); break;
     }
   };
 
@@ -129,10 +120,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         };
       }
     }
-    return { width: currentPosition.width, height: currentPosition.height };
+    return currentPosition ? { width: currentPosition.width, height: currentPosition.height } : { width: 200, height: 200 };
   };
 
-  const textContainerSize = getTextContainerSize();
+  const textContainerSize = getTextContainerSize() || { width: 200, height: 200 };
 
   // Función para extraer solo el contenido del path del SVG
   const extractSvgPath = (svgContent: string): string => {
@@ -346,15 +337,17 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
   // Inicializar tamaño del texto solo si no hay un valor guardado
   useEffect(() => {
-    if (type === 'text' && text.trim() && textSettings.size === 120) {
+    if (type === 'text' && text.trim() && textSettings.size === 120 && currentPosition) {
       // Solo inicializar si el tamaño actual es el default
       const newSize = Math.min(currentPosition.width, currentPosition.height) * 0.6;
       updateTextSettings({ size: Math.max(newSize, 12) });
     }
-  }, [type, text, textSettings.size, currentPosition.width, currentPosition.height, updateTextSettings]);
+  }, [type, text, textSettings.size, currentPosition, updateTextSettings]);
 
   // Función para descargar imagen usando html2canvas
   const downloadImage = () => {
+    if (!currentPosition) return;
+
     // Crear un contenedor temporal sin controles para la captura
     const tempContainer = document.createElement('div');
     tempContainer.style.width = '620px';
@@ -452,6 +445,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     downloadImage,
     generateImageBlob: () => {
       return new Promise<Blob>((resolve) => {
+        if (!currentPosition) {
+          resolve(new Blob());
+          return;
+        }
+
         // Crear un contenedor temporal sin controles para la captura
         const tempContainer = document.createElement('div');
         tempContainer.style.width = '620px';
@@ -537,7 +535,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     },
     centerVertically: () => {
       // Solo alinear si hay un elemento activo según el tipo
-      if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+      if (currentPosition && ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent))) {
         const elementHeight = type === 'text' ? textContainerSize.height : currentPosition.height;
         const newPosition = {
           ...currentPosition,
@@ -548,7 +546,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     },
     centerHorizontally: () => {
       // Solo alinear si hay un elemento activo según el tipo
-      if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+      if (currentPosition && ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent))) {
         const elementWidth = type === 'text' ? textContainerSize.width : currentPosition.width;
         const newPosition = {
           ...currentPosition,
@@ -558,6 +556,28 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       }
     }
   }));
+
+  // Verificar que currentPosition existe antes de renderizar
+  if (!currentPosition) {
+    return (
+      <div className="preview-default">
+        <div
+          className="preview-default__canvas"
+          style={{
+            width: '620px',
+            height: '620px',
+            backgroundColor,
+            borderRadius: '8px',
+            border: '1px solid rgba(126, 189, 194, 0.3)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Loading state */}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="preview-default">
@@ -574,7 +594,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         }}
       >
         {/* Elemento editable con react-rnd */}
-        {(type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent) ? (
+        {currentPosition && ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) ? (
           <Rnd
             data-testid="rnd"
             position={{

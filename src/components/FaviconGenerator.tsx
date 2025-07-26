@@ -35,22 +35,10 @@ export default function FaviconGenerator() {
     textSettings,
     svgSettings,
     iconSettings,
-    textPosition,
-    iconPosition,
-    svgPosition,
-    textSize,
-    iconSize,
-    svgSize,
     setActiveTab,
     updateTextSettings,
     updateSvgSettings,
-    updateIconSettings,
-    setTextPosition,
-    setIconPosition,
-    setSvgPosition,
-    setTextSize,
-    setIconSize,
-    setSvgSize
+    updateIconSettings
   } = useGeneratorStore();
 
 
@@ -69,7 +57,7 @@ export default function FaviconGenerator() {
   // Seleccionar primer icono cuando se cambie al tab Icons
   useEffect(() => {
     if (activeTab === 'icons' && !iconSettings.selectedIcon) {
-      updateIconSettings({ selectedIcon: 'heart' });
+      updateIconSettings({ selectedIcon: 'star' });
     }
   }, [activeTab, iconSettings.selectedIcon, updateIconSettings]);
 
@@ -218,7 +206,14 @@ export default function FaviconGenerator() {
                       updateSvgSettings({
                         file,
                         fileName: file.name,
-                        fileSize: file.size
+                        fileSize: file.size,
+                        position: {
+                          x: 78,
+                          y: 78,
+                          width: 464,
+                          height: 464
+                        },
+                        size: 120
                       });
 
                       // Cargar el contenido del SVG y guardarlo en el store
@@ -463,21 +458,8 @@ export default function FaviconGenerator() {
                     localStorage.setItem('generatorData', JSON.stringify({
                       activeTab,
                       textSettings,
-                      svgSettings: {
-                        backgroundColor: svgSettings.backgroundColor,
-                        fillColor: svgSettings.fillColor,
-                        strokeColor: svgSettings.strokeColor,
-                        svgContent: svgSettings.svgContent,
-                        fileName: svgSettings.fileName,
-                        fileSize: svgSettings.fileSize
-                      },
-                      iconSettings,
-                      textPosition,
-                      iconPosition,
-                      svgPosition,
-                      textSize,
-                      iconSize,
-                      svgSize
+                      svgSettings,
+                      iconSettings
                     }));
 
                     console.log('Imagen guardada en localStorage, redirigiendo...');

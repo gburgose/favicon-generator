@@ -7,6 +7,7 @@ interface TextSettings {
   size: number;
   backgroundColor: string;
   textColor: string;
+  position: ElementPosition;
 }
 
 interface SvgSettings {
@@ -17,6 +18,8 @@ interface SvgSettings {
   backgroundColor: string;
   fillColor: string;
   strokeColor: string;
+  position: ElementPosition;
+  size: number;
 }
 
 interface IconSettings {
@@ -24,6 +27,8 @@ interface IconSettings {
   backgroundColor: string;
   fillColor: string;
   strokeColor: string;
+  position: ElementPosition;
+  size: number;
 }
 
 interface ElementPosition {
@@ -42,49 +47,31 @@ interface GeneratorStore {
   svgSettings: SvgSettings;
   iconSettings: IconSettings;
 
-  // Element positions and sizes (for interactive preview) - independent for each type
-  textPosition: ElementPosition;
-  iconPosition: ElementPosition;
-  svgPosition: ElementPosition;
-  iconSize: number;
-  svgSize: number;
+
 
   // Actions
   setActiveTab: (tab: 'text' | 'svg' | 'icons') => void;
   updateTextSettings: (updates: Partial<TextSettings>) => void;
   updateSvgSettings: (updates: Partial<SvgSettings>) => void;
   updateIconSettings: (updates: Partial<IconSettings>) => void;
-  setTextPosition: (position: ElementPosition) => void;
-  setIconPosition: (position: ElementPosition) => void;
-  setSvgPosition: (position: ElementPosition) => void;
-  setIconSize: (size: number) => void;
-  setSvgSize: (size: number) => void;
+
   resetStore: () => void;
 }
+
+const defaultTextPosition: ElementPosition = {
+  x: 284.9228515625,
+  y: 156,
+  width: 200,
+  height: 200
+};
 
 const defaultTextSettings: TextSettings = {
   text: 'FAV',
   font: 'Roboto',
   size: 273,
   backgroundColor: '#F3DFA2',
-  textColor: '#333'
-};
-
-const defaultSvgSettings: SvgSettings = {
-  file: null,
-  svgContent: '',
-  fileName: '',
-  fileSize: 0,
-  backgroundColor: '#F3DFA2',
-  fillColor: '#F3DFA2',
-  strokeColor: '#333'
-};
-
-const defaultIconSettings: IconSettings = {
-  selectedIcon: 'heart',
-  backgroundColor: '#F3DFA2',
-  fillColor: '#F3DFA2',
-  strokeColor: '#333'
+  textColor: '#333',
+  position: defaultTextPosition
 };
 
 const defaultElementPosition: ElementPosition = {
@@ -94,6 +81,18 @@ const defaultElementPosition: ElementPosition = {
   height: 200
 };
 
+const defaultSvgSettings: SvgSettings = {
+  file: null,
+  svgContent: '',
+  fileName: '',
+  fileSize: 0,
+  backgroundColor: '#F3DFA2',
+  fillColor: '#F3DFA2',
+  strokeColor: '#333',
+  position: defaultElementPosition,
+  size: 120
+};
+
 const defaultIconPosition: ElementPosition = {
   x: 60,
   y: 60,
@@ -101,12 +100,16 @@ const defaultIconPosition: ElementPosition = {
   height: 500
 };
 
-const defaultTextPosition: ElementPosition = {
-  x: 156,
-  y: 156,
-  width: 120,
-  height: 80
+const defaultIconSettings: IconSettings = {
+  selectedIcon: 'star',
+  backgroundColor: '#F3DFA2',
+  fillColor: '#F3DFA2',
+  strokeColor: '#333',
+  position: defaultIconPosition,
+  size: 120
 };
+
+
 
 export const useGeneratorStore = create<GeneratorStore>()(
   persist(
@@ -116,12 +119,6 @@ export const useGeneratorStore = create<GeneratorStore>()(
       textSettings: defaultTextSettings,
       svgSettings: defaultSvgSettings,
       iconSettings: defaultIconSettings,
-      textPosition: defaultTextPosition,
-      iconPosition: defaultIconPosition,
-      svgPosition: defaultElementPosition,
-      iconSize: 120,
-      svgSize: 120,
-
       // Actions
       setActiveTab: (tab) => set({ activeTab: tab }),
 
@@ -137,28 +134,14 @@ export const useGeneratorStore = create<GeneratorStore>()(
         iconSettings: { ...state.iconSettings, ...updates }
       })),
 
-      setTextPosition: (position) => set({ textPosition: position }),
 
-      setIconPosition: (position) => set({ iconPosition: position }),
-
-      setSvgPosition: (position) => set({ svgPosition: position }),
-
-
-
-      setIconSize: (size) => set({ iconSize: size }),
-
-      setSvgSize: (size) => set({ svgSize: size }),
 
       resetStore: () => set({
         activeTab: 'text',
         textSettings: defaultTextSettings,
         svgSettings: defaultSvgSettings,
         iconSettings: defaultIconSettings,
-        textPosition: defaultTextPosition,
-        iconPosition: defaultIconPosition,
-        svgPosition: defaultElementPosition,
-        iconSize: 120,
-        svgSize: 120
+
       })
     }),
     {
@@ -176,12 +159,7 @@ export const useGeneratorStore = create<GeneratorStore>()(
           fileSize: state.svgSettings.fileSize
         },
         iconSettings: state.iconSettings,
-        textPosition: state.textPosition,
-        iconPosition: state.iconPosition,
-        svgPosition: state.svgPosition,
 
-        iconSize: state.iconSize,
-        svgSize: state.svgSize
       })
     }
   )
