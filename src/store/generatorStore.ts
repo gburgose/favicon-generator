@@ -96,6 +96,13 @@ const defaultElementPosition: ElementPosition = {
   height: 200
 };
 
+const defaultTextPosition: ElementPosition = {
+  x: 156,
+  y: 156,
+  width: 120,
+  height: 80
+};
+
 export const useGeneratorStore = create<GeneratorStore>()(
   persist(
     (set, get) => ({
@@ -104,7 +111,7 @@ export const useGeneratorStore = create<GeneratorStore>()(
       textSettings: defaultTextSettings,
       svgSettings: defaultSvgSettings,
       iconSettings: defaultIconSettings,
-      textPosition: defaultElementPosition,
+      textPosition: defaultTextPosition,
       iconPosition: defaultElementPosition,
       svgPosition: defaultElementPosition,
       textSize: 120,
@@ -143,7 +150,7 @@ export const useGeneratorStore = create<GeneratorStore>()(
         textSettings: defaultTextSettings,
         svgSettings: defaultSvgSettings,
         iconSettings: defaultIconSettings,
-        textPosition: defaultElementPosition,
+        textPosition: defaultTextPosition,
         iconPosition: defaultElementPosition,
         svgPosition: defaultElementPosition,
         textSize: 120,

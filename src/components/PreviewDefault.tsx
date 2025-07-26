@@ -93,6 +93,31 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
   const currentPosition = getCurrentPosition();
   const currentSize = getCurrentSize();
 
+  // Calcular el tamaño del contenedor de texto basado en el contenido
+  const getTextContainerSize = () => {
+    if (type === 'text' && text.trim()) {
+      // Crear un canvas temporal para medir el texto
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.font = `bold ${textSize}px "${font}"`;
+        const textMetrics = ctx.measureText(text.substring(0, 3).toUpperCase());
+        const textWidth = textMetrics.width;
+        const textHeight = textSize * 1.2; // Aproximación de la altura del texto
+
+        // Agregar padding
+        const padding = 16;
+        return {
+          width: textWidth + padding * 2,
+          height: textHeight + padding * 2
+        };
+      }
+    }
+    return { width: currentPosition.width, height: currentPosition.height };
+  };
+
+  const textContainerSize = getTextContainerSize();
+
   // Función para extraer solo el contenido del path del SVG
   const extractSvgPath = (svgContent: string): string => {
     const match = svgContent.match(/<path[^>]*>/);
@@ -303,99 +328,55 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     }
   }, [type, text, textSize, currentPosition.width, currentPosition.height, setTextSize]);
 
-  // Función para descargar imagen (crear canvas temporalmente solo para descarga)
+  // Función para descargar imagen usando html2canvas
   const downloadImage = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    // Capturar directamente el contenedor del preview
+    const previewContainer = document.querySelector('.preview-default__canvas') as HTMLElement;
+    if (!previewContainer) return;
 
-    canvas.width = 512;
-    canvas.height = 512;
+    // Ocultar temporalmente todos los elementos de resize y el borde
+    const allResizeHandles = document.querySelectorAll('[class*="resizable-handle"], [class*="react-resizable-handle"], [class*="react-rnd-handle"], [class*="handle"]');
+    const rndElement = previewContainer.querySelector('[data-testid="rnd"]') as HTMLElement;
 
-    // Rellenar fondo
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, 512, 512);
+    const originalDisplay: string[] = [];
+    const originalBorder = rndElement?.style.border || '';
+    const originalVisibility: string[] = [];
+    const originalOpacity: string[] = [];
 
-    // Renderizar contenido según el tipo
-    if (type === 'text' && text.trim()) {
-      // Calcular escala del preview (620px) al canvas (512px)
-      const scale = 512 / 620;
+    allResizeHandles.forEach((handle) => {
+      originalDisplay.push((handle as HTMLElement).style.display);
+      originalVisibility.push((handle as HTMLElement).style.visibility);
+      originalOpacity.push((handle as HTMLElement).style.opacity);
+      (handle as HTMLElement).style.display = 'none';
+      (handle as HTMLElement).style.visibility = 'hidden';
+      (handle as HTMLElement).style.opacity = '0';
+    });
 
-      // Calcular posición y tamaño escalados
-      const scaledX = currentPosition.x * scale;
-      const scaledY = currentPosition.y * scale;
-      const scaledWidth = currentPosition.width * scale;
-      const scaledHeight = currentPosition.height * scale;
+    if (rndElement) {
+      rndElement.style.border = 'none';
+    }
 
-      ctx.fillStyle = textColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const scaledFontSize = textSize * scale;
-      // Aplicar el peso de fuente correcto (bold)
-      ctx.font = `bold ${scaledFontSize}px "${font}"`;
-      ctx.fillText(text.substring(0, 3).toUpperCase(), scaledX + scaledWidth / 2, scaledY + scaledHeight / 2);
-    } else if (type === 'icon' && iconName) {
-      // Calcular escala del preview (620px) al canvas (512px)
-      const scale = 512 / 620;
+    // Usar html2canvas para capturar el contenedor
+    import('html2canvas').then(({ default: html2canvas }) => {
+      html2canvas(previewContainer, {
+        width: 620,
+        height: 620,
+        scale: 512 / 620, // Escalar a 512x512
+        backgroundColor: backgroundColor,
+        useCORS: true,
+        allowTaint: true
+      }).then((canvas) => {
+        // Restaurar los handles de resize y el borde
+        allResizeHandles.forEach((handle, index) => {
+          (handle as HTMLElement).style.display = originalDisplay[index];
+          (handle as HTMLElement).style.visibility = originalVisibility[index];
+          (handle as HTMLElement).style.opacity = originalOpacity[index];
+        });
 
-      // Calcular posición y tamaño escalados
-      const scaledX = currentPosition.x * scale;
-      const scaledY = currentPosition.y * scale;
-      const scaledWidth = currentPosition.width * scale;
-      const scaledHeight = currentPosition.height * scale;
+        if (rndElement) {
+          rndElement.style.border = originalBorder;
+        }
 
-      // Para iconos, crear SVG temporal
-      const iconSvg = getIconSvgComplete(iconName);
-      if (iconSvg) {
-        const coloredIconSvg = iconSvg
-          .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
-          .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
-
-        const svgContent = `
-          <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <rect width="512" height="512" fill="${backgroundColor}"/>
-            <g transform="translate(${scaledX}, ${scaledY}) scale(${scaledWidth / 24})">
-              ${coloredIconSvg}
-            </g>
-          </svg>
-        `;
-        const img = new Image();
-        img.onload = () => {
-          ctx.drawImage(img, 0, 0);
-          // Descargar
-          canvas.toBlob((blob) => {
-            if (blob) {
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = 'favicon-512x512.png';
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-            }
-          }, 'image/png');
-        };
-        img.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
-        return;
-      }
-    } else if (type === 'svg' && svgContent) {
-      // Calcular escala del preview (620px) al canvas (512px)
-      const scale = 512 / 620;
-
-      // Calcular posición y tamaño escalados
-      const scaledX = currentPosition.x * scale;
-      const scaledY = currentPosition.y * scale;
-      const scaledWidth = currentPosition.width * scale;
-      const scaledHeight = currentPosition.height * scale;
-
-      // Crear SVG con el color correcto
-      const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
-
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, scaledX, scaledY, scaledWidth, scaledHeight);
-        // Descargar
         canvas.toBlob((blob) => {
           if (blob) {
             const url = URL.createObjectURL(blob);
@@ -408,24 +389,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
             URL.revokeObjectURL(url);
           }
         }, 'image/png');
-      };
-      img.src = 'data:image/svg+xml;base64,' + btoa(coloredSvg);
-      return;
-    }
-
-    // Descargar para texto
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'favicon-512x512.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }
-    }, 'image/png');
+      });
+    });
   };
 
   // Exponer método de descarga
@@ -433,101 +398,70 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     downloadImage,
     generateImageBlob: () => {
       return new Promise<Blob>((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        // Capturar directamente el contenedor del preview
+        const previewContainer = document.querySelector('.preview-default__canvas') as HTMLElement;
+        if (!previewContainer) {
+          resolve(new Blob());
+          return;
+        }
 
-        canvas.width = 512;
-        canvas.height = 512;
+        // Ocultar temporalmente todos los elementos de resize y el borde
+        const allResizeHandles = document.querySelectorAll('[class*="resizable-handle"], [class*="react-resizable-handle"], [class*="react-rnd-handle"], [class*="handle"]');
+        const rndElement = previewContainer.querySelector('[data-testid="rnd"]') as HTMLElement;
 
-        // Rellenar fondo
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, 512, 512);
+        const originalDisplay: string[] = [];
+        const originalBorder = rndElement?.style.border || '';
+        const originalVisibility: string[] = [];
+        const originalOpacity: string[] = [];
 
-        // Renderizar contenido según el tipo
-        if (type === 'text' && text.trim()) {
-          // Calcular escala del preview (620px) al canvas (512px)
-          const scale = 512 / 620;
+        allResizeHandles.forEach((handle) => {
+          originalDisplay.push((handle as HTMLElement).style.display);
+          originalVisibility.push((handle as HTMLElement).style.visibility);
+          originalOpacity.push((handle as HTMLElement).style.opacity);
+          (handle as HTMLElement).style.display = 'none';
+          (handle as HTMLElement).style.visibility = 'hidden';
+          (handle as HTMLElement).style.opacity = '0';
+        });
 
-          // Calcular posición y tamaño escalados
-          const scaledX = currentPosition.x * scale;
-          const scaledY = currentPosition.y * scale;
-          const scaledWidth = currentPosition.width * scale;
-          const scaledHeight = currentPosition.height * scale;
+        if (rndElement) {
+          rndElement.style.border = 'none';
+        }
 
-          ctx.fillStyle = textColor;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          const scaledFontSize = textSize * scale;
-          // Aplicar el peso de fuente correcto (bold)
-          ctx.font = `bold ${scaledFontSize}px "${font}"`;
-          ctx.fillText(text.substring(0, 3).toUpperCase(), scaledX + scaledWidth / 2, scaledY + scaledHeight / 2);
+        // Usar html2canvas para capturar el contenedor
+        import('html2canvas').then(({ default: html2canvas }) => {
+          html2canvas(previewContainer, {
+            width: 620,
+            height: 620,
+            scale: 512 / 620, // Escalar a 512x512
+            backgroundColor: backgroundColor,
+            useCORS: true,
+            allowTaint: true
+          }).then((canvas) => {
+            // Restaurar los handles de resize y el borde
+            allResizeHandles.forEach((handle, index) => {
+              (handle as HTMLElement).style.display = originalDisplay[index];
+              (handle as HTMLElement).style.visibility = originalVisibility[index];
+              (handle as HTMLElement).style.opacity = originalOpacity[index];
+            });
 
-          canvas.toBlob((blob) => {
-            if (blob) resolve(blob);
-          }, 'image/png');
-        } else if (type === 'icon' && iconName) {
-          // Calcular escala del preview (620px) al canvas (512px)
-          const scale = 512 / 620;
+            if (rndElement) {
+              rndElement.style.border = originalBorder;
+            }
 
-          // Calcular posición y tamaño escalados
-          const scaledX = currentPosition.x * scale;
-          const scaledY = currentPosition.y * scale;
-          const scaledWidth = currentPosition.width * scale;
-          const scaledHeight = currentPosition.height * scale;
-
-          // Para iconos, crear SVG temporal
-          const iconSvg = getIconSvgComplete(iconName);
-          if (iconSvg) {
-            const coloredIconSvg = iconSvg
-              .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
-              .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
-
-            const svgContent = `
-              <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                <rect width="512" height="512" fill="${backgroundColor}"/>
-                <g transform="translate(${scaledX}, ${scaledY}) scale(${scaledWidth / 24})">
-                  ${coloredIconSvg.replace(/<svg[^>]*>|<\/svg>/g, '')}
-                </g>
-              </svg>
-            `;
-            const img = new Image();
-            img.onload = () => {
-              ctx.drawImage(img, 0, 0);
-              canvas.toBlob((blob) => {
-                if (blob) resolve(blob);
-              }, 'image/png');
-            };
-            img.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
-          }
-        } else if (type === 'svg' && svgContent) {
-          // Calcular escala del preview (620px) al canvas (512px)
-          const scale = 512 / 620;
-
-          // Calcular posición y tamaño escalados
-          const scaledX = currentPosition.x * scale;
-          const scaledY = currentPosition.y * scale;
-          const scaledWidth = currentPosition.width * scale;
-          const scaledHeight = currentPosition.height * scale;
-
-          const coloredSvg = applyColorsToSvg(svgContent, svgSettings.fillColor, svgSettings.strokeColor);
-          const img = new Image();
-          img.onload = () => {
-            ctx.drawImage(img, scaledX, scaledY, scaledWidth, scaledHeight);
             canvas.toBlob((blob) => {
               if (blob) resolve(blob);
             }, 'image/png');
-          };
-          img.src = 'data:image/svg+xml;base64,' + btoa(coloredSvg);
-        }
+          });
+        });
       });
     },
     centerVertically: () => {
       // Solo alinear si hay un elemento activo según el tipo
       if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+        const elementHeight = type === 'text' ? textContainerSize.height : currentPosition.height;
         const newPosition = {
           ...currentPosition,
-          y: (620 - currentPosition.height) / 2
+          y: (620 - elementHeight) / 2
         };
         setCurrentPosition(newPosition);
       }
@@ -535,9 +469,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     centerHorizontally: () => {
       // Solo alinear si hay un elemento activo según el tipo
       if ((type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent)) {
+        const elementWidth = type === 'text' ? textContainerSize.width : currentPosition.width;
         const newPosition = {
           ...currentPosition,
-          x: (620 - currentPosition.width) / 2
+          x: (620 - elementWidth) / 2
         };
         setCurrentPosition(newPosition);
       }
@@ -561,20 +496,21 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         {/* Elemento editable con react-rnd */}
         {(type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent) ? (
           <Rnd
+            data-testid="rnd"
             position={{
               x: currentPosition.x,
               y: currentPosition.y,
             }}
             size={{
-              width: currentPosition.width,
-              height: currentPosition.height,
+              width: type === 'text' ? textContainerSize.width : currentPosition.width,
+              height: type === 'text' ? textContainerSize.height : currentPosition.height,
             }}
             minWidth={50}
             minHeight={50}
             maxWidth={500}
             maxHeight={500}
             bounds="parent"
-            lockAspectRatio={true}
+            lockAspectRatio={type !== 'text'}
             onResize={(e, direction, ref, delta, position) => {
               const newPosition = {
                 x: position.x,
@@ -616,12 +552,13 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                   fontFamily: font,
                   fontSize: `${textSize}px`,
                   fontWeight: 'bold',
-                  width: '100%',
-                  height: '100%',
+                  width: 'fit-content',
+                  height: 'fit-content',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  userSelect: 'none'
+                  userSelect: 'none',
+                  padding: '8px'
                 }}
               >
                 {text.substring(0, 3).toUpperCase()}
