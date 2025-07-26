@@ -33,16 +33,15 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     textPosition,
     iconPosition,
     svgPosition,
-    textSize,
     iconSize,
     svgSize,
     setTextPosition,
     setIconPosition,
     setSvgPosition,
-    setTextSize,
     setIconSize,
     setSvgSize,
-    updateSvgSettings
+    updateSvgSettings,
+    updateTextSettings
   } = useGeneratorStore();
 
   // Determinar el tipo basado en el tab activo
@@ -67,10 +66,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
   const getCurrentSize = () => {
     switch (type) {
-      case 'text': return textSize;
+      case 'text': return textSettings.size;
       case 'icon': return iconSize;
       case 'svg': return svgSize;
-      default: return textSize;
+      default: return textSettings.size;
     }
   };
 
@@ -84,7 +83,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
   const setCurrentSize = (size: number) => {
     switch (type) {
-      case 'text': setTextSize(size); break;
+      case 'text': updateTextSettings({ size }); break;
       case 'icon': setIconSize(size); break;
       case 'svg': setSvgSize(size); break;
     }
@@ -93,6 +92,23 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
   const currentPosition = getCurrentPosition();
   const currentSize = getCurrentSize();
 
+  // Función para mapear nombres de fuentes a variables CSS
+  const getFontFamily = (fontName: string): string => {
+    const fontMap: { [key: string]: string } = {
+      'Roboto': 'var(--font-roboto)',
+      'Open Sans': 'var(--font-open-sans)',
+      'Lato': 'var(--font-lato)',
+      'Montserrat': 'var(--font-montserrat)',
+      'Oswald': 'var(--font-oswald)',
+      'Raleway': 'var(--font-raleway)',
+      'Poppins': 'var(--font-poppins)',
+      'Source Sans Pro': 'var(--font-source-sans-pro)',
+      'Merriweather': 'var(--font-merriweather)',
+      'Noto Sans': 'var(--font-noto-sans)'
+    };
+    return fontMap[fontName] || fontName;
+  };
+
   // Calcular el tamaño del contenedor de texto basado en el contenido
   const getTextContainerSize = () => {
     if (type === 'text' && text.trim()) {
@@ -100,10 +116,10 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.font = `bold ${textSize}px "${font}"`;
+        ctx.font = `bold ${textSettings.size}px ${getFontFamily(font)}`;
         const textMetrics = ctx.measureText(text.substring(0, 3));
         const textWidth = textMetrics.width;
-        const textHeight = textSize * 1.2; // Aproximación de la altura del texto
+        const textHeight = textSettings.size * 1.2; // Aproximación de la altura del texto
 
         // Agregar padding
         const padding = 16;
@@ -330,12 +346,12 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
 
   // Inicializar tamaño del texto solo si no hay un valor guardado
   useEffect(() => {
-    if (type === 'text' && text.trim() && textSize === 120) {
+    if (type === 'text' && text.trim() && textSettings.size === 120) {
       // Solo inicializar si el tamaño actual es el default
       const newSize = Math.min(currentPosition.width, currentPosition.height) * 0.6;
-      setTextSize(Math.max(newSize, 12));
+      updateTextSettings({ size: Math.max(newSize, 12) });
     }
-  }, [type, text, textSize, currentPosition.width, currentPosition.height, setTextSize]);
+  }, [type, text, textSettings.size, currentPosition.width, currentPosition.height, updateTextSettings]);
 
   // Función para descargar imagen usando html2canvas
   const downloadImage = () => {
@@ -362,8 +378,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     if (type === 'text' && text.trim()) {
       const textDiv = document.createElement('div');
       textDiv.style.color = textColor;
-      textDiv.style.fontFamily = font;
-      textDiv.style.fontSize = textSize + 'px';
+      textDiv.style.fontFamily = getFontFamily(font);
+      textDiv.style.fontSize = textSettings.size + 'px';
       textDiv.style.fontWeight = 'bold';
       textDiv.style.width = 'fit-content';
       textDiv.style.height = 'fit-content';
@@ -459,8 +475,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         if (type === 'text' && text.trim()) {
           const textDiv = document.createElement('div');
           textDiv.style.color = textColor;
-          textDiv.style.fontFamily = font;
-          textDiv.style.fontSize = textSize + 'px';
+          textDiv.style.fontFamily = getFontFamily(font);
+          textDiv.style.fontSize = textSettings.size + 'px';
           textDiv.style.fontWeight = 'bold';
           textDiv.style.width = 'fit-content';
           textDiv.style.height = 'fit-content';
@@ -585,7 +601,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
               setCurrentPosition(newPosition);
               if (type === 'text') {
                 const newSize = Math.min(ref.offsetWidth, ref.offsetHeight) * 0.6;
-                setTextSize(Math.max(newSize, 12));
+                updateTextSettings({ size: Math.max(newSize, 12) });
               }
             }}
             onDragStop={(e, d) => {
@@ -613,8 +629,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
               <div
                 style={{
                   color: textColor,
-                  fontFamily: font,
-                  fontSize: `${textSize}px`,
+                  fontFamily: getFontFamily(font),
+                  fontSize: `${textSettings.size}px`,
                   fontWeight: 'bold',
                   width: 'fit-content',
                   height: 'fit-content',

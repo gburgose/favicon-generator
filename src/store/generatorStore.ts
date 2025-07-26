@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 interface TextSettings {
   text: string;
   font: string;
-  size: string;
+  size: number;
   backgroundColor: string;
   textColor: string;
 }
@@ -46,7 +46,6 @@ interface GeneratorStore {
   textPosition: ElementPosition;
   iconPosition: ElementPosition;
   svgPosition: ElementPosition;
-  textSize: number;
   iconSize: number;
   svgSize: number;
 
@@ -58,16 +57,15 @@ interface GeneratorStore {
   setTextPosition: (position: ElementPosition) => void;
   setIconPosition: (position: ElementPosition) => void;
   setSvgPosition: (position: ElementPosition) => void;
-  setTextSize: (size: number) => void;
   setIconSize: (size: number) => void;
   setSvgSize: (size: number) => void;
   resetStore: () => void;
 }
 
 const defaultTextSettings: TextSettings = {
-  text: 'FT',
+  text: 'FAV',
   font: 'Roboto',
-  size: 'medium',
+  size: 273,
   backgroundColor: '#F3DFA2',
   textColor: '#333'
 };
@@ -96,6 +94,13 @@ const defaultElementPosition: ElementPosition = {
   height: 200
 };
 
+const defaultIconPosition: ElementPosition = {
+  x: 60,
+  y: 60,
+  width: 500,
+  height: 500
+};
+
 const defaultTextPosition: ElementPosition = {
   x: 156,
   y: 156,
@@ -112,9 +117,8 @@ export const useGeneratorStore = create<GeneratorStore>()(
       svgSettings: defaultSvgSettings,
       iconSettings: defaultIconSettings,
       textPosition: defaultTextPosition,
-      iconPosition: defaultElementPosition,
+      iconPosition: defaultIconPosition,
       svgPosition: defaultElementPosition,
-      textSize: 120,
       iconSize: 120,
       svgSize: 120,
 
@@ -139,7 +143,7 @@ export const useGeneratorStore = create<GeneratorStore>()(
 
       setSvgPosition: (position) => set({ svgPosition: position }),
 
-      setTextSize: (size) => set({ textSize: size }),
+
 
       setIconSize: (size) => set({ iconSize: size }),
 
@@ -151,9 +155,8 @@ export const useGeneratorStore = create<GeneratorStore>()(
         svgSettings: defaultSvgSettings,
         iconSettings: defaultIconSettings,
         textPosition: defaultTextPosition,
-        iconPosition: defaultElementPosition,
+        iconPosition: defaultIconPosition,
         svgPosition: defaultElementPosition,
-        textSize: 120,
         iconSize: 120,
         svgSize: 120
       })
@@ -176,7 +179,7 @@ export const useGeneratorStore = create<GeneratorStore>()(
         textPosition: state.textPosition,
         iconPosition: state.iconPosition,
         svgPosition: state.svgPosition,
-        textSize: state.textSize,
+
         iconSize: state.iconSize,
         svgSize: state.svgSize
       })

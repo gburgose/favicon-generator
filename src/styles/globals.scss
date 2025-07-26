@@ -19,6 +19,17 @@
 @use './components/_home.scss';
 @use './components/_lightbox-thank-you.scss';
 
+// Font variables
+:root {
+  --font-roboto: 'Roboto', sans-serif;
+  --font-open-sans: 'Open Sans', sans-serif;
+  --font-lato: 'Lato', sans-serif;
+  --font-oswald: 'Oswald', sans-serif;
+  --font-raleway: 'Raleway', sans-serif;
+  --font-source-sans-pro: 'Source Sans Pro', sans-serif;
+  --font-merriweather: 'Merriweather', serif;
+  --font-noto-sans: 'Noto Sans', sans-serif;
+}
 
 .container {
   margin: 0 auto;

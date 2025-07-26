@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
-import { Montserrat, Poppins } from "next/font/google";
+import { Montserrat, Poppins, Roboto, Open_Sans, Lato, Oswald, Raleway, Source_Sans_3, Merriweather, Noto_Sans } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import Header from "@/components/Header";
@@ -21,6 +21,62 @@ const poppins = Poppins({
   weight: ['600', '700'],
   display: 'swap',
   variable: '--font-poppins',
+});
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-roboto',
+});
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-open-sans',
+});
+
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-lato',
+});
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-oswald',
+});
+
+const raleway = Raleway({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-raleway',
+});
+
+const sourceSansPro = Source_Sans_3({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-source-sans-pro',
+});
+
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-merriweather',
+});
+
+const notoSans = Noto_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-noto-sans',
 });
 
 export const metadata: Metadata = {
@@ -145,7 +201,7 @@ export default function RootLayout({
         {/* Google Site Verification */}
         <meta name="google-site-verification" content="ZGmqB_iCvwVhAWkyyY5htrL_3HU-grU4wIO6AH5u6po" />
       </head>
-      <body className={`${montserrat.className} ${poppins.variable}`} style={{
+      <body className={`${montserrat.className} ${poppins.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${oswald.variable} ${raleway.variable} ${sourceSansPro.variable} ${merriweather.variable} ${notoSans.variable}`} style={{
         backgroundColor: '#100709',
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 100 60'%3E%3Cg %3E%3Crect fill='%23100709' width='11' height='11'/%3E%3Crect fill='%2311080a' x='10' width='11' height='11'/%3E%3Crect fill='%2311090b' y='10' width='11' height='11'/%3E%3Crect fill='%23120a0c' x='20' width='11' height='11'/%3E%3Crect fill='%23120b0d' x='10' y='10' width='11' height='11'/%3E%3Crect fill='%23130c0e' y='20' width='11' height='11'/%3E%3Crect fill='%23130d0e' x='30' width='11' height='11'/%3E%3Crect fill='%23140e0f' x='20' y='10' width='11' height='11'/%3E%3Crect fill='%23150f10' x='10' y='20' width='11' height='11'/%3E%3Crect fill='%23150f11' y='30' width='11' height='11'/%3E%3Crect fill='%23161011' x='40' width='11' height='11'/%3E%3Crect fill='%23161112' x='30' y='10' width='11' height='11'/%3E%3Crect fill='%23161213' x='20' y='20' width='11' height='11'/%3E%3Crect fill='%23171213' x='10' y='30' width='11' height='11'/%3E%3Crect fill='%23171314' y='40' width='11' height='11'/%3E%3Crect fill='%23181414' x='50' width='11' height='11'/%3E%3Crect fill='%23181415' x='40' y='10' width='11' height='11'/%3E%3Crect fill='%23191516' x='30' y='20' width='11' height='11'/%3E%3Crect fill='%23191516' x='20' y='30' width='11' height='11'/%3E%3Crect fill='%231a1617' x='10' y='40' width='11' height='11'/%3E%3Crect fill='%231a1717' y='50' width='11' height='11'/%3E%3Crect fill='%231b1718' x='60' width='11' height='11'/%3E%3Crect fill='%231b1818' x='50' y='10' width='11' height='11'/%3E%3Crect fill='%231b1819' x='40' y='20' width='11' height='11'/%3E%3Crect fill='%231c1919' x='30' y='30' width='11' height='11'/%3E%3Crect fill='%231c191a' x='20' y='40' width='11' height='11'/%3E%3Crect fill='%231d1a1b' x='10' y='50' width='11' height='11'/%3E%3Crect fill='%231d1a1b' x='70' width='11' height='11'/%3E%3Crect fill='%231e1b1c' x='60' y='10' width='11' height='11'/%3E%3Crect fill='%231e1c1c' x='50' y='20' width='11' height='11'/%3E%3Crect fill='%231f1c1d' x='40' y='30' width='11' height='11'/%3E%3Crect fill='%231f1d1d' x='30' y='40' width='11' height='11'/%3E%3Crect fill='%23201d1e' x='20' y='50' width='11' height='11'/%3E%3Crect fill='%23201e1e' x='80' width='11' height='11'/%3E%3Crect fill='%23211e1f' x='70' y='10' width='11' height='11'/%3E%3Crect fill='%23211f1f' x='60' y='20' width='11' height='11'/%3E%3Crect fill='%23222020' x='50' y='30' width='11' height='11'/%3E%3Crect fill='%23222021' x='40' y='40' width='11' height='11'/%3E%3Crect fill='%23232121' x='30' y='50' width='11' height='11'/%3E%3Crect fill='%23232122' x='90' width='11' height='11'/%3E%3Crect fill='%23242222' x='80' y='10' width='11' height='11'/%3E%3Crect fill='%23242223' x='70' y='20' width='11' height='11'/%3E%3Crect fill='%23252323' x='60' y='30' width='11' height='11'/%3E%3Crect fill='%23252424' x='50' y='40' width='11' height='11'/%3E%3Crect fill='%23262424' x='40' y='50' width='11' height='11'/%3E%3Crect fill='%23262525' x='90' y='10' width='11' height='11'/%3E%3Crect fill='%23272526' x='80' y='20' width='11' height='11'/%3E%3Crect fill='%23272626' x='70' y='30' width='11' height='11'/%3E%3Crect fill='%23282627' x='60' y='40' width='11' height='11'/%3E%3Crect fill='%23282727' x='50' y='50' width='11' height='11'/%3E%3Crect fill='%23292828' x='90' y='20' width='11' height='11'/%3E%3Crect fill='%23292828' x='80' y='30' width='11' height='11'/%3E%3Crect fill='%232a2929' x='70' y='40' width='11' height='11'/%3E%3Crect fill='%232a292a' x='60' y='50' width='11' height='11'/%3E%3Crect fill='%232b2a2a' x='90' y='30' width='11' height='11'/%3E%3Crect fill='%232b2b2b' x='80' y='40' width='11' height='11'/%3E%3Crect fill='%232c2b2b' x='70' y='50' width='11' height='11'/%3E%3Crect fill='%232c2c2c' x='90' y='40' width='11' height='11'/%3E%3Crect fill='%232d2c2c' x='80' y='50' width='11' height='11'/%3E%3Crect fill='%232D2D2D' x='90' y='50' width='11' height='11'/%3E%3C/g%3E%3C/svg%3E")`,
         backgroundAttachment: 'fixed',
