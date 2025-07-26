@@ -13,6 +13,8 @@ interface PreviewDefaultProps {
 export interface PreviewDefaultRef {
   downloadImage: () => void;
   generateImageBlob: () => Promise<Blob>;
+  centerVertically: () => void;
+  centerHorizontally: () => void;
 }
 
 const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props, ref) => {
@@ -466,6 +468,20 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           img.src = 'data:image/svg+xml;base64,' + btoa(coloredSvg);
         }
       });
+    },
+    centerVertically: () => {
+      const newPosition = {
+        ...elementPosition,
+        y: (620 - elementPosition.height) / 2
+      };
+      setElementPosition(newPosition);
+    },
+    centerHorizontally: () => {
+      const newPosition = {
+        ...elementPosition,
+        x: (620 - elementPosition.width) / 2
+      };
+      setElementPosition(newPosition);
     }
   }));
 
@@ -486,9 +502,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
         {/* Elemento editable con react-rnd */}
         {(type === 'text' && text.trim()) || (type === 'icon' && iconName) || (type === 'svg' && svgContent) ? (
           <Rnd
-            default={{
+            position={{
               x: elementPosition.x,
               y: elementPosition.y,
+            }}
+            size={{
               width: elementPosition.width,
               height: elementPosition.height,
             }}

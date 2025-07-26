@@ -48,6 +48,7 @@
     font-family: inherit;
     box-sizing: border-box;
     min-width: 0;
+    max-width: 140px;
 
     &::placeholder {
       color: #666;

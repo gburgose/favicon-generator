@@ -7,7 +7,9 @@ import {
   Palette,
   Download,
   Sparkles,
-  X
+  X,
+  AlignCenter,
+  AlignVerticalJustifyCenter
 } from 'lucide-react';
 import { useGeneratorStore } from '@/store/generatorStore';
 import Dropzone from './Dropzone';
@@ -35,7 +37,8 @@ export default function FaviconGenerator() {
     setActiveTab,
     updateTextSettings,
     updateSvgSettings,
-    updateIconSettings
+    updateIconSettings,
+    setElementPosition
   } = useGeneratorStore();
 
 
@@ -287,50 +290,70 @@ export default function FaviconGenerator() {
 
         {/* Color Settings Section */}
         <div className={`generator__color-settings ${activeTab === 'text' ? 'show-text-color' : ''} ${(activeTab === 'icons' || activeTab === 'svg') ? 'show-fill-color show-stroke-color' : ''}`}>
-          <div className="generator__form-row">
-            <div className="generator__form-group">
-              <ColorSelector
-                label="Background Color"
-                value={textSettings.backgroundColor}
-                onChange={(value) => updateTextSettings({ backgroundColor: value })}
-                placeholder="#F3DFA2"
-              />
+          <div className="generator__color-controls">
+            <div className="generator__color-selectors">
+              <div className="generator__form-group">
+                <ColorSelector
+                  label="Background Color"
+                  value={textSettings.backgroundColor}
+                  onChange={(value) => updateTextSettings({ backgroundColor: value })}
+                  placeholder="#F3DFA2"
+                />
+              </div>
+              <div className="generator__form-group">
+                <ColorSelector
+                  label="Text Color"
+                  value={textSettings.textColor}
+                  onChange={(value) => updateTextSettings({ textColor: value })}
+                  placeholder="#333"
+                />
+              </div>
+              <div className="generator__form-group">
+                <ColorSelector
+                  label="Fill Color"
+                  value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.fillColor}
+                  onChange={(value) => {
+                    if (activeTab === 'icons') {
+                      updateIconSettings({ iconColor: value });
+                    } else {
+                      updateSvgSettings({ fillColor: value });
+                    }
+                  }}
+                  placeholder="#333"
+                />
+              </div>
+              <div className="generator__form-group">
+                <ColorSelector
+                  label="Stroke Color"
+                  value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.strokeColor}
+                  onChange={(value) => {
+                    if (activeTab === 'icons') {
+                      updateIconSettings({ iconColor: value });
+                    } else {
+                      updateSvgSettings({ strokeColor: value });
+                    }
+                  }}
+                  placeholder="#333"
+                />
+              </div>
             </div>
-            <div className="generator__form-group">
-              <ColorSelector
-                label="Text Color"
-                value={textSettings.textColor}
-                onChange={(value) => updateTextSettings({ textColor: value })}
-                placeholder="#333"
-              />
-            </div>
-            <div className="generator__form-group">
-              <ColorSelector
-                label="Fill Color"
-                value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.fillColor}
-                onChange={(value) => {
-                  if (activeTab === 'icons') {
-                    updateIconSettings({ iconColor: value });
-                  } else {
-                    updateSvgSettings({ fillColor: value });
-                  }
-                }}
-                placeholder="#333"
-              />
-            </div>
-            <div className="generator__form-group">
-              <ColorSelector
-                label="Stroke Color"
-                value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.strokeColor}
-                onChange={(value) => {
-                  if (activeTab === 'icons') {
-                    updateIconSettings({ iconColor: value });
-                  } else {
-                    updateSvgSettings({ strokeColor: value });
-                  }
-                }}
-                placeholder="#333"
-              />
+
+            <div className="generator__alignment-controls">
+              <button
+                className="generator__align-btn"
+                onClick={() => previewRef.current?.centerVertically()}
+                title="Centrar verticalmente"
+              >
+                <AlignVerticalJustifyCenter size={20} />
+              </button>
+
+              <button
+                className="generator__align-btn"
+                onClick={() => previewRef.current?.centerHorizontally()}
+                title="Centrar horizontalmente"
+              >
+                <AlignCenter size={20} />
+              </button>
             </div>
           </div>
         </div>
