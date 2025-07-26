@@ -2,12 +2,25 @@
 
 import { useEffect } from 'react';
 import LogRocket from 'logrocket';
+import setupLogRocketReact from 'logrocket-react';
 
 export default function LogRocketInit() {
   useEffect(() => {
-    console.log('Initializing LogRocket...');
-    LogRocket.init('kwz0t7/favicon-tools');
-    console.log('LogRocket initialized successfully');
+    try {
+      LogRocket.init('kwz0t7/favicon-tools');
+
+      // Setup LogRocket React integration
+      setupLogRocketReact(LogRocket);
+
+      // Test LogRocket functionality
+      LogRocket.identify('test-user', {
+        name: 'Test User',
+        email: 'test@example.com',
+      });
+
+    } catch (error) {
+      console.error('Error initializing LogRocket:', error);
+    }
   }, []);
 
   return null;
