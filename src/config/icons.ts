@@ -12,12 +12,7 @@ import bookmarkSvg from '@/assets/icons/bookmark.svg';
 import downloadSvg from '@/assets/icons/download.svg';
 import uploadSvg from '@/assets/icons/upload.svg';
 import shareSvg from '@/assets/icons/share.svg';
-import thumbsupSvg from '@/assets/icons/thumbsup.svg';
 import eyeSvg from '@/assets/icons/eye.svg';
-import plusSvg from '@/assets/icons/plus.svg';
-import minusSvg from '@/assets/icons/minus.svg';
-import checkSvg from '@/assets/icons/check.svg';
-import xSvg from '@/assets/icons/x.svg';
 import zapSvg from '@/assets/icons/zap.svg';
 
 export const ICONS: { [key: string]: string } = {
@@ -35,11 +30,6 @@ export const ICONS: { [key: string]: string } = {
   download: downloadSvg,
   upload: uploadSvg,
   share: shareSvg,
-  thumbsup: thumbsupSvg,
   eye: eyeSvg,
-  plus: plusSvg,
-  minus: minusSvg,
-  check: checkSvg,
-  x: xSvg,
   zap: zapSvg
 }; 
