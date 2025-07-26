@@ -156,7 +156,9 @@ export const useGeneratorStore = create<GeneratorStore>()(
           strokeColor: state.svgSettings.strokeColor,
           svgContent: state.svgSettings.svgContent,
           fileName: state.svgSettings.fileName,
-          fileSize: state.svgSettings.fileSize
+          fileSize: state.svgSettings.fileSize,
+          position: state.svgSettings.position,
+          size: state.svgSettings.size
         },
         iconSettings: state.iconSettings,
 

@@ -100,6 +100,23 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     return fontMap[fontName] || fontName;
   };
 
+  // Función para obtener el nombre real de la fuente para el canvas
+  const getCanvasFontFamily = (fontName: string): string => {
+    const fontMap: { [key: string]: string } = {
+      'Roboto': 'Roboto',
+      'Open Sans': 'Open Sans',
+      'Lato': 'Lato',
+      'Montserrat': 'Montserrat',
+      'Oswald': 'Oswald',
+      'Raleway': 'Raleway',
+      'Poppins': 'Poppins',
+      'Source Sans Pro': 'Source Sans Pro',
+      'Merriweather': 'Merriweather',
+      'Noto Sans': 'Noto Sans'
+    };
+    return fontMap[fontName] || fontName;
+  };
+
   // Calcular el tamaño del contenedor de texto basado en el contenido
   const getTextContainerSize = () => {
     if (type === 'text' && text.trim()) {
@@ -107,17 +124,22 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.font = `bold ${textSettings.size}px ${getFontFamily(font)}`;
-        const textMetrics = ctx.measureText(text.substring(0, 3));
+        const canvasFontFamily = getCanvasFontFamily(textSettings.font);
+        ctx.font = `bold ${textSettings.size}px ${canvasFontFamily}`;
+        const textMetrics = ctx.measureText(text);
         const textWidth = textMetrics.width;
         const textHeight = textSettings.size * 1.2; // Aproximación de la altura del texto
 
         // Agregar padding
         const padding = 16;
-        return {
+        const result = {
           width: textWidth + padding * 2,
           height: textHeight + padding * 2
         };
+
+
+
+        return result;
       }
     }
     return currentPosition ? { width: currentPosition.width, height: currentPosition.height } : { width: 200, height: 200 };
@@ -335,6 +357,21 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
     }
   }, [svgFile, updateSvgSettings]);
 
+  // Restaurar SVG desde contenido persistido cuando no hay archivo
+  useEffect(() => {
+    if (!svgFile && svgContent && svgSettings.fileName) {
+      // El SVG se restauró desde localStorage, pero necesitamos limpiar el archivo
+      // y asegurar que los colores estén detectados
+      if (!svgSettings.fillColor || !svgSettings.strokeColor) {
+        const { fillColor, strokeColor } = detectSvgColors(svgContent);
+        updateSvgSettings({
+          fillColor,
+          strokeColor
+        });
+      }
+    }
+  }, [svgFile, svgContent, svgSettings.fileName, svgSettings.fillColor, svgSettings.strokeColor, updateSvgSettings]);
+
   // Inicializar tamaño del texto solo si no hay un valor guardado
   useEffect(() => {
     if (type === 'text' && text.trim() && textSettings.size === 120 && currentPosition) {
@@ -343,6 +380,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       updateTextSettings({ size: Math.max(newSize, 12) });
     }
   }, [type, text, textSettings.size, currentPosition, updateTextSettings]);
+
+
 
   // Función para descargar imagen usando html2canvas
   const downloadImage = () => {
@@ -483,7 +522,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           textDiv.style.justifyContent = 'center';
           textDiv.style.userSelect = 'none';
           textDiv.style.padding = '8px';
-          textDiv.textContent = text.substring(0, 3);
+          textDiv.textContent = text;
           contentDiv.appendChild(textDiv);
         } else if (type === 'icon' && iconName) {
           const iconDiv = document.createElement('div');
@@ -607,10 +646,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
             }}
             minWidth={50}
             minHeight={50}
-            maxWidth={500}
-            maxHeight={500}
+            maxWidth={800}
+            maxHeight={800}
             bounds="parent"
-            lockAspectRatio={type !== 'text'}
+            lockAspectRatio={true}
+
             onResize={(e, direction, ref, delta, position) => {
               const newPosition = {
                 x: position.x,
@@ -620,10 +660,11 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
               };
               setCurrentPosition(newPosition);
               if (type === 'text') {
-                const newSize = Math.min(ref.offsetWidth, ref.offsetHeight) * 0.6;
+                const newSize = Math.min(ref.offsetWidth, ref.offsetHeight) * 0.8;
                 updateTextSettings({ size: Math.max(newSize, 12) });
               }
             }}
+
             onDragStop={(e, d) => {
               setCurrentPosition({
                 ...currentPosition,
@@ -661,7 +702,7 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                   padding: '8px'
                 }}
               >
-                {text.substring(0, 3)}
+                {text}
               </div>
             )}
             {type === 'icon' && iconName && (

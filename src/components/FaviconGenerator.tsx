@@ -258,7 +258,14 @@ export default function FaviconGenerator() {
                         file: null,
                         svgContent: '',
                         fileName: '',
-                        fileSize: 0
+                        fileSize: 0,
+                        position: {
+                          x: 78,
+                          y: 78,
+                          width: 464,
+                          height: 464
+                        },
+                        size: 120
                       });
                     }
                   }}
