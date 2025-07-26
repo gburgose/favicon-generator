@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   Type,
   FileText,
@@ -18,6 +18,7 @@ import { ICONS } from '@/config/icons';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import ColorSelector from './ColorSelector';
+import LightboxThankYou from './LightboxThankYou';
 
 const PreviewDefault = dynamic(() => import('./PreviewDefault'), { ssr: false });
 import type { PreviewDefaultRef } from './PreviewDefault';
@@ -26,6 +27,7 @@ type TabType = 'text' | 'svg' | 'icons';
 
 export default function FaviconGenerator() {
   const previewRef = useRef<PreviewDefaultRef>(null);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const {
     activeTab,
@@ -60,6 +62,7 @@ export default function FaviconGenerator() {
 
   const handleGenerateFavicon = () => {
     previewRef.current?.downloadImage();
+    setShowThankYou(true);
   };
 
   // Seleccionar primer icono cuando se cambie al tab Icons
@@ -444,6 +447,13 @@ export default function FaviconGenerator() {
           </div>
         </div>
       </div>
+
+      <LightboxThankYou
+        isOpen={showThankYou}
+        onClose={() => setShowThankYou(false)}
+        title="Thank you for using our Favicon Generator!"
+        message="We hope you love your new favicon. If you found our tool helpful, consider supporting us with a coffee to keep it free and improve it further."
+      />
     </section>
   );
 } 
