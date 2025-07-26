@@ -101,3 +101,42 @@ The following events are triggered in the `/converter` page, ordered by user flo
 9. **`converter_manifest_copied`** - When user copies manifest
 
 10. **`converter_all_cleared`** - When user clears all data
+
+### Generator Events
+
+The following events are triggered in the `/generator` page, ordered by user flow:
+
+1. **`generator_tab_changed`** - When user changes between Text, Icons, or SVG tabs
+   - Data: `tab_name`
+
+2. **`generator_text_changed`** - When user modifies the text input
+   - Data: `text_length`, `text_content`
+
+3. **`generator_font_changed`** - When user selects a different font
+   - Data: `font_name`
+
+4. **`generator_icon_selected`** - When user selects an icon from the library
+   - Data: `icon_name`
+
+5. **`generator_svg_uploaded`** - When user uploads an SVG file
+   - Data: `file_name`, `file_size_mb`
+
+6. **`generator_background_color_changed`** - When user changes background color
+   - Data: `color`
+
+7. **`generator_text_color_changed`** - When user changes text color
+   - Data: `color`
+
+8. **`generator_fill_color_changed`** - When user changes fill color (for icons/SVGs)
+   - Data: `color`
+
+9. **`generator_stroke_color_changed`** - When user changes stroke color (for icons/SVGs)
+   - Data: `color`
+
+10. **`generator_align_vertical`** - When user clicks vertical alignment button
+
+11. **`generator_align_horizontal`** - When user clicks horizontal alignment button
+
+12. **`generator_download`** - When user downloads the generated favicon
+
+13. **`generator_send_to_converter`** - When user sends the favicon to the converter tool

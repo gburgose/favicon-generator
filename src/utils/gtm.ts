@@ -83,15 +83,7 @@ export const gtmEvents = {
     });
   },
 
-  // 2. Subida de SVG en generator
-  generatorSvgUploaded: (fileName: string, fileSize: number) => {
-    gtmEvent('generator_svg_uploaded', {
-      file_name: fileName,
-      file_size_mb: (fileSize / 1024 / 1024).toFixed(2)
-    });
-  },
-
-  // 3. Cambio de texto en generator
+  // 2. Cambio de texto en generator
   generatorTextChanged: (text: string) => {
     gtmEvent('generator_text_changed', {
       text_length: text.length,
@@ -99,17 +91,25 @@ export const gtmEvents = {
     });
   },
 
-  // 4. Cambio de fuente en generator
+  // 3. Cambio de fuente en generator
   generatorFontChanged: (fontName: string) => {
     gtmEvent('generator_font_changed', {
       font_name: fontName
     });
   },
 
-  // 5. Selección de icono en generator
+  // 4. Selección de icono en generator
   generatorIconSelected: (iconName: string) => {
     gtmEvent('generator_icon_selected', {
       icon_name: iconName
+    });
+  },
+
+  // 5. Subida de SVG en generator
+  generatorSvgUploaded: (fileName: string, fileSize: number) => {
+    gtmEvent('generator_svg_uploaded', {
+      file_name: fileName,
+      file_size_mb: (fileSize / 1024 / 1024).toFixed(2)
     });
   },
 
