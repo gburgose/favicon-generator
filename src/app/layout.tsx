@@ -83,6 +83,7 @@ export const metadata: Metadata = {
   other: {
     'theme-color': '#F3DFA2',
     'msapplication-TileColor': '#F3DFA2',
+    'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': siteConfig.name,

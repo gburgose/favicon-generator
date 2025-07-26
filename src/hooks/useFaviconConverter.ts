@@ -73,9 +73,7 @@ export const useFaviconConverter = () => {
       const img = new Image();
       img.onload = () => {
         try {
-          console.log('Detecting color for image from generator:', img.width, 'x', img.height);
           const dominantColor = detectDominantColor(img);
-          console.log('Setting theme color to:', dominantColor);
           updateTempAppSettings({ themeColor: dominantColor });
           toast.success(`Theme color automatically set to ${dominantColor}`);
         } catch (error) {
@@ -115,9 +113,7 @@ export const useFaviconConverter = () => {
       const img = new Image();
       img.onload = () => {
         try {
-          console.log('Detecting color for restored image:', img.width, 'x', img.height);
           const dominantColor = detectDominantColor(img);
-          console.log('Setting theme color to:', dominantColor);
           updateTempAppSettings({ themeColor: dominantColor });
           toast.success(`Theme color automatically set to ${dominantColor}`);
         } catch (error) {
@@ -180,7 +176,6 @@ export const useFaviconConverter = () => {
       }
     }
 
-    console.log('Detected dominant color:', dominantColor, 'from', Object.keys(colorCounts).length, 'color groups');
     return dominantColor;
   };
 
@@ -231,9 +226,7 @@ export const useFaviconConverter = () => {
 
       // Detectar color predominante y aplicarlo al Theme Color
       try {
-        console.log('Starting color detection for image:', img.width, 'x', img.height);
         const dominantColor = detectDominantColor(img);
-        console.log('Setting theme color to:', dominantColor);
         updateTempAppSettings({ themeColor: dominantColor });
         toast.success(`Theme color automatically set to ${dominantColor}`);
       } catch (error) {

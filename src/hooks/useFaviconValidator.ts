@@ -78,15 +78,10 @@ export const useFaviconValidator = () => {
 
   const findFaviconsInHTML = async (url: string): Promise<FaviconFound[]> => {
     try {
-      console.log('Fetching HTML from:', url);
-
       // Verificar si tenemos el HTML en caché
       let html = getCachedHTML(url) || '';
 
-      if (html) {
-        console.log('Using cached HTML');
-      } else {
-        console.log('No cached HTML found, fetching from URL');
+      if (!html) {
 
         // Usar un proxy público para evitar CORS
         try {
@@ -96,7 +91,6 @@ export const useFaviconValidator = () => {
           if (response.ok) {
             const data = await response.json();
             html = data.contents;
-            console.log('Successfully fetched HTML via proxy');
 
             // Guardar en caché
             setCachedHTML(url, html);
@@ -221,7 +215,6 @@ export const useFaviconValidator = () => {
         }
       });
 
-      console.log('Total favicons found:', favicons.length);
       return favicons;
     } catch {
       return [];
