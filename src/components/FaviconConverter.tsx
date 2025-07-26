@@ -48,6 +48,7 @@ export default function Converter() {
     FAVICON_SIZES,
     toggleFaviconSize,
     isFaviconSelected,
+    getSelectedFaviconSizes,
     onDrop,
     setShowFavicons,
     setShowMetaTags,
@@ -59,6 +60,8 @@ export default function Converter() {
     await downloadFavicons();
     setShowThankYou(true);
   };
+
+
 
   return (
     <section className="converter">
@@ -202,8 +205,9 @@ export default function Converter() {
             <div className="converter__buttons-container">
               <button
                 onClick={generateFavicons}
-                disabled={isGenerating}
+                disabled={isGenerating || getSelectedFaviconSizes().length === 0}
                 className="converter__btn-primary converter__btn-primary--no-margin"
+                style={{ opacity: (isGenerating || getSelectedFaviconSizes().length === 0) ? 0.5 : 1 }}
               >
                 {isGenerating && <span className="converter__loading"></span>}
                 {!isGenerating && <Sparkles size={18} />}

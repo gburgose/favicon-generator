@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { FAVICON_SIZES } from '@/config/favicons';
 
 interface AppSettings {
   name: string;
@@ -58,6 +59,10 @@ const DEFAULT_APP_SETTINGS: AppSettings = {
   themeColor: '#ffffff'
 };
 
+const RECOMMENDED_FAVICON_SIZES = FAVICON_SIZES
+  .filter(size => size.recommended)
+  .map(size => size.name);
+
 export const useConverterStore = create<ConverterState>()(
   persist(
     (set, get) => ({
@@ -70,7 +75,7 @@ export const useConverterStore = create<ConverterState>()(
       isDownloading: false,
       appSettings: DEFAULT_APP_SETTINGS,
       tempAppSettings: DEFAULT_APP_SETTINGS,
-      selectedFaviconSizes: ['16x16', '32x32', '48x48', '192x192', '512x512'], // Default recommended sizes
+      selectedFaviconSizes: RECOMMENDED_FAVICON_SIZES, // Default recommended sizes
       imageWarning: '',
       showFavicons: false,
       showMetaTags: false,
