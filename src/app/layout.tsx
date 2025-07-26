@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 import "../styles/globals.scss";
 import { siteConfig } from "@/config/site";
 import { Montserrat, Poppins } from "next/font/google";
@@ -8,7 +9,6 @@ import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LogRocketInit from "@/components/LogRocketInit";
-import GTM from "@/components/GTM";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -91,6 +91,8 @@ export const metadata: Metadata = {
   manifest: '/favicons/manifest.json',
 };
 
+const GTM_ID = 'GTM-P7FQSKFN';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -99,7 +101,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <GTM />
+        {/* Script estático en el head */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+          }}
+        />
         {/* Classic Favicon */}
         <link rel="shortcut icon" href="/favicons/favicon.ico" />
 
@@ -135,10 +148,10 @@ export default function RootLayout({
         backgroundAttachment: 'fixed',
         backgroundSize: 'cover'
       }}>
-        {/* Google Tag Manager (noscript) */}
+        {/* GTM <noscript> para el body */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-P7FQSKFN"
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0"
             width="0"
             style={{ display: 'none', visibility: 'hidden' }}
