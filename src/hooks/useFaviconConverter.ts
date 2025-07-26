@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -6,32 +6,43 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { gtmEvents } from '@/utils/gtm';
 import { FAVICON_SIZES } from '@/config/favicons';
-
-interface AppSettings {
-  name: string;
-  description: string;
-  themeColor: string;
-}
-
-const DEFAULT_APP_SETTINGS: AppSettings = {
-  name: 'My App',
-  description: 'Demo description',
-  themeColor: '#ffffff'
-};
+import { useConverterStore } from '@/store/converterStore';
 
 export const useFaviconConverter = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
-  const [generatedFavicons, setGeneratedFavicons] = useState<{ [key: string]: string }>({});
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
+  const {
+    // State from store
+    selectedFile,
+    previewUrl,
+    fileDataUrl,
+    generatedFavicons,
+    isGenerating,
+    isDownloading,
+    appSettings,
+    tempAppSettings,
+    imageWarning,
+    selectedFaviconSizes,
+    showFavicons,
+    showMetaTags,
+    showManifest,
 
-  const [imageWarning, setImageWarning] = useState<string>('');
-  const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS);
-  const [tempAppSettings, setTempAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS);
-  const [selectedFaviconSizes, setSelectedFaviconSizes] = useState<string[]>(
-    FAVICON_SIZES.filter(size => size.recommended).map(size => size.name)
-  );
+    // Actions from store
+    setSelectedFile,
+    setPreviewUrl,
+    setFileDataUrl,
+    setGeneratedFavicons,
+    setIsGenerating,
+    setIsDownloading,
+    setAppSettings,
+    setTempAppSettings,
+    updateTempAppSettings,
+    setSelectedFaviconSizes,
+    toggleFaviconSize,
+    setImageWarning,
+    setShowFavicons,
+    setShowMetaTags,
+    setShowManifest,
+    clearAll: clearAllStore
+  } = useConverterStore();
 
   // Check if there's a generated favicon from the Generator
   useEffect(() => {
@@ -52,6 +63,7 @@ export const useFaviconConverter = () => {
       // Set the file and preview
       setSelectedFile(file);
       setPreviewUrl(generatedFavicon);
+      setFileDataUrl(generatedFavicon);
 
       // Clear localStorage
       localStorage.removeItem('generatedFavicon');
@@ -60,7 +72,25 @@ export const useFaviconConverter = () => {
       // Show success message
       toast.success('Image from Generator loaded successfully!');
     }
-  }, []);
+  }, [setSelectedFile, setPreviewUrl, setFileDataUrl]);
+
+  // Restore image from persisted data URL
+  useEffect(() => {
+    if (fileDataUrl && !selectedFile) {
+      // Convert data URL back to File object
+      const base64Data = fileDataUrl.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const file = new File([byteArray], 'restored-image.png', { type: 'image/png' });
+
+      setSelectedFile(file);
+      setPreviewUrl(fileDataUrl);
+    }
+  }, [fileDataUrl, selectedFile, setSelectedFile, setPreviewUrl]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setGeneratedFavicons({});
@@ -91,6 +121,14 @@ export const useFaviconConverter = () => {
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
 
+    // Convert file to data URL for persistence
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      setFileDataUrl(dataUrl);
+    };
+    reader.readAsDataURL(file);
+
     // Check image dimensions
     const img = new Image();
     img.onload = () => {
@@ -100,7 +138,7 @@ export const useFaviconConverter = () => {
       }
     };
     img.src = url;
-  }, []);
+  }, [setGeneratedFavicons, setImageWarning, setSelectedFile, setPreviewUrl]);
 
   const dropzoneProps = useDropzone({
     onDrop,
@@ -264,11 +302,7 @@ export const useFaviconConverter = () => {
       color: '#EFE6DD'
     }).then((result) => {
       if (result.isConfirmed) {
-        setSelectedFile(null);
-        setPreviewUrl('');
-        setGeneratedFavicons({});
-        setImageWarning('');
-        setTempAppSettings(DEFAULT_APP_SETTINGS);
+        clearAllStore();
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
         }
@@ -281,34 +315,18 @@ export const useFaviconConverter = () => {
     });
   };
 
-  const updateAppSettings = (updates: Partial<AppSettings>) => {
-    setTempAppSettings(prev => {
-      const newSettings = { ...prev, ...updates };
+  const updateAppSettings = (updates: Partial<typeof tempAppSettings>) => {
+    updateTempAppSettings(updates);
 
-      // Track app configuration changes
-      if (updates.name || updates.themeColor || updates.description) {
-        gtmEvents.appConfigured(
-          newSettings.name,
-          newSettings.themeColor,
-          !!newSettings.description
-        );
-      }
-
-      return newSettings;
-    });
-  };
-
-  const toggleFaviconSize = (name: string) => {
-    setSelectedFaviconSizes(prev => {
-      if (prev.includes(name)) {
-        return prev.filter(size => size !== name);
-      } else {
-        return [...prev, name];
-      }
-    });
-
-    // Limpiar favicons generados cuando cambie la selección
-    setGeneratedFavicons({});
+    // Track app configuration changes
+    if (updates.name || updates.themeColor || updates.description) {
+      const newSettings = { ...tempAppSettings, ...updates };
+      gtmEvents.appConfigured(
+        newSettings.name,
+        newSettings.themeColor,
+        !!newSettings.description
+      );
+    }
   };
 
   const getSelectedFaviconSizes = () => {
@@ -432,6 +450,9 @@ ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fi
     appSettings,
     tempAppSettings,
     imageWarning,
+    showFavicons,
+    showMetaTags,
+    showManifest,
 
     // Dropzone
     dropzoneProps,
@@ -461,6 +482,11 @@ ${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fi
     selectedFaviconSizes,
     toggleFaviconSize,
     getSelectedFaviconSizes,
-    isFaviconSelected
+    isFaviconSelected,
+
+    // UI state setters
+    setShowFavicons,
+    setShowMetaTags,
+    setShowManifest
   };
 }; 

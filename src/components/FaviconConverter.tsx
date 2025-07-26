@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useFaviconConverter } from '@/hooks/useFaviconConverter';
@@ -18,10 +18,6 @@ import {
 } from 'lucide-react';
 
 export default function Converter() {
-  const [showFavicons, setShowFavicons] = useState(false);
-  const [showMetaTags, setShowMetaTags] = useState(false);
-  const [showManifest, setShowManifest] = useState(false);
-
   const {
     selectedFile,
     previewUrl,
@@ -30,6 +26,9 @@ export default function Converter() {
     isDownloading,
     tempAppSettings,
     imageWarning,
+    showFavicons,
+    showMetaTags,
+    showManifest,
     dropzoneProps,
     generateFavicons,
     downloadFavicons,
@@ -45,7 +44,10 @@ export default function Converter() {
     FAVICON_SIZES,
     toggleFaviconSize,
     isFaviconSelected,
-    onDrop
+    onDrop,
+    setShowFavicons,
+    setShowMetaTags,
+    setShowManifest
   } = useFaviconConverter();
 
 
