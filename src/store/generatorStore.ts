@@ -22,7 +22,8 @@ interface SvgSettings {
 interface IconSettings {
   selectedIcon: string;
   backgroundColor: string;
-  iconColor: string;
+  fillColor: string;
+  strokeColor: string;
 }
 
 interface ElementPosition {
@@ -84,7 +85,8 @@ const defaultSvgSettings: SvgSettings = {
 const defaultIconSettings: IconSettings = {
   selectedIcon: 'heart',
   backgroundColor: '#F3DFA2',
-  iconColor: '#333'
+  fillColor: '#333',
+  strokeColor: '#333'
 };
 
 const defaultElementPosition: ElementPosition = {

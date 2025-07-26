@@ -320,10 +320,10 @@ export default function FaviconGenerator() {
               <div className="generator__form-group">
                 <ColorSelector
                   label="Fill Color"
-                  value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.fillColor}
+                  value={activeTab === 'icons' ? iconSettings.fillColor : svgSettings.fillColor}
                   onChange={(value) => {
                     if (activeTab === 'icons') {
-                      updateIconSettings({ iconColor: value });
+                      updateIconSettings({ fillColor: value });
                     } else {
                       updateSvgSettings({ fillColor: value });
                     }
@@ -334,10 +334,10 @@ export default function FaviconGenerator() {
               <div className="generator__form-group">
                 <ColorSelector
                   label="Stroke Color"
-                  value={activeTab === 'icons' ? iconSettings.iconColor : svgSettings.strokeColor}
+                  value={activeTab === 'icons' ? iconSettings.strokeColor : svgSettings.strokeColor}
                   onChange={(value) => {
                     if (activeTab === 'icons') {
-                      updateIconSettings({ iconColor: value });
+                      updateIconSettings({ strokeColor: value });
                     } else {
                       updateSvgSettings({ strokeColor: value });
                     }

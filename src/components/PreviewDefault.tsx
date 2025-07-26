@@ -348,8 +348,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
       const iconSvg = getIconSvgComplete(iconName);
       if (iconSvg) {
         const coloredIconSvg = iconSvg
-          .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
-          .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`);
+          .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
+          .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
 
         const svgContent = `
           <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -480,8 +480,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
           const iconSvg = getIconSvgComplete(iconName);
           if (iconSvg) {
             const coloredIconSvg = iconSvg
-              .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
-              .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`);
+              .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
+              .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`);
 
             const svgContent = `
               <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -639,8 +639,8 @@ const PreviewDefault = forwardRef<PreviewDefaultRef, PreviewDefaultProps>((props
                 dangerouslySetInnerHTML={{
                   __html: getIconSvgComplete(iconName)
                     .replace('width="24" height="24"', 'width="100%" height="100%"')
-                    .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.iconColor}"`)
-                    .replace(/fill="[^"]*"/g, `fill="${iconSettings.iconColor}"`)
+                    .replace(/stroke="[^"]*"/g, `stroke="${iconSettings.strokeColor}"`)
+                    .replace(/fill="[^"]*"/g, `fill="${iconSettings.fillColor}"`)
                 }}
               />
             )}
