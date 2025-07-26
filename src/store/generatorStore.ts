@@ -59,8 +59,8 @@ interface GeneratorStore {
 }
 
 const defaultTextPosition: ElementPosition = {
-  x: 284.9228515625,
-  y: 156,
+  x: 55.866851806640625,
+  y: 130.20000000000002,
   width: 200,
   height: 200
 };
