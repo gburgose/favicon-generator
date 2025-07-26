@@ -256,7 +256,7 @@ export default function FaviconGenerator() {
         </div>
 
         {/* Color Settings Section */}
-        <div className="generator__color-settings">
+        <div className={`generator__color-settings ${activeTab === 'text' ? 'show-text-color' : ''} ${(activeTab === 'icons' || activeTab === 'svg') ? 'show-fill-color show-stroke-color' : ''}`}>
           <div className="generator__form-row">
             <div className="generator__form-group">
               <ColorSelector
@@ -271,6 +271,22 @@ export default function FaviconGenerator() {
                 label="Text Color"
                 value={textSettings.textColor}
                 onChange={(value) => updateTextSettings({ textColor: value })}
+                placeholder="#333"
+              />
+            </div>
+            <div className="generator__form-group">
+              <ColorSelector
+                label="Fill Color"
+                value={textSettings.textColor}
+                onChange={(value) => updateTextSettings({ textColor: value })}
+                placeholder="#333"
+              />
+            </div>
+            <div className="generator__form-group">
+              <ColorSelector
+                label="Stroke Color"
+                value={svgSettings.iconColor || '#333'}
+                onChange={(value) => updateSvgSettings({ iconColor: value })}
                 placeholder="#333"
               />
             </div>
