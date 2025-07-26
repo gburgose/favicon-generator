@@ -472,25 +472,25 @@ export const useFaviconConverter = () => {
     // ICO favicon
     const icoFavicon = FAVICON_SIZES.find(size => size.format === 'ico' && selectedSizes.includes(size.name));
 
-    return `<!-- Classic Favicon -->
-${icoFavicon ? `<link rel="shortcut icon" href="/${icoFavicon.fileName}">` : ''}
+    return `${icoFavicon ? `<!-- Classic Favicon -->
+<link rel="shortcut icon" href="/${icoFavicon.fileName}">
 
-<!-- Apple Touch Icons -->
+` : ''}${appleTouchIcons ? `<!-- Apple Touch Icons -->
 ${appleTouchIcons}
 
-<!-- Modern PNG Favicons -->
+` : ''}${faviconLinks ? `<!-- Modern PNG Favicons -->
 ${faviconLinks}
 
-<!-- Android Icons -->
+` : ''}${androidIcons ? `<!-- Android Icons -->
 ${androidIcons}
 
-<!-- Microsoft Tile Icons -->
-<meta name="msapplication-TileColor" content="${appSettings.themeColor}">
-${windowsTile ? `<meta name="msapplication-TileImage" content="/${windowsTile.fileName}">` : ''}
+` : ''}${windowsTile ? `<!-- Microsoft Tile Icons -->
+<meta name="msapplication-TileImage" content="/${windowsTile.fileName}">
 
-<!-- Manifest and Theme Color -->
+` : ''}<!-- Manifest and Theme Color -->
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="${appSettings.themeColor}">`;
+<meta name="theme-color" content="${appSettings.themeColor}">
+<meta name="msapplication-TileColor" content="${appSettings.themeColor}">`;
   };
 
   const getManifest = () => {
