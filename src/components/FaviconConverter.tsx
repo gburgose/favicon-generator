@@ -1,6 +1,6 @@
 'use client';
 
-
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useFaviconConverter } from '@/hooks/useFaviconConverter';
@@ -16,8 +16,11 @@ import {
   ChevronUp,
   Check
 } from 'lucide-react';
+import LightboxThankYou from './LightboxThankYou';
 
 export default function Converter() {
+  const [showThankYou, setShowThankYou] = useState(false);
+
   const {
     selectedFile,
     previewUrl,
@@ -50,7 +53,10 @@ export default function Converter() {
     setShowManifest
   } = useFaviconConverter();
 
-
+  const handleDownload = async () => {
+    await downloadFavicons();
+    setShowThankYou(true);
+  };
 
   return (
     <section className="converter">
@@ -356,7 +362,7 @@ export default function Converter() {
               All your favicons have been generated successfully. Download the complete package with all files and meta tags.
             </p>
             <button
-              onClick={downloadFavicons}
+              onClick={handleDownload}
               disabled={isDownloading}
               className="converter__btn-download"
             >
@@ -367,6 +373,13 @@ export default function Converter() {
           </div>
         )}
       </div>
+
+      <LightboxThankYou
+        isOpen={showThankYou}
+        onClose={() => setShowThankYou(false)}
+        title="Thank you for using our Favicon Converter!"
+        message="We hope you love your new favicons. If you found our tool helpful, consider supporting us with a coffee to keep it free and improve it further."
+      />
     </section>
   );
 } 
