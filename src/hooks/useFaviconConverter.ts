@@ -86,6 +86,9 @@ export const useFaviconConverter = () => {
 
       // Show success message
       toast.success('Image from Generator loaded successfully!');
+
+      // GTM Event: Image loaded from generator
+      gtmEvents.converterImageFromGenerator();
     }
   }, [setSelectedFile, setPreviewUrl, setFileDataUrl]);
 
@@ -204,7 +207,7 @@ export const useFaviconConverter = () => {
     setSelectedFile(file);
 
     // Track image upload
-    gtmEvents.imageUploaded(file.name, file.size, file.type);
+    gtmEvents.converterImageUploaded(file.name, file.size, file.type);
 
     // Create preview URL and check image dimensions
     const url = URL.createObjectURL(file);
@@ -251,6 +254,9 @@ export const useFaviconConverter = () => {
   const generateFavicons = async () => {
     if (!selectedFile) return;
 
+    // GTM Event: Favicon generation started
+    gtmEvents.converterGeneration();
+
     // Apply temporary app settings when generating
     setAppSettings(tempAppSettings);
 
@@ -294,12 +300,7 @@ export const useFaviconConverter = () => {
         toast.success('Favicons generated successfully!');
         setIsGenerating(false);
 
-        // Track successful generation
-        gtmEvents.faviconsGenerated(
-          FAVICON_SIZES.length + 1, // +1 for favicon.ico
-          appSettings.name,
-          `${img.width}x${img.height}`
-        );
+
 
         // Scroll to generated favicons section
         setTimeout(() => {
@@ -328,6 +329,9 @@ export const useFaviconConverter = () => {
 
   const downloadFavicons = async () => {
     if (Object.keys(generatedFavicons).length === 0) return;
+
+    // GTM Event: Favicon package download started
+    gtmEvents.converterDownload();
 
     setIsDownloading(true);
 
@@ -373,11 +377,7 @@ export const useFaviconConverter = () => {
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       saveAs(zipBlob, 'favicons.zip');
 
-      // Track download
-      gtmEvents.faviconsDownloaded(
-        FAVICON_SIZES.length + 1, // +1 for favicon.ico
-        appSettings.name
-      );
+
 
       toast.success('Favicons and files downloaded successfully!');
     } catch (error) {

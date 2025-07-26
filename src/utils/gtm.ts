@@ -27,30 +27,11 @@ export const gtmEvents = {
     });
   },
 
-  // Favicons generados exitosamente
-  faviconsGenerated: (faviconCount: number, appName: string, imageSize: string) => {
-    gtmEvent('favicon_generated', {
-      favicon_count: faviconCount,
-      app_name: appName,
-      image_size: imageSize,
-      success: true
-    });
-  },
-
   // Error en la generación
   generationError: (error: string) => {
     gtmEvent('favicon_generation_error', {
       error_type: error,
       success: false
-    });
-  },
-
-  // Usuario descarga el ZIP
-  faviconsDownloaded: (faviconCount: number, appName: string) => {
-    gtmEvent('favicon_downloaded', {
-      favicon_count: faviconCount,
-      app_name: appName,
-      download_format: 'zip'
     });
   },
 
@@ -76,5 +57,29 @@ export const gtmEvents = {
       image_height: imageHeight,
       recommended_size: '512x512'
     });
+  },
+
+  // Converter: Imagen cargada desde dropzone
+  converterImageUploaded: (fileName: string, fileSize: number, fileType: string) => {
+    gtmEvent('converter_image_uploaded', {
+      file_name: fileName,
+      file_size_mb: (fileSize / 1024 / 1024).toFixed(2),
+      file_type: fileType
+    });
+  },
+
+  // Converter: Imagen cargada desde generator
+  converterImageFromGenerator: () => {
+    gtmEvent('converter_image_from_generator');
+  },
+
+  // Converter: Generación de favicons
+  converterGeneration: () => {
+    gtmEvent('converter_generation');
+  },
+
+  // Converter: Descarga de favicons
+  converterDownload: () => {
+    gtmEvent('converter_download');
   }
 }; 
