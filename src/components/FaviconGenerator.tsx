@@ -98,8 +98,10 @@ export default function FaviconGenerator() {
         <div className="generator__controls">
           {activeTab === 'text' && (
             <div className="generator__text-controls">
-              <h3>Text Settings</h3>
-              <p>Create a favicon from custom text (max 2 characters).</p>
+              <div className="generator__text-controls__header">
+                <h3 className="generator__text-controls__heading">Text Settings</h3>
+                <p className="generator__text-controls__description">Create a favicon from custom text (max 2 characters).</p>
+              </div>
 
               <div className="generator__form-row">
                 <div className="generator__form-group">
@@ -151,8 +153,10 @@ export default function FaviconGenerator() {
 
           {activeTab === 'svg' && (
             <div className="generator__svg-controls">
-              <h3>SVG Settings</h3>
-              <p>Upload an SVG file to create your favicon.</p>
+              <div className="generator__svg-controls__header">
+                <h3 className="generator__svg-controls__heading">SVG Settings</h3>
+                <p className="generator__svg-controls__description">Upload an SVG file to create your favicon.</p>
+              </div>
 
               {svgSettings.svgContent ? (
                 // Mostrar archivo cargado desde el store
@@ -280,8 +284,10 @@ export default function FaviconGenerator() {
 
           {activeTab === 'icons' && (
             <div className="generator__icons-controls">
-              <h3>Icon Settings</h3>
-              <p>Choose from our icon library.</p>
+              <div className="generator__icons-controls__header">
+                <h3 className="generator__icons-controls__heading">Icon Settings</h3>
+                <p className="generator__icons-controls__description">Choose from our icon library.</p>
+              </div>
 
               <div className="generator__icons-grid">
                 {Object.keys(ICONS).map((name) => (
