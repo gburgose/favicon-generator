@@ -200,6 +200,9 @@ export default function RootLayout({
 
         {/* Google Site Verification */}
         <meta name="google-site-verification" content="ZGmqB_iCvwVhAWkyyY5htrL_3HU-grU4wIO6AH5u6po" />
+
+        {/* Google AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-5666837199568994" />
       </head>
       <body className={`${montserrat.className} ${poppins.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${oswald.variable} ${raleway.variable} ${sourceSansPro.variable} ${merriweather.variable} ${notoSans.variable}`} style={{
         backgroundColor: '#100709',
