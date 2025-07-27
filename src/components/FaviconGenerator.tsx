@@ -8,7 +8,7 @@ import {
   Download,
   Sparkles,
   X,
-  AlignCenter,
+  AlignHorizontalJustifyCenter,
   AlignVerticalJustifyCenter
 } from 'lucide-react';
 import { useGeneratorStore } from '@/store/generatorStore';
@@ -397,7 +397,7 @@ export default function FaviconGenerator() {
                 }}
                 title="Centrar horizontalmente"
               >
-                <AlignCenter size={20} />
+                <AlignHorizontalJustifyCenter size={20} />
               </button>
             </div>
           </div>
